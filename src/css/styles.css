@@ -1,0 +1,75 @@
+@import "./minireset.css";
+
+/* --- MONT --- */
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* --- KIONA --- */
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Semi Bold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Light Itallic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+:root {
+  /* --- PALETA DE COLORES --- */
+  --color-verde-negro: #0c3e26;
+  --color-verde-vivido: #0aa352;
+  --color-naranja: #f27405;
+  --color-amarillo: #ffc73b;
+  --color-marron-negro: #3f1504;
+  --color-naranja-rojo: #d64738;
+  --color-verde-claro: #a3ff99;
+  --color-gris-claro: #fafafa;
+
+  /* --- TIPOGRAFÍAS --- */
+  --font-primary: "Mont", sans-serif;
+  --font-secondary: "Kiona", sans-serif;
+}
