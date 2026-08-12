@@ -3,11 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Catálogo de cítricos frescos de Nicaragua. Naranjas, limones, toronjas y más directo del productor.">
-    <meta name="keywords" content="catálogo cítricos, naranjas, limones, toronjas, comprar frutas, Nicaragua">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO -->
     <title>Catálogo de Productos | Citri-Fresh</title>
+    <meta name="description" content="Catálogo de cítricos frescos de Nicaragua. Limones, limas, naranjas y mandarinas directo del productor.">
+    <meta name="keywords" content="catálogo cítricos, limón criollo, lima limón, naranja dulce, naranja agria, mandarina, Nicaragua">
+    <meta name="author" content="Citri-Fresh Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0C3E26">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Catálogo de Productos | Citri-Fresh">
+    <meta property="og:description" content="Cítricos frescos de Nicaragua directo del productor.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+    
+    <!-- Estilos -->
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/catalogo.css">
+    
+    <link rel="canonical" href="https://citri-fresh.com/catalogo">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
@@ -26,6 +44,7 @@
                 <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
                     <span class="hamburger"></span>
                 </button>
+                
                 <ul id="nav-menu" class="nav-menu" role="menubar">
                     <li role="none"><a href="/" class="nav-link" role="menuitem">Inicio</a></li>
                     <li role="none"><a href="/catalogo" class="nav-link active" role="menuitem" aria-current="page">Productos</a></li>
@@ -75,11 +94,10 @@
                         <label for="filtro-tipo" class="filtro-label">Tipo</label>
                         <select id="filtro-tipo" class="filtro-select">
                             <option value="todos">Todos los cítricos</option>
-                            <option value="naranja">Naranjas</option>
                             <option value="limon">Limones</option>
-                            <option value="toronja">Toronjas</option>
-                            <option value="mandarina">Mandarinas</option>
                             <option value="lima">Limas</option>
+                            <option value="naranja">Naranjas</option>
+                            <option value="mandarina">Mandarinas</option>
                         </select>
                     </div>
                     
@@ -90,10 +108,9 @@
                             <option value="todas">Todas las zonas</option>
                             <option value="managua">Managua</option>
                             <option value="granada">Granada</option>
-                            <option value="carazo">Carazo</option>
-                            <option value="rivas">Rivas</option>
                             <option value="leon">León</option>
                             <option value="chinandega">Chinandega</option>
+                            <option value="rivas">Rivas</option>
                         </select>
                     </div>
                     
@@ -104,13 +121,12 @@
                             <option value="relevancia">Relevancia</option>
                             <option value="precio-menor">Precio: menor a mayor</option>
                             <option value="precio-mayor">Precio: mayor a menor</option>
-                            <option value="recientes">Más recientes</option>
                         </select>
                     </div>
                     
                     <!-- Contador de resultados -->
                     <div class="resultados-info" aria-live="polite">
-                        <span id="contador-productos">12</span> productos encontrados
+                        <span id="contador-productos">5</span> productos encontrados
                     </div>
                 </div>
             </div>
@@ -121,188 +137,10 @@
             <div class="container">
                 <div class="productos-grid" id="productos-grid">
                     
-                    <!-- Producto 1 -->
-                    <article class="producto-card" data-tipo="naranja" data-zona="managua" data-precio="25">
-                        <figure class="producto-imagen">
-                            <img src="/images/naranja-valencia.jpg" alt="Naranjas Valencia recién cosechadas" loading="lazy">
-                            <span class="producto-badge">Más vendido</span>
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Naranjas</span>
-                            <h2 class="producto-nombre">Naranja Valencia</h2>
-                            <p class="producto-descripcion">Jugosas y dulces, perfectas para jugo fresco. Cosechadas a mano.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 Managua</span>
-                                <span class="producto-calificacion">⭐ 4.8</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 25.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Naranja Valencia al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 2 -->
-                    <article class="producto-card" data-tipo="limon" data-zona="granada" data-precio="18">
-                        <figure class="producto-imagen">
-                            <img src="/images/limon-persa.jpg" alt="Limones Persa frescos" loading="lazy">
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Limones</span>
-                            <h2 class="producto-nombre">Limón Persa</h2>
-                            <p class="producto-descripcion">Ácidos y aromáticos. Ideal para cocina, bebidas y postres.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 Granada</span>
-                                <span class="producto-calificacion">⭐ 4.6</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 18.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Limón Persa al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 3 -->
-                    <article class="producto-card" data-tipo="toronja" data-zona="carazo" data-precio="30">
-                        <figure class="producto-imagen">
-                            <img src="/images/toronja-roja.jpg" alt="Toronjas rojas maduras" loading="lazy">
-                            <span class="producto-badge producto-badge-nuevo">Nuevo</span>
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Toronjas</span>
-                            <h2 class="producto-nombre">Toronja Roja</h2>
-                            <p class="producto-descripcion">Dulce y refrescante. Excelente fuente de vitamina C.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 Carazo</span>
-                                <span class="producto-calificacion">⭐ 4.9</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 30.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Toronja Roja al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 4 -->
-                    <article class="producto-card" data-tipo="mandarina" data-zona="rivas" data-precio="22">
-                        <figure class="producto-imagen">
-                            <img src="/images/mandarina-cristina.jpg" alt="Mandarinas Cristina dulces" loading="lazy">
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Mandarinas</span>
-                            <h2 class="producto-nombre">Mandarina Cristina</h2>
-                            <p class="producto-descripcion">Dulces, sin semillas y fáciles de pelar. Favoritas de los niños.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 Rivas</span>
-                                <span class="producto-calificacion">⭐ 4.7</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 22.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Mandarina Cristina al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 5 -->
-                    <article class="producto-card" data-tipo="naranja" data-zona="leon" data-precio="28">
-                        <figure class="producto-imagen">
-                            <img src="/images/naranja-navel.jpg" alt="Naranjas Navel de mesa" loading="lazy">
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Naranjas</span>
-                            <h2 class="producto-nombre">Naranja Navel</h2>
-                            <p class="producto-descripcion">Perfectas para mesa. Sin semillas, piel fácil de remover.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 León</span>
-                                <span class="producto-calificacion">⭐ 4.5</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 28.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Naranja Navel al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 6 -->
-                    <article class="producto-card" data-tipo="lima" data-zona="chinandega" data-precio="20">
-                        <figure class="producto-imagen">
-                            <img src="/images/lima-tahiti.jpg" alt="Limas Tahiti verdes" loading="lazy">
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Limas</span>
-                            <h2 class="producto-nombre">Lima Tahiti</h2>
-                            <p class="producto-descripcion">Sin semillas, jugosas y aromáticas. Ideal para cocteles y ceviche.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 Chinandega</span>
-                                <span class="producto-calificacion">⭐ 4.4</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 20.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Lima Tahiti al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 7 -->
-                    <article class="producto-card" data-tipo="naranja" data-zona="managua" data-precio="23">
-                        <figure class="producto-imagen">
-                            <img src="/images/naranja-sangre.jpg" alt="Naranjas de sangre rojas por dentro" loading="lazy">
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Naranjas</span>
-                            <h2 class="producto-nombre">Naranja de Sangre</h2>
-                            <p class="producto-descripcion">Color rojo intenso, sabor único y dulce. Edición limitada.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 Managua</span>
-                                <span class="producto-calificacion">⭐ 4.9</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 23.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Naranja de Sangre al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 8 -->
-                    <article class="producto-card" data-tipo="limon" data-zona="granada" data-precio="15">
+                    <!-- Producto 1: Limón Criollo -->
+                    <article class="producto-card" data-tipo="limon" data-zona="granada" data-precio="3">
                         <figure class="producto-imagen">
                             <img src="/images/limon-criollo.jpg" alt="Limones criollos nicaragüenses" loading="lazy">
-                            <span class="producto-badge producto-badge-oferta">Oferta</span>
                         </figure>
                         <div class="producto-info">
                             <span class="producto-categoria">Limones</span>
@@ -310,12 +148,12 @@
                             <p class="producto-descripcion">El clásico de Nicaragua. Ácido y aromático para todo uso.</p>
                             <div class="producto-meta">
                                 <span class="producto-zona">📍 Granada</span>
-                                <span class="producto-calificacion">⭐ 4.3</span>
+                                <span class="producto-calificacion">⭐ 4.5</span>
                             </div>
                             <div class="producto-footer">
                                 <div class="producto-precio">
-                                    <span class="precio-valor">C$ 15.00</span>
-                                    <span class="precio-unidad">/ kg</span>
+                                    <span class="precio-valor">C$ 3.00</span>
+                                    <span class="precio-unidad">/ unidad</span>
                                 </div>
                                 <button class="btn btn-primary btn-agregar" aria-label="Agregar Limón Criollo al carrito">
                                     Agregar
@@ -324,100 +162,102 @@
                         </div>
                     </article>
                     
-                    <!-- Producto 9 -->
-                    <article class="producto-card" data-tipo="toronja" data-zona="carazo" data-precio="32">
+                    <!-- Producto 2: Lima Limón -->
+                    <article class="producto-card" data-tipo="lima" data-zona="chinandega" data-precio="4">
                         <figure class="producto-imagen">
-                            <img src="/images/toronja-blanca.jpg" alt="Toronjas blancas dulces" loading="lazy">
+                            <img src="/images/lima-limon.jpg" alt="Lima limón verde" loading="lazy">
                         </figure>
                         <div class="producto-info">
-                            <span class="producto-categoria">Toronjas</span>
-                            <h2 class="producto-nombre">Toronja Blanca</h2>
-                            <p class="producto-descripcion">Más dulce que la roja. Perfecta para ensaladas de frutas.</p>
+                            <span class="producto-categoria">Limas</span>
+                            <h2 class="producto-nombre">Lima Limón</h2>
+                            <p class="producto-descripcion">Sin semillas, jugosa y aromática. Ideal para cocteles y ceviche.</p>
                             <div class="producto-meta">
-                                <span class="producto-zona">📍 Carazo</span>
-                                <span class="producto-calificacion">⭐ 4.6</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 32.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Toronja Blanca al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 10 -->
-                    <article class="producto-card" data-tipo="mandarina" data-zona="rivas" data-precio="24">
-                        <figure class="producto-imagen">
-                            <img src="/images/mandarina-ponkan.jpg" alt="Mandarinas Ponkan grandes" loading="lazy">
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Mandarinas</span>
-                            <h2 class="producto-nombre">Mandarina Ponkan</h2>
-                            <p class="producto-descripcion">Grandes, dulces y muy jugosas. La favorita de la temporada.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 Rivas</span>
-                                <span class="producto-calificacion">⭐ 4.8</span>
-                            </div>
-                            <div class="producto-footer">
-                                <div class="producto-precio">
-                                    <span class="precio-valor">C$ 24.00</span>
-                                    <span class="precio-unidad">/ kg</span>
-                                </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Mandarina Ponkan al carrito">
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Producto 11 -->
-                    <article class="producto-card" data-tipo="naranja" data-zona="leon" data-precio="26">
-                        <figure class="producto-imagen">
-                            <img src="/images/naranja-hamlin.jpg" alt="Naranjas Hamlin para jugo" loading="lazy">
-                        </figure>
-                        <div class="producto-info">
-                            <span class="producto-categoria">Naranjas</span>
-                            <h2 class="producto-nombre">Naranja Hamlin</h2>
-                            <p class="producto-descripcion">La mejor para jugo. Mucho líquido y sabor intenso.</p>
-                            <div class="producto-meta">
-                                <span class="producto-zona">📍 León</span>
+                                <span class="producto-zona">📍 Chinandega</span>
                                 <span class="producto-calificacion">⭐ 4.7</span>
                             </div>
                             <div class="producto-footer">
                                 <div class="producto-precio">
-                                    <span class="precio-valor">C$ 26.00</span>
-                                    <span class="precio-unidad">/ kg</span>
+                                    <span class="precio-valor">C$ 4.00</span>
+                                    <span class="precio-unidad">/ unidad</span>
                                 </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Naranja Hamlin al carrito">
+                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Lima Limón al carrito">
                                     Agregar
                                 </button>
                             </div>
                         </div>
                     </article>
                     
-                    <!-- Producto 12 -->
-                    <article class="producto-card" data-tipo="lima" data-zona="chinandega" data-precio="19">
+                    <!-- Producto 3: Naranja Dulce -->
+                    <article class="producto-card" data-tipo="naranja" data-zona="managua" data-precio="8">
                         <figure class="producto-imagen">
-                            <img src="/images/lima-dulce.jpg" alt="Limas dulces para mesa" loading="lazy">
+                            <img src="/images/naranja-dulce.jpg" alt="Naranjas dulces de mesa" loading="lazy">
+                            <span class="producto-badge">Más vendido</span>
                         </figure>
                         <div class="producto-info">
-                            <span class="producto-categoria">Limas</span>
-                            <h2 class="producto-nombre">Lima Dulce</h2>
-                            <p class="producto-descripcion">Puede comerse como naranja. Dulce y aromática.</p>
+                            <span class="producto-categoria">Naranjas</span>
+                            <h2 class="producto-nombre">Naranja Dulce</h2>
+                            <p class="producto-descripcion">Dulce y jugosa, perfecta para comer al natural o en jugo.</p>
                             <div class="producto-meta">
-                                <span class="producto-zona">📍 Chinandega</span>
-                                <span class="producto-calificacion">⭐ 4.5</span>
+                                <span class="producto-zona">📍 Managua</span>
+                                <span class="producto-calificacion">⭐ 4.8</span>
                             </div>
                             <div class="producto-footer">
                                 <div class="producto-precio">
-                                    <span class="precio-valor">C$ 19.00</span>
-                                    <span class="precio-unidad">/ kg</span>
+                                    <span class="precio-valor">C$ 8.00</span>
+                                    <span class="precio-unidad">/ unidad</span>
                                 </div>
-                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Lima Dulce al carrito">
+                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Naranja Dulce al carrito">
+                                    Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- Producto 4: Naranja Agria -->
+                    <article class="producto-card" data-tipo="naranja" data-zona="leon" data-precio="6">
+                        <figure class="producto-imagen">
+                            <img src="/images/naranja-agria.jpg" alt="Naranjas agrias para cocina" loading="lazy">
+                        </figure>
+                        <div class="producto-info">
+                            <span class="producto-categoria">Naranjas</span>
+                            <h2 class="producto-nombre">Naranja Agria</h2>
+                            <p class="producto-descripcion">Ácida y aromática. Ideal para salsas, adobos y cocina.</p>
+                            <div class="producto-meta">
+                                <span class="producto-zona">📍 León</span>
+                                <span class="producto-calificacion">⭐ 4.3</span>
+                            </div>
+                            <div class="producto-footer">
+                                <div class="producto-precio">
+                                    <span class="precio-valor">C$ 6.00</span>
+                                    <span class="precio-unidad">/ unidad</span>
+                                </div>
+                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Naranja Agria al carrito">
+                                    Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- Producto 5: Mandarina -->
+                    <article class="producto-card" data-tipo="mandarina" data-zona="rivas" data-precio="5">
+                        <figure class="producto-imagen">
+                            <img src="/images/mandarina.jpg" alt="Mandarinas dulces sin semillas" loading="lazy">
+                            <span class="producto-badge producto-badge-nuevo">Nuevo</span>
+                        </figure>
+                        <div class="producto-info">
+                            <span class="producto-categoria">Mandarinas</span>
+                            <h2 class="producto-nombre">Mandarina</h2>
+                            <p class="producto-descripcion">Dulce, sin semillas y fácil de pelar. Favorita de los niños.</p>
+                            <div class="producto-meta">
+                                <span class="producto-zona">📍 Rivas</span>
+                                <span class="producto-calificacion">⭐ 4.6</span>
+                            </div>
+                            <div class="producto-footer">
+                                <div class="producto-precio">
+                                    <span class="precio-valor">C$ 5.00</span>
+                                    <span class="precio-unidad">/ unidad</span>
+                                </div>
+                                <button class="btn btn-primary btn-agregar" aria-label="Agregar Mandarina al carrito">
                                     Agregar
                                 </button>
                             </div>
@@ -436,29 +276,6 @@
             </div>
         </section>
         
-        <!-- Paginación -->
-        <nav class="paginacion-section" aria-label="Paginación de productos">
-            <div class="container">
-                <div class="paginacion">
-                    <button class="paginacion-btn paginacion-prev" aria-label="Página anterior" disabled>
-                        ← Anterior
-                    </button>
-                    
-                    <div class="paginacion-numeros" role="tablist" aria-label="Páginas">
-                        <button class="paginacion-numero active" aria-current="page" aria-label="Página 1">1</button>
-                        <button class="paginacion-numero" aria-label="Página 2">2</button>
-                        <button class="paginacion-numero" aria-label="Página 3">3</button>
-                        <span class="paginacion-ellipsis">...</span>
-                        <button class="paginacion-numero" aria-label="Página 8">8</button>
-                    </div>
-                    
-                    <button class="paginacion-btn paginacion-next" aria-label="Página siguiente">
-                        Siguiente →
-                    </button>
-                </div>
-            </div>
-        </nav>
-        
     </main>
     
     <!-- FOOTER -->
@@ -476,6 +293,7 @@
                         <p><a href="mailto:info@citri-fresh.com">info@citri-fresh.com</a></p>
                     </address>
                 </div>
+                
                 <nav class="footer-nav" aria-label="Enlaces rápidos">
                     <h3>Enlaces Rápidos</h3>
                     <ul>
@@ -484,6 +302,7 @@
                         <li><a href="/nosotros">Sobre Nosotros</a></li>
                     </ul>
                 </nav>
+                
                 <nav class="footer-legal" aria-label="Legal">
                     <h3>Legal</h3>
                     <ul>
@@ -491,6 +310,7 @@
                         <li><a href="/privacidad">Política de Privacidad</a></li>
                     </ul>
                 </nav>
+                
                 <div class="footer-social">
                     <h3>Síguenos</h3>
                     <ul class="social-links">
@@ -500,8 +320,10 @@
                     </ul>
                 </div>
             </div>
+            
             <div class="footer-bottom">
                 <p>&copy; <time datetime="2026">2026</time> Citri-Fresh. Todos los derechos reservados.</p>
+                <p>Hecho con 🧡 en Nicaragua</p>
             </div>
         </div>
     </footer>
