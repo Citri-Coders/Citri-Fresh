@@ -1,0 +1,166 @@
+@import "./styles.css";
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--color-gris-claro);
+  padding: 20px;
+}
+
+.auth-card-split {
+  display: flex;
+  width: 100%;
+  max-width: 960px;
+  min-height: 560px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(12, 62, 38, 0.08);
+}
+
+.auth-form-side {
+  flex: 1;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-form-side h1 {
+  font-family: var(--font-primary);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-verde-negro);
+  margin-bottom: 28px;
+}
+
+.input-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-label {
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-verde-negro);
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: var(--color-verde-negro);
+  background-color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-field::placeholder {
+  color: #a0aec0;
+}
+
+.input-field:focus {
+  border-color: var(--color-verde-vivido);
+  box-shadow: 0 0 0 3px rgba(10, 163, 82, 0.15);
+}
+
+select.input-field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230c3e26' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  cursor: pointer;
+  padding-right: 40px;
+}
+
+select.input-field option {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: var(--color-verde-negro);
+  background-color: #ffffff;
+  padding: 10px 14px;
+}
+
+select.input-field option[disabled] {
+  color: #a0aec0;
+  background-color: #ffffff;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 24px 0;
+  font-size: 0.85rem;
+  font-family: var(--font-primary);
+  color: var(--color-verde-negro);
+}
+
+.checkbox-group input[type="checkbox"] {
+  accent-color: var(--color-verde-negro);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background-color: var(--color-verde-negro);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+  background-color: var(--color-verde-vivido);
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  font-family: var(--font-primary);
+  color: #718096;
+}
+
+.auth-footer a {
+  color: var(--color-naranja);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+.auth-image-side {
+  flex: 1;
+  background-color: var(--color-verde-negro);
+  background-image: url("../img/auth/Citri-Fresh\ Logo\ Animado.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 170%;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .auth-image-side {
+    display: block;
+  }
+}

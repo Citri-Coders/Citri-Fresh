@@ -84,6 +84,7 @@
     /* Transiciones */
     --transition: 0.3s ease;
 }
+<<<<<<< HEAD
 
 /* ==================== RESET BASE ==================== */
 *,
@@ -437,3 +438,5 @@ body {
         text-align: center;
     }
 }
+=======
+>>>>>>> da84edb (feat(auth): add login and register views with split layout and system design tokens)
