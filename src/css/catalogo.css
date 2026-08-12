@@ -9,7 +9,8 @@
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
     margin-bottom: 0.5rem;
-    color: var(--color-primary, #0C3E26);
+    color: var(--color-verde-negro);
+    font-family: var(--font-secondary);
 }
 
 .catalogo-subtitle {
@@ -69,7 +70,7 @@
 .filtro-input:focus,
 .filtro-select:focus {
     outline: none;
-    border-color: var(--color-primary, #0C3E26);
+    border-color: var(--color-verde-negro);
     box-shadow: 0 0 0 3px rgba(12, 62, 38, 0.1);
 }
 
@@ -96,7 +97,7 @@
 
 #contador-productos {
     font-weight: 700;
-    color: var(--color-primary, #0C3E26);
+    color: var(--color-verde-negro);
 }
 
 /* ==================== PRODUCTOS - CSS GRID ==================== */
@@ -154,7 +155,7 @@
     position: absolute;
     top: 0.75rem;
     left: 0.75rem;
-    background: var(--color-primary, #0C3E26);
+    background: var(--color-verde-negro);
     color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 2rem;
@@ -165,12 +166,12 @@
 }
 
 .producto-badge-nuevo {
-    background: var(--color-secondary, #84CC16);
-    color: var(--color-dark, #1C1917);
+    background: var(--color-naranja);
+    color: white;
 }
 
 .producto-badge-oferta {
-    background: #EF4444;
+    background: var(--color-naranja-rojo);
 }
 
 /* Info del producto */
@@ -186,16 +187,17 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-secondary, #84CC16);
+    color: var(--color-naranja);
     margin-bottom: 0.25rem;
 }
 
 .producto-nombre {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-dark, #1C1917);
+    color: var(--color-marron-negro);
     margin-bottom: 0.5rem;
     line-height: 1.3;
+    font-family: var(--font-secondary);
 }
 
 .producto-descripcion {
@@ -245,7 +247,7 @@
 .precio-valor {
     font-size: 1.375rem;
     font-weight: 800;
-    color: var(--color-primary, #0C3E26);
+    color: var(--color-verde-negro);
 }
 
 .precio-unidad {
@@ -279,62 +281,12 @@
 .sin-resultados h2 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--color-dark, #1C1917);
+    color: var(--color-marron-negro);
 }
 
 .sin-resultados p {
     color: #78716C;
     margin-bottom: 1.5rem;
-}
-
-/* ==================== PAGINACIÓN ==================== */
-.paginacion-section {
-    padding: 2rem 0 4rem;
-}
-
-.paginacion {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.paginacion-btn,
-.paginacion-numero {
-    padding: 0.625rem 1rem;
-    border: 1px solid #D6D3D1;
-    border-radius: 0.5rem;
-    background: white;
-    color: var(--color-dark, #1C1917);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 44px;
-    text-align: center;
-}
-
-.paginacion-btn:hover:not(:disabled),
-.paginacion-numero:hover:not(.active) {
-    background: #F5F5F4;
-    border-color: #A8A29E;
-}
-
-.paginacion-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.paginacion-numero.active {
-    background: var(--color-primary, #0C3E26);
-    color: white;
-    border-color: var(--color-primary, #0C3E26);
-}
-
-.paginacion-ellipsis {
-    color: #78716C;
-    padding: 0 0.5rem;
 }
 
 /* ==================== RESPONSIVE ==================== */
@@ -365,16 +317,6 @@
     .productos-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 1rem;
-    }
-    
-    .paginacion {
-        gap: 0.25rem;
-    }
-    
-    .paginacion-btn,
-    .paginacion-numero {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.875rem;
     }
 }
 
