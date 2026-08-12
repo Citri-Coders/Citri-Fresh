@@ -1,4 +1,82 @@
-/* ==================== RESET & BASE ==================== */
+@import "./minireset.css";
+
+/* --- MONT --- */
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("./fonts/mont/Mont-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* --- KIONA --- */
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Semi Bold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("./fonts/kiona/Kiona-Light Itallic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+:root {
+  /* --- PALETA DE COLORES --- */
+  --color-verde-negro: #0c3e26;
+  --color-verde-vivido: #0aa352;
+  --color-naranja: #f27405;
+  --color-amarillo: #ffc73b;
+  --color-marron-negro: #3f1504;
+  --color-naranja-rojo: #d64738;
+  --color-verde-claro: #a3ff99;
+  --color-gris-claro: #fafafa;
+
+  /* --- TIPOGRAFÍAS --- */
+  --font-primary: "Mont", sans-serif;
+  --font-secondary: "Kiona", sans-serif;
+}
+
+/* ==================== ESTILOS AGREGADOS - ESTRUCTURA RESPONSIVE ==================== */
+
+/* --- RESET & BASE --- */
 *,
 *::before,
 *::after {
@@ -8,27 +86,9 @@
 }
 
 :root {
-    /* Colores - Paleta cítrica */
-    --color-primary: #0C3E26;
-    --color-primary-dark: #3F1504;
-    --color-secondary: #0AA352;
-    --color-accent: #FFC73B;
-    --color-dark: #1C1917;
-    --color-light: #FAFAFA;
-    --color-gray: #3F1504;
-    --color-gray-light: #E7E5E4;
-    
-    /* Tipografía */
-    --font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-size-base: 1rem;
-    --line-height: 1.6;
-    
     /* Layout */
     --container-max: 1200px;
     --section-padding: 4rem;
-    --gap: 1.5rem;
-    
-    /* Transiciones */
     --transition: 0.3s ease;
 }
 
@@ -37,17 +97,12 @@ html {
 }
 
 body {
-    font-family: var(--font-family);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height);
-    color: var(--color-dark);
-    background-color: var(--color-light);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* ==================== UTILIDADES ==================== */
+/* --- UTILIDADES --- */
 .container {
     max-width: var(--container-max);
     margin: 0 auto;
@@ -59,7 +114,7 @@ body {
     top: -100%;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--color-primary);
+    background: var(--color-primary, #0C3E26);
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 0 0 0.5rem 0.5rem;
@@ -73,7 +128,7 @@ body {
     top: 0;
 }
 
-/* ==================== BOTONES ==================== */
+/* --- BOTONES --- */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -85,30 +140,29 @@ body {
     transition: all var(--transition);
     cursor: pointer;
     border: 2px solid transparent;
-    font-size: var(--font-size-base);
+    font-size: 1rem;
 }
 
 .btn-primary {
-    background: var(--color-primary);
+    background: var(--color-primary, #0C3E26);
     color: white;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-    background: var(--color-primary-dark);
+    opacity: 0.9;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .btn-outline {
     background: transparent;
-    color: var(--color-primary);
-    border-color: var(--color-primary);
+    color: var(--color-primary, #0C3E26);
+    border-color: var(--color-primary, #0C3E26);
 }
 
 .btn-outline:hover,
 .btn-outline:focus {
-    background: var(--color-primary);
+    background: var(--color-primary, #0C3E26);
     color: white;
 }
 
@@ -117,7 +171,7 @@ body {
     font-size: 1.125rem;
 }
 
-/* ==================== HEADER ==================== */
+/* --- HEADER --- */
 .site-header {
     background: white;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -140,7 +194,7 @@ body {
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
-    color: var(--color-dark);
+    color: #1C1917;
     font-size: 1.5rem;
 }
 
@@ -149,7 +203,7 @@ body {
 }
 
 .logo-text strong {
-    color: var(--color-primary);
+    color: var(--color-primary, #0C3E26);
 }
 
 /* Navegación */
@@ -166,7 +220,7 @@ body {
 
 .nav-link {
     text-decoration: none;
-    color: var(--color-gray);
+    color: #78716C;
     font-weight: 500;
     transition: color var(--transition);
     position: relative;
@@ -176,7 +230,7 @@ body {
 .nav-link:hover,
 .nav-link:focus,
 .nav-link.active {
-    color: var(--color-primary);
+    color: var(--color-primary, #0C3E26);
 }
 
 .nav-link.active::after {
@@ -186,7 +240,7 @@ body {
     left: 0;
     width: 100%;
     height: 2px;
-    background: var(--color-primary);
+    background: var(--color-primary, #0C3E26);
     border-radius: 1px;
 }
 
@@ -205,7 +259,7 @@ body {
     display: block;
     width: 24px;
     height: 2px;
-    background: var(--color-dark);
+    background: #1C1917;
     transition: all var(--transition);
 }
 
@@ -223,21 +277,20 @@ body {
 .hamburger::before { top: -7px; }
 .hamburger::after { top: 7px; }
 
-/* Acciones header */
 .header-actions {
     display: flex;
     gap: 0.75rem;
 }
 
-/* ==================== MAIN ==================== */
+/* --- MAIN --- */
 .main-content {
     flex: 1;
 }
 
-/* ==================== HERO ==================== */
+/* --- HERO --- */
 .hero {
     padding: var(--section-padding) 0;
-    background: linear-gradient(135deg, #FFF7ED 0%, #FEF3C7 100%);
+    background: linear-gradient(135deg, #e8f5e9 0%, #fff8e1 100%);
 }
 
 .hero .container {
@@ -249,18 +302,18 @@ body {
 
 .hero-title {
     font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1.5rem;
 }
 
 .highlight {
-    color: var(--color-primary);
+    color: var(--color-primary, #0C3E26);
 }
 
 .hero-description {
     font-size: 1.25rem;
-    color: var(--color-gray);
+    color: #78716C;
     margin-bottom: 2rem;
 }
 
@@ -277,7 +330,7 @@ body {
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
-/* ==================== SECCIONES ==================== */
+/* --- SECCIONES --- */
 .section-title {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     font-weight: 700;
@@ -287,7 +340,7 @@ body {
 
 .section-subtitle {
     text-align: center;
-    color: var(--color-gray);
+    color: #78716C;
     margin-bottom: 3rem;
     font-size: 1.125rem;
 }
@@ -329,11 +382,11 @@ body {
 .category-card h3 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--color-dark);
+    color: #1C1917;
 }
 
 .category-card p {
-    color: var(--color-gray);
+    color: #78716C;
 }
 
 /* Beneficios */
@@ -357,7 +410,7 @@ body {
 }
 
 .benefit-item:hover {
-    background: var(--color-light);
+    background: #FAFAF9;
 }
 
 .benefit-icon {
@@ -372,13 +425,13 @@ body {
 }
 
 .benefit-item p {
-    color: var(--color-gray);
+    color: #78716C;
 }
 
 /* CTA */
 .cta-section {
     padding: var(--section-padding) 0;
-    background: var(--color-primary);
+    background: var(--color-primary, #0C3E26);
     color: white;
     text-align: center;
 }
@@ -399,16 +452,16 @@ body {
 
 .cta-section .btn-primary {
     background: white;
-    color: var(--color-primary);
+    color: var(--color-primary, #0C3E26);
 }
 
 .cta-section .btn-primary:hover {
-    background: var(--color-light);
+    background: #FAFAF9;
 }
 
-/* ==================== FOOTER ==================== */
+/* --- FOOTER --- */
 .site-footer {
-    background: var(--color-dark);
+    background: #1C1917;
     color: #A8A29E;
     padding: 3rem 0 1.5rem;
 }
@@ -440,7 +493,7 @@ body {
 }
 
 .footer-brand a {
-    color: var(--color-primary);
+    color: var(--color-secondary, #84CC16);
     text-decoration: none;
 }
 
@@ -478,7 +531,7 @@ body {
 .footer-nav a:focus,
 .footer-legal a:focus,
 .social-links a:focus {
-    color: var(--color-primary);
+    color: var(--color-secondary, #84CC16);
 }
 
 .footer-bottom {
