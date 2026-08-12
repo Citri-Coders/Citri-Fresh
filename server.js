@@ -6,6 +6,7 @@ require('dotenv').config();
 // 2. Importar dependencias
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 // 3. Crear aplicación Express
 const app = express();
@@ -18,10 +19,22 @@ app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000']
 }));
 app.use(express.json());
-app.use(express.static('public'));
 
-// 6. Ruta de prueba
+// 6. Archivos estáticos
+app.use('/css', express.static(path.join(__dirname, 'src', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'src', 'js')));
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+
+// 7. Ruta principal - Sirve el HTML
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src', 'pages', 'index.html'));
+});
+app.get('/catalogo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src', 'pages', 'catalogo.html'));
+});
+
+// 8. API de prueba
+app.get('/api', (req, res) => {
   res.json({
     mensaje: '🍊 ¡Bienvenido a Citri-Fresh!',
     version: '0.1.0',
@@ -30,7 +43,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// 7. Ruta de salud
+// 9. Ruta de salud
 app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -39,7 +52,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 8. Iniciar servidor
+// 10. Iniciar servidor
 app.listen(PORT, () => {
   console.log('');
   console.log('🍊 ==========================================');
@@ -52,8 +65,8 @@ app.listen(PORT, () => {
   console.log('');
 });
 
-// 9. Manejo de errores
+// 11. Manejo de errores
 process.on('unhandledRejection', (err) => {
   console.error('❌ Error no manejado:', err.message);
   process.exit(1);
-}); 
+});

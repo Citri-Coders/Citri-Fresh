@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión — CitriFresh</title>
+    <link rel="stylesheet" href="../css/auth.css" />
+  </head>
+  <body>
+    <div class="auth-wrapper">
+      <div class="auth-card-split">
+        <main class="auth-form-side">
+          <h1>Iniciar Sesión</h1>
+
+          <form id="login-form">
+            <div class="input-group">
+              <label for="email" class="input-label">Correo electrónico</label>
+              <input
+                type="email"
+                id="email"
+                class="input-field"
+                placeholder="Ingresa tu correo"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="password" class="input-label">Contraseña</label>
+              <input
+                type="password"
+                id="password"
+                class="input-field"
+                placeholder="Ingresa tu contraseña"
+                required
+              />
+            </div>
+
+            <div class="checkbox-group">
+              <input type="checkbox" id="remember" />
+              <label for="remember">Recordar mi sesión</label>
+            </div>
+
+            <button type="submit" class="btn-submit">Ingresar</button>
+          </form>
+
+          <p class="auth-footer" style="margin-top: 24px">
+            ¿No tienes una cuenta? <a href="./register.html">Regístrate aquí</a>
+          </p>
+        </main>
+
+        <aside
+          class="auth-image-side"
+          aria-label="Imagen decorativa de CitriFresh"
+        ></aside>
+      </div>
+    </div>
+  </body>
+</html>

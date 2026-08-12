@@ -39,7 +39,7 @@
 
 @font-face {
   font-family: "Kiona";
-  src: url("./fonts/kiona/Kiona-Semi Bold.ttf") format("truetype");
+  src: url("./fonts/kiona/Kiona-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
 }
@@ -53,13 +53,13 @@
 
 @font-face {
   font-family: "Kiona";
-  src: url("./fonts/kiona/Kiona-Light Itallic.ttf") format("truetype");
+  src: url("./fonts/kiona/Kiona-LightItalic.ttf") format("truetype");
   font-weight: 300;
   font-style: italic;
 }
 
 :root {
-  /* --- PALETA DE COLORES --- */
+  /* Colores */
   --color-verde-negro: #0c3e26;
   --color-verde-vivido: #0aa352;
   --color-naranja: #f27405;
@@ -72,4 +72,13 @@
   /* --- TIPOGRAFÍAS --- */
   --font-primary: "Mont", sans-serif;
   --font-secondary: "Kiona", sans-serif;
+  --font-size-base: 1rem;
+  --line-height: 1.6;
+
+  /* Layout */
+  --container-max: 1200px;
+  --section-padding: 4rem;
+
+  /* Transiciones */
+  --transition: 0.3s ease;
 }
