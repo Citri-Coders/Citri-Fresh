@@ -18,16 +18,16 @@
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1.5rem;
-    font-family: var(--font-heading);
+    font-family: var(--font-secondary);
 }
 
 .highlight {
-    color: var(--color-primary);
+    color: var(--color-verde-negro);
 }
 
 .hero-description {
     font-size: 1.25rem;
-    color: var(--color-gray);
+    color: #78716C;
     margin-bottom: 2rem;
 }
 
@@ -50,12 +50,12 @@
     font-weight: 700;
     text-align: center;
     margin-bottom: 0.5rem;
-    font-family: var(--font-heading);
+    font-family: var(--font-secondary);
 }
 
 .section-subtitle {
     text-align: center;
-    color: var(--color-gray);
+    color: #78716C;
     margin-bottom: 3rem;
     font-size: 1.125rem;
 }
@@ -97,12 +97,12 @@
 .category-card h3 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: var(--color-dark);
-    font-family: var(--font-heading);
+    color: var(--color-marron-negro);
+    font-family: var(--font-secondary);
 }
 
 .category-card p {
-    color: var(--color-gray);
+    color: #78716C;
 }
 
 /* === BENEFICIOS === */
@@ -126,7 +126,7 @@
 }
 
 .benefit-item:hover {
-    background: var(--color-light);
+    background: var(--color-gris-claro);
 }
 
 .benefit-icon {
@@ -138,17 +138,17 @@
 .benefit-item h3 {
     font-size: 1.25rem;
     margin-bottom: 0.5rem;
-    font-family: var(--font-heading);
+    font-family: var(--font-secondary);
 }
 
 .benefit-item p {
-    color: var(--color-gray);
+    color: #78716C;
 }
 
 /* === CTA === */
 .cta-section {
     padding: var(--section-padding) 0;
-    background: var(--color-primary);
+    background: var(--color-verde-negro);
     color: white;
     text-align: center;
 }
@@ -156,7 +156,7 @@
 .cta-title {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     margin-bottom: 1rem;
-    font-family: var(--font-heading);
+    font-family: var(--font-secondary);
 }
 
 .cta-description {
@@ -170,11 +170,11 @@
 
 .cta-section .btn-primary {
     background: white;
-    color: var(--color-primary);
+    color: var(--color-verde-negro);
 }
 
 .cta-section .btn-primary:hover {
-    background: var(--color-light);
+    background: var(--color-gris-claro);
 }
 
 /* === RESPONSIVE INDEX === */
