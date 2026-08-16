@@ -1,84 +1,19 @@
-@import "./minireset.css";
+/* ==========================================================================
+   CITRI-FRESH — MASTER STYLESHEET
+   ========================================================================== */
 
-/* --- MONT --- */
-@font-face {
-  font-family: "Mont";
-  src: url("./fonts/mont/Mont-Light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
-}
+/* 1. Base */
+@import "./base/reset.css";
+@import "./base/variables.css";
+@import "./base/typography.css";
 
-@font-face {
-  font-family: "Mont";
-  src: url("./fonts/mont/Mont-Regular.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-}
+/* 2. Layout */
+@import "./layout/container.css";
+@import "./layout/header.css";
+@import "./layout/footer.css";
 
-@font-face {
-  font-family: "Mont";
-  src: url("./fonts/mont/Mont-Bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Mont";
-  src: url("./fonts/mont/Mont-Black.otf") format("opentype");
-  font-weight: 900;
-  font-style: normal;
-}
-
-/* --- KIONA --- */
-@font-face {
-  font-family: "Kiona";
-  src: url("./fonts/kiona/Kiona-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Kiona";
-  src: url("./fonts/kiona/Kiona-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Kiona";
-  src: url("./fonts/kiona/Kiona-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Kiona";
-  src: url("./fonts/kiona/Kiona-LightItalic.ttf") format("truetype");
-  font-weight: 300;
-  font-style: italic;
-}
-
-:root {
-  /* Colores */
-  --color-verde-negro: #0c3e26;
-  --color-verde-vivido: #0aa352;
-  --color-naranja: #f27405;
-  --color-amarillo: #ffc73b;
-  --color-marron-negro: #3f1504;
-  --color-naranja-rojo: #d64738;
-  --color-verde-claro: #a3ff99;
-  --color-gris-claro: #fafafa;
-
-  /* --- TIPOGRAFÍAS --- */
-  --font-primary: "Mont", sans-serif;
-  --font-secondary: "Kiona", sans-serif;
-  --font-size-base: 1rem;
-  --line-height: 1.6;
-
-  /* Layout */
-  --container-max: 1200px;
-  --section-padding: 4rem;
-
-  /* Transiciones */
-  --transition: 0.3s ease;
-}
+/* 3. Components */
+@import "./components/buttons.css";
+@import "./components/forms.css";
+@import "./components/cards.css";
+@import "./components/toast.css";
