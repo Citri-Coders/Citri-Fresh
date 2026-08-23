@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const db = require('./server/models/database');
+const productosRouter = require('./server/routes/productos');
 
 // 3. Crear aplicación Express
 const app = express();
@@ -20,6 +21,7 @@ app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000']
 }));
 app.use(express.json());
+app.use('/api/productos', productosRouter);
 
 // 6. Archivos estáticos
 app.use('/css', express.static(path.join(__dirname, 'src', 'css')));
