@@ -1,0 +1,74 @@
+@import "../styles.css";
+
+/* ==========================================================================
+   PÁGINA: AUTENTICACIÓN (login.html y register.html)
+   ========================================================================== */
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--color-gris-claro);
+  padding: 20px;
+}
+
+.auth-card-split {
+  display: flex;
+  width: 100%;
+  max-width: 960px;
+  min-height: 560px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(12, 62, 38, 0.08);
+}
+
+.auth-form-side {
+  flex: 1;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-form-side h1 {
+  font-family: var(--font-primary);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--color-verde-negro);
+  margin-bottom: 28px;
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  font-family: var(--font-primary);
+  color: #718096;
+}
+
+.auth-footer a {
+  color: var(--color-naranja);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+.auth-image-side {
+  flex: 1;
+  background-color: var(--color-verde-negro);
+  background-image: url("../../img/auth/Citri-Fresh Logo Animado.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 170%;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .auth-image-side {
+    display: block;
+  }
+}

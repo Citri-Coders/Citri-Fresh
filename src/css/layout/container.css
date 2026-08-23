@@ -1,0 +1,30 @@
+/* ==========================================================================
+   LAYOUT: CONTENEDORES Y ACCESIBILIDAD
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Enlace de accesibilidad para lectores de pantalla */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: var(--color-verde-negro);
+  color: white;
+  padding: 0.5rem 1rem;
+  z-index: 9999;
+  border-radius: 0.25rem;
+  font-weight: 700;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}

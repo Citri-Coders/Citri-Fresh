@@ -1,0 +1,69 @@
+/* ==========================================================================
+   TIPOGRAFÍAS (@font-face)
+   ========================================================================== */
+
+/* --- MONT --- */
+@font-face {
+  font-family: "Mont";
+  src: url("../fonts/Mont/Mont-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("../fonts/Mont/Mont-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("../fonts/Mont/Mont-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("../fonts/Mont/Mont-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- KIONA --- */
+@font-face {
+  font-family: "Kiona";
+  src: url("../fonts/Kiona/Kiona-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("../fonts/Kiona/Kiona-Semi Bold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("../fonts/Kiona/Kiona-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Kiona";
+  src: url("../fonts/Kiona/Kiona-Light Itallic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}

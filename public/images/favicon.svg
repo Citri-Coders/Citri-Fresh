@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="citrusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA41C"/>
+      <stop offset="100%" stop-color="#F27405"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0AA352"/>
+      <stop offset="100%" stop-color="#0C3E26"/>
+    </linearGradient>
+  </defs>
+  <!-- Sombra base -->
+  <ellipse cx="50" cy="88" rx="30" ry="6" fill="#0c3e26" opacity="0.15"/>
+  <!-- Hoja -->
+  <path d="M 50 25 C 55 10, 75 8, 78 18 C 78 30, 62 32, 50 25 Z" fill="url(#leafGrad)"/>
+  <path d="M 52 23 Q 64 19 72 16" stroke="#A3FF99" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  <!-- Tallo -->
+  <path d="M 48 30 C 47 22, 51 18, 54 15" stroke="#3F1504" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Fruta / Naranja -->
+  <circle cx="50" cy="56" r="32" fill="url(#citrusGrad)"/>
+  <circle cx="50" cy="56" r="30" fill="none" stroke="#FFC73B" stroke-width="2" opacity="0.6"/>
+  <!-- Brillo -->
+  <ellipse cx="40" cy="44" rx="8" ry="4" transform="rotate(-30 40 44)" fill="#ffffff" opacity="0.4"/>
+</svg>
