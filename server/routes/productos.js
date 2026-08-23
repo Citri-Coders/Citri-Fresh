@@ -68,4 +68,41 @@ router.get('/', (req, res) => {
   }
 });
 
+/*
+ GET /api/productos/:id
+ Descripcion: Obtiene los detalles de un producto especifico mediante su Id
+*/
+router.get('/:id', (req, res) => {
+  try {
+    // 1. Extraer el Id dinamico de la URL
+    const productId = req.params.id;
+
+    // 2. Preparar y ejecutar la consulta buscando un unico registro (.get)
+    const sql = 'SELECT * FROM productos WHERE id = ?';
+    const stmt = db.prepare(sql);
+    const producto = stmt.get(productId);
+
+    // 3. Validar si el producto existe
+    if (!producto) {
+      return res.status(404).json({
+        exito: false,
+        error: 'Producto no encontrado en el catalogo'
+      });
+    }
+
+    // 4. Retornar el producto encontrado
+    res.status(200).json({
+      exito: true,
+      datos: producto
+    });
+
+  } catch (error) {
+    // 5. Manejo de errores
+    console.error(`Error al obtener el producto con ID ${req.params.id}:`, error.message);
+    res.status(500).json({
+      exito: false,
+      error: 'Error interno del servidor al buscar el producto'
+    });
+  }
+});
 module.exports = router;
