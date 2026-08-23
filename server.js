@@ -7,6 +7,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const db = require('./server/models/database');
 
 // 3. Crear aplicación Express
 const app = express();
