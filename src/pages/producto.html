@@ -56,15 +56,15 @@
             <!-- Filters & Search -->
             <div class="catalog-filters">
                 <div class="filter-group">
-                    <button class="filter-btn active">Todos</button>
-                    <button class="filter-btn">Naranjas</button>
-                    <button class="filter-btn">Limones</button>
-                    <button class="filter-btn">Mandarinas</button>
+                    <button class="filter-btn active" data-filter="todos">Todos</button>
+                    <button class="filter-btn" data-filter="naranjas">Naranjas</button>
+                    <button class="filter-btn" data-filter="limones">Limones</button>
+                    <button class="filter-btn" data-filter="mandarinas">Mandarinas</button>
                 </div>
                 
                 <div class="search-box">
                     <span class="material-symbols-outlined">search</span>
-                    <input type="text" placeholder="Buscar cítricos...">
+                    <input type="text" id="catalog-search" placeholder="Buscar cítricos...">
                 </div>
             </div>
             
@@ -72,15 +72,15 @@
             <div class="product-grid">
                 
                 <!-- Product 1 -->
-                <div class="product-card">
+                <div class="product-card" data-category="naranjas">
                     <div class="product-image-container">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Naranja Valencia" class="product-image">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Naranja Valencia" class="product-image" style="object-position: center;">
                         <div class="product-badges">
                             <span class="badge badge-success">Top Ventas</span>
                         </div>
                     </div>
                     <div class="product-info">
-                        <span class="product-category">Cítricos Dulces</span>
+                        <span class="product-category">Naranjas</span>
                         <h2 class="product-name">Naranja Valencia Exportación</h2>
                         <div class="product-seller">
                             <span class="material-symbols-outlined" style="font-size: 16px;">storefront</span>
@@ -92,10 +92,10 @@
                         </div>
                         
                         <div class="product-actions">
-                            <a href="detalle_producto.html" class="btn-details" title="Ver Detalles">
+                            <a href="detalle_producto.html?id=1" class="btn-details" title="Ver Detalles">
                                 <span class="material-symbols-outlined">visibility</span>
                             </a>
-                            <button class="btn-cart">
+                            <button class="btn-cart" data-id="1" data-name="Naranja Valencia Exportación" data-price="550">
                                 <span class="material-symbols-outlined">shopping_cart</span> Agregar
                             </button>
                         </div>
@@ -103,9 +103,9 @@
                 </div>
                 
                 <!-- Product 2 -->
-                <div class="product-card">
+                <div class="product-card" data-category="limones">
                     <div class="product-image-container">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7" alt="Limón Persa" class="product-image">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7" alt="Limón Persa" class="product-image" style="object-position: center;">
                         <div class="product-badges">
                             <span class="badge" style="background-color: var(--color-primary); color: white;">Nuevo Lote</span>
                         </div>
@@ -123,10 +123,10 @@
                         </div>
                         
                         <div class="product-actions">
-                            <a href="detalle_producto.html" class="btn-details" title="Ver Detalles">
+                            <a href="detalle_producto.html?id=2" class="btn-details" title="Ver Detalles">
                                 <span class="material-symbols-outlined">visibility</span>
                             </a>
-                            <button class="btn-cart">
+                            <button class="btn-cart" data-id="2" data-name="Limón Persa Sin Semilla" data-price="320">
                                 <span class="material-symbols-outlined">shopping_cart</span> Agregar
                             </button>
                         </div>
@@ -134,9 +134,12 @@
                 </div>
                 
                 <!-- Product 3 -->
-                <div class="product-card">
+                <div class="product-card" data-category="mandarinas">
                     <div class="product-image-container">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPGZf3QvyMP4KpwykuSd7MCEaroVjJKxNgHPdZZdPgDsPUaAY68uz0HVCWauyAitBpK6_FLl9Da13KzKRB3h-Ac-UN3r97LPb9QjJcEsNInbOVdcuxCHW7CXPvpJ2BioTlDG2wYTJ6QssrWMw1OHCaHwqzTpLZIrYD_AiwRPuRWPD4R9OsWD4YqycnaTt6lHrswViuudpRH537N3F-FZrhV9klwJqcmyuQmzYAKS7hTYuNvJ6OoF_r5VhDP8sxz3kb-Q" alt="Mandarina" class="product-image">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPGZf3QvyMP4KpwykuSd7MCEaroVjJKxNgHPdZZdPgDsPUaAY68uz0HVCWauyAitBpK6_FLl9Da13KzKRB3h-Ac-UN3r97LPb9QjJcEsNInbOVdcuxCHW7CXPvpJ2BioTlDG2wYTJ6QssrWMw1OHCaHwqzTpLZIrYD_AiwRPuRWPD4R9OsWD4YqycnaTt6lHrswViuudpRH537N3F-FZrhV9klwJqcmyuQmzYAKS7hTYuNvJ6OoF_r5VhDP8sxz3kb-Q" alt="Mandarina" class="product-image" style="object-position: center;">
+                        <div class="product-badges">
+                            <span class="badge" style="background-color: var(--color-secondary); color: white;">Temporada</span>
+                        </div>
                     </div>
                     <div class="product-info">
                         <span class="product-category">Mandarinas</span>
@@ -151,10 +154,10 @@
                         </div>
                         
                         <div class="product-actions">
-                            <a href="detalle_producto.html" class="btn-details" title="Ver Detalles">
+                            <a href="detalle_producto.html?id=3" class="btn-details" title="Ver Detalles">
                                 <span class="material-symbols-outlined">visibility</span>
                             </a>
-                            <button class="btn-cart">
+                            <button class="btn-cart" data-id="3" data-name="Mandarina Criolla Dulce" data-price="400">
                                 <span class="material-symbols-outlined">shopping_cart</span> Agregar
                             </button>
                         </div>
@@ -162,12 +165,15 @@
                 </div>
 
                 <!-- Product 4 -->
-                <div class="product-card">
+                <div class="product-card" data-category="naranjas">
                     <div class="product-image-container">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5NlBrwVQCmUkCLSscY3_IEnCs-xbBdHzo1XEYM8Xsmgv6G6ehonwO-rC_-ZlRYWZoX9TwdQnRhupM01cVynZfl_no7AvdVpGwSbqMdxgFyik5Okdb10vA8ZbJNzUFR3Z8WyVOfTME3Yi-CSyiBXB-YlOAFCpAw1UupPun8wXSmnApIjd5a-DY4eTzrtfoKgEwHZWo2KResH_qIsq0ahd-wHLAYP1sVUut-Z7RrdURGUzFVmd92ODJ_u96rmL6kZ0KzQ" alt="Naranja Agria" class="product-image">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5NlBrwVQCmUkCLSscY3_IEnCs-xbBdHzo1XEYM8Xsmgv6G6ehonwO-rC_-ZlRYWZoX9TwdQnRhupM01cVynZfl_no7AvdVpGwSbqMdxgFyik5Okdb10vA8ZbJNzUFR3Z8WyVOfTME3Yi-CSyiBXB-YlOAFCpAw1UupPun8wXSmnApIjd5a-DY4eTzrtfoKgEwHZWo2KResH_qIsq0ahd-wHLAYP1sVUut-Z7RrdURGUzFVmd92ODJ_u96rmL6kZ0KzQ" alt="Naranja Agria" class="product-image" style="object-position: center;">
+                        <div class="product-badges">
+                            <span class="badge" style="background-color: #e65c00; color: white;">Ácida</span>
+                        </div>
                     </div>
                     <div class="product-info">
-                        <span class="product-category">Cítricos Ácidos</span>
+                        <span class="product-category">Naranjas</span>
                         <h2 class="product-name">Naranja Agria Especial</h2>
                         <div class="product-seller">
                             <span class="material-symbols-outlined" style="font-size: 16px;">storefront</span>
@@ -179,10 +185,10 @@
                         </div>
                         
                         <div class="product-actions">
-                            <a href="detalle_producto.html" class="btn-details" title="Ver Detalles">
+                            <a href="detalle_producto.html?id=4" class="btn-details" title="Ver Detalles">
                                 <span class="material-symbols-outlined">visibility</span>
                             </a>
-                            <button class="btn-cart">
+                            <button class="btn-cart" data-id="4" data-name="Naranja Agria Especial" data-price="280">
                                 <span class="material-symbols-outlined">shopping_cart</span> Agregar
                             </button>
                         </div>
@@ -213,5 +219,59 @@
         </div>
     </footer>
     <script src="../js/app.js"></script>
+    <script>
+        // ── Filter buttons ──────────────────────────────────────────────
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const cards      = document.querySelectorAll('.product-card');
+        const searchInput = document.getElementById('catalog-search');
+
+        function applyFilters() {
+            const activeBtn  = document.querySelector('.filter-btn.active');
+            const activeFilter = activeBtn ? activeBtn.dataset.filter : 'todos';
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+            cards.forEach(card => {
+                const cat  = (card.dataset.category || '').toLowerCase();
+                const name = card.querySelector('.product-name')?.textContent.toLowerCase() || '';
+
+                const matchFilter = activeFilter === 'todos' || cat === activeFilter;
+                const matchSearch = query === '' || name.includes(query) || cat.includes(query);
+
+                card.style.display = (matchFilter && matchSearch) ? '' : 'none';
+            });
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                applyFilters();
+            });
+        });
+
+        if (searchInput) {
+            searchInput.addEventListener('input', applyFilters);
+        }
+
+        // ── Quantity badge on cart button ───────────────────────────────
+        document.querySelectorAll('.btn-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const user = CitriAuth.getUser();
+                if (!user || user.role !== 'cliente') {
+                    alert('Debes iniciar sesión como comprador para agregar productos al carrito.');
+                    window.location.href = 'auth/login.html';
+                    return;
+                }
+                const name = btn.dataset.name || 'Producto';
+                const original = btn.innerHTML;
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> ¡Agregado!';
+                btn.style.background = 'var(--color-secondary)';
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.style.background = '';
+                }, 1800);
+            });
+        });
+    </script>
 </body>
 </html>

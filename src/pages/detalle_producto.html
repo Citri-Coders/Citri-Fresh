@@ -130,11 +130,9 @@
             </div>
             
             <div class="nav-actions flex items-center gap-sm">
-                <a href="auth/login.html" class="btn btn-primary hidden md-flex">
-                    Ingresar
-                </a>
-                <a href="carrito.html" class="btn btn-icon" style="color: var(--color-primary);">
-                    <span class="material-symbols-outlined">shopping_cart</span>
+                <a href="auth/login.html" class="btn btn-primary">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">login</span>
+                    <span>Ingresar</span>
                 </a>
                 <button class="mobile-menu-btn">
                     <span class="material-symbols-outlined">menu</span>
@@ -156,8 +154,8 @@
             <div class="product-detail-grid">
                 <!-- Gallery Section -->
                 <div>
-                    <div class="product-gallery-main">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Naranjas Valencia">
+                    <div class="product-gallery-main" id="main-gallery">
+                        <img id="main-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Naranjas Valencia" style="object-position: center;">
                         <div style="position: absolute; top: var(--space-md); left: var(--space-md); display: flex; flex-direction: column; gap: var(--space-xs);">
                             <span class="badge badge-success" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Cosecha Reciente</span>
                             <span class="badge" style="background-color: white; color: var(--color-primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Calidad Exportación</span>
@@ -165,14 +163,14 @@
                     </div>
                     
                     <div class="product-gallery-thumbs">
-                        <div class="product-thumb active">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Thumb 1">
+                        <div class="product-thumb active" onclick="switchThumb(this, 'https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp')">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Thumb 1" style="object-position: center;">
                         </div>
-                        <div class="product-thumb">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7" alt="Thumb 2">
+                        <div class="product-thumb" onclick="switchThumb(this, 'https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7')">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7" alt="Thumb 2" style="object-position: center;">
                         </div>
-                        <div class="product-thumb">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPGZf3QvyMP4KpwykuSd7MCEaroVjJKxNgHPdZZdPgDsPUaAY68uz0HVCWauyAitBpK6_FLl9Da13KzKRB3h-Ac-UN3r97LPb9QjJcEsNInbOVdcuxCHW7CXPvpJ2BioTlDG2wYTJ6QssrWMw1OHCaHwqzTpLZIrYD_AiwRPuRWPD4R9OsWD4YqycnaTt6lHrswViuudpRH537N3F-FZrhV9klwJqcmyuQmzYAKS7hTYuNvJ6OoF_r5VhDP8sxz3kb-Q" alt="Thumb 3">
+                        <div class="product-thumb" onclick="switchThumb(this, 'https://lh3.googleusercontent.com/aida-public/AB6AXuCPGZf3QvyMP4KpwykuSd7MCEaroVjJKxNgHPdZZdPgDsPUaAY68uz0HVCWauyAitBpK6_FLl9Da13KzKRB3h-Ac-UN3r97LPb9QjJcEsNInbOVdcuxCHW7CXPvpJ2BioTlDG2wYTJ6QssrWMw1OHCaHwqzTpLZIrYD_AiwRPuRWPD4R9OsWD4YqycnaTt6lHrswViuudpRH537N3F-FZrhV9klwJqcmyuQmzYAKS7hTYuNvJ6OoF_r5VhDP8sxz3kb-Q')">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPGZf3QvyMP4KpwykuSd7MCEaroVjJKxNgHPdZZdPgDsPUaAY68uz0HVCWauyAitBpK6_FLl9Da13KzKRB3h-Ac-UN3r97LPb9QjJcEsNInbOVdcuxCHW7CXPvpJ2BioTlDG2wYTJ6QssrWMw1OHCaHwqzTpLZIrYD_AiwRPuRWPD4R9OsWD4YqycnaTt6lHrswViuudpRH537N3F-FZrhV9klwJqcmyuQmzYAKS7hTYuNvJ6OoF_r5VhDP8sxz3kb-Q" alt="Thumb 3" style="object-position: center;">
                         </div>
                         <div class="product-thumb" style="display: flex; align-items: center; justify-content: center; background-color: var(--color-surface-container);">
                             <span class="material-symbols-outlined text-muted" style="font-size: 32px;">play_circle</span>
@@ -189,8 +187,8 @@
                     
                     <div style="background-color: var(--color-surface-gray); padding: var(--space-md); border-radius: var(--radius-lg); margin-bottom: var(--space-lg); border: 1px solid var(--color-border);">
                         <div class="flex items-end gap-sm" style="margin-bottom: var(--space-xs);">
-                            <span class="text-primary" style="font-size: var(--text-h2); font-weight: 700;">C$ 550.00</span>
-                            <span class="text-muted" style="font-size: var(--text-body-md); margin-bottom: 4px;">/ Caja (20 kg)</span>
+                            <span id="detail-price" class="text-primary" style="font-size: var(--text-h2); font-weight: 700;">C$ 550.00</span>
+                            <span id="detail-unit" class="text-muted" style="font-size: var(--text-body-md); margin-bottom: 4px;">/ Caja (20 kg)</span>
                         </div>
                         <div class="flex items-center gap-xs" style="color: var(--color-secondary); font-size: var(--text-label);">
                             <span class="material-symbols-outlined icon-fill">check_circle</span>
@@ -201,17 +199,17 @@
                     <div style="margin-bottom: var(--space-lg);">
                         <label style="display: block; font-size: var(--text-label); font-weight: 700; text-transform: uppercase; margin-bottom: var(--space-xs);">Formato de Envase</label>
                         <div class="format-selector">
-                            <div class="format-btn active">Caja 20 kg</div>
-                            <div class="format-btn">Bin 400 kg</div>
+                            <div class="format-btn active" onclick="selectFormat(this, 550, 'Caja 20 kg')">Caja 20 kg</div>
+                            <div class="format-btn" onclick="selectFormat(this, 8800, 'Bin 400 kg')">Bin 400 kg</div>
                         </div>
                         
                         <label style="display: block; font-size: var(--text-label); font-weight: 700; text-transform: uppercase; margin-bottom: var(--space-xs);">Cantidad (Cajas)</label>
                         <div style="display: flex; align-items: center; width: 200px;">
-                            <button style="width: 48px; height: 48px; background-color: var(--color-surface-container); border: 1px solid var(--color-border); border-radius: var(--radius-lg) 0 0 var(--radius-lg); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <button id="qty-minus" onclick="changeQty(-1)" style="width: 48px; height: 48px; background-color: var(--color-surface-container); border: 1px solid var(--color-border); border-radius: var(--radius-lg) 0 0 var(--radius-lg); display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                 <span class="material-symbols-outlined">remove</span>
                             </button>
-                            <input type="number" value="50" min="50" step="50" style="flex: 1; height: 48px; text-align: center; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); border-left: none; border-right: none; font-size: var(--text-body-lg); background-color: white;">
-                            <button style="width: 48px; height: 48px; background-color: var(--color-surface-container); border: 1px solid var(--color-border); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <input type="number" id="qty-input" value="50" min="50" step="50" style="flex: 1; height: 48px; text-align: center; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); border-left: none; border-right: none; font-size: var(--text-body-lg); background-color: white;">
+                            <button id="qty-plus" onclick="changeQty(1)" style="width: 48px; height: 48px; background-color: var(--color-surface-container); border: 1px solid var(--color-border); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                 <span class="material-symbols-outlined">add</span>
                             </button>
                         </div>
@@ -219,11 +217,11 @@
                     </div>
                     
                     <div style="display: flex; gap: var(--space-sm); border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: auto;">
-                        <button class="btn btn-accent flex-1 flex justify-center items-center gap-xs" style="padding: var(--space-md);">
+                        <button id="add-cart-btn" class="btn btn-accent flex-1 flex justify-center items-center gap-xs" style="padding: var(--space-md);" onclick="handleAddCart()">
                             <span class="material-symbols-outlined">shopping_cart</span>
                             Agregar al Carrito
                         </button>
-                        <button class="btn btn-outline flex justify-center items-center" style="padding: var(--space-md);">
+                        <button class="btn btn-outline flex justify-center items-center" style="padding: var(--space-md);" onclick="alert('Cotización enviada. Un asesor se pondrá en contacto contigo pronto.')">
                             Solicitar Cotización
                         </button>
                     </div>
@@ -277,5 +275,73 @@
         </div>
     </footer>
     <script src="../js/app.js"></script>
+    <script>
+        // ── Gallery Thumbnail Switcher ─────────────────────────────────────
+        function switchThumb(el, src) {
+            document.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            const mainImg = document.getElementById('main-img');
+            mainImg.style.opacity = '0';
+            setTimeout(() => {
+                mainImg.src = src;
+                mainImg.style.opacity = '1';
+            }, 200);
+        }
+        document.getElementById('main-img').style.transition = 'opacity 0.2s ease';
+
+        // ── Format Selector ───────────────────────────────────────────────
+        let currentPrice = 550;
+        let currentUnit  = 'Caja (20 kg)';
+
+        function selectFormat(el, price, unit) {
+            document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentPrice = price;
+            currentUnit  = unit;
+            updateTotal();
+            document.getElementById('detail-unit').textContent = `/ ${unit}`;
+        }
+
+        // ── Quantity Stepper ──────────────────────────────────────────────
+        const qtyInput = document.getElementById('qty-input');
+
+        function changeQty(delta) {
+            let val = parseInt(qtyInput.value) || 50;
+            val = Math.max(50, val + delta * 50);
+            qtyInput.value = val;
+            updateTotal();
+        }
+
+        qtyInput.addEventListener('change', () => {
+            let val = parseInt(qtyInput.value) || 50;
+            val = Math.max(50, Math.ceil(val / 50) * 50);
+            qtyInput.value = val;
+            updateTotal();
+        });
+
+        function updateTotal() {
+            const qty = parseInt(qtyInput.value) || 50;
+            const total = (currentPrice * qty).toLocaleString('es-NI');
+            document.getElementById('detail-price').textContent = `C$ ${total}`;
+        }
+
+        // ── Add to Cart Button ────────────────────────────────────────────
+        function handleAddCart() {
+            const user = CitriAuth.getUser();
+            if (!user || user.role !== 'cliente') {
+                alert('Debes iniciar sesión como comprador para agregar productos al carrito.');
+                window.location.href = 'auth/login.html';
+                return;
+            }
+            const btn = document.getElementById('add-cart-btn');
+            const qty = qtyInput.value;
+            btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> ¡Agregado al Carrito!';
+            btn.style.background = 'var(--color-secondary)';
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">shopping_cart</span> Agregar al Carrito';
+                btn.style.background = '';
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
