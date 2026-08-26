@@ -25,11 +25,45 @@ app.use('/api/productos', productosRouter);
 
 // 6. Archivos estáticos
 app.use(express.static(path.join(__dirname, 'src')));
+app.use('/src', express.static(path.join(__dirname, 'src')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// 7. Ruta principal - Sirve el HTML
+// 7. Rutas limpias de páginas
 app.get('/', (req, res) => {
   res.redirect('/pages/inicio.html');
+});
+
+app.get('/login', (req, res) => {
+  res.redirect('/pages/auth/login.html');
+});
+
+app.get('/registro', (req, res) => {
+  res.redirect('/pages/registro.html');
+});
+
+app.get('/catalogo', (req, res) => {
+  res.redirect('/pages/producto.html');
+});
+
+app.get('/carrito', (req, res) => {
+  res.redirect('/pages/carrito.html');
+});
+
+app.get('/nosotros', (req, res) => {
+  res.redirect('/pages/nosotros.html');
+});
+
+app.get('/perfil', (req, res) => {
+  res.redirect('/pages/perfil.html');
+});
+
+app.get('/panel-productor', (req, res) => {
+  res.redirect('/pages/panel_productor.html');
+});
+
+app.get('/registro-cosecha', (req, res) => {
+  res.redirect('/pages/registro_cosecha.html');
 });
 
 // 8. API de prueba

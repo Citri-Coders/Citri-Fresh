@@ -1,45 +1,83 @@
-// Se importa la libreria better-sqlite3
-const Database = require('better-sqlite3');
+const express = require('express');
+const router = express.Router();
+const db = require('../models/database');
 
-// Se importan modulos de node.js para el manejo de rutas de archivos y lectura del sistema
-const path = require('path');
-const fs = require('fs');
+/*
+ GET /api/productos
+*/
+router.get('/', (req, res) => {
+  const { zona, search, minPrecio, maxPrecio } = req.query;
 
-/* Se definen las rutas absolutas del archivo de la base de datos y del archivo sql de esquema
- __dirname apunta a la carpeta actual: server/models
- '../../db/citri_fresh.db' sube dos niveles a la raíz y entra a la carpeta db*/
-const dbPath = path.join(__dirname, '../../db/citri_fresh.db');
-const schemaPath = path.join(__dirname, '../../db/schema.sql');
+  let sql = 'SELECT * FROM productos WHERE 1=1';
+  const params = [];
 
-let db;
-
-try {
-  /*FUNCION DE CONEXION
-  Intenta abrir el archivo de la BD. Si no existe, better-sqlite3 lo crea automaticamente*/
-  db = new Database(dbPath);
-  
-  // Se habilita WAL (Write-Ahead Logging) para optimizar la velocidad de lectura/escritura
-  db.pragma('journal_mode = WAL');
-  console.log('Conexión establecida exitosamente con la base de datos sqlite.');
-
-  /*FUNCION DE INICIALIZACION
-  Verifica si el archivo db/schema.sql existe y ejecuta sus sentencias para crear las tablas*/
-  if (fs.existsSync(schemaPath)) {
-    const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-    db.exec(schemaSql);
-    console.log('Esquema de base de datos cargado e inicializado');
-  } else {
-    console.warn('No se encontro el archivo db/schema.sql');
+  if (zona) {
+    sql += ' AND zona = ?';
+    params.push(zona);
   }
 
-} catch (error) {
-  /*MANEJO DE ERRORES DE CONEXION
-  Captura cualquier fallo al intentar abrir la BD o leer el archivo sql */
-  console.error('Error al conectar o inicializar la base de datos sqlite:', error.message);
-  
-  // Detiene la ejecucion de Node.js si la base de datos no puede inicializarse
-  process.exit(1);
-}
+  if (search) {
+    sql += ' AND (nombre LIKE ? OR descripcion LIKE ?)';
+    params.push(`%${search}%`, `%${search}%`);
+  }
 
-// Exportamos la instancia de la base de datos para que las rutas puedan realizar consultas
-module.exports = db;
+  if (minPrecio && !isNaN(minPrecio)) {
+    sql += ' AND precio >= ?';
+    params.push(parseFloat(minPrecio));
+  }
+
+  if (maxPrecio && !isNaN(maxPrecio)) {
+    sql += ' AND precio <= ?';
+    params.push(parseFloat(maxPrecio));
+  }
+
+  sql += ' ORDER BY creado_en DESC';
+
+  db.all(sql, params, (err, productos) => {
+    if (err) {
+      console.error('Error al obtener productos:', err.message);
+      return res.status(500).json({
+        exito: false,
+        error: 'Error interno del servidor al consultar la lista de productos'
+      });
+    }
+
+    res.status(200).json({
+      exito: true,
+      total: productos.length,
+      datos: productos
+    });
+  });
+});
+
+/*
+ GET /api/productos/:id
+*/
+router.get('/:id', (req, res) => {
+  const productId = req.params.id;
+  const sql = 'SELECT * FROM productos WHERE id = ?';
+
+  db.get(sql, [productId], (err, producto) => {
+    if (err) {
+      console.error(`Error al obtener el producto con ID ${productId}:`, err.message);
+      return res.status(500).json({
+        exito: false,
+        error: 'Error interno del servidor al buscar el producto'
+      });
+    }
+
+    if (!producto) {
+      return res.status(404).json({
+        exito: false,
+        error: 'Producto no encontrado en el catalogo'
+      });
+    }
+
+    res.status(200).json({
+      exito: true,
+      datos: producto
+    });
+  });
+});
+
+module.exports = router;
