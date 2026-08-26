@@ -1,0 +1,76 @@
+/* ============================================
+   CITRI-FRESH — BASE STYLES
+   ============================================ */
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--color-text-dark);
+    margin-bottom: var(--space-sm);
+    line-height: 1.2;
+}
+
+h1 { font-size: var(--text-h1-mob); }
+h2 { font-size: var(--text-h2-mob); }
+h3 { font-size: var(--text-h3); }
+
+@media (min-width: 768px) {
+    h1 { font-size: var(--text-h1); }
+    h2 { font-size: var(--text-h2); }
+}
+
+p {
+    margin-bottom: var(--space-md);
+}
+
+a {
+    transition: var(--transition-fast);
+}
+
+/* Utilities */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-accent { color: var(--color-accent); }
+.text-muted { color: var(--color-text-muted); }
+.font-bold { font-weight: 700; }
+.font-black { font-weight: 900; }
+
+.bg-surface { background-color: var(--color-surface); }
+.bg-primary { background-color: var(--color-primary); }
+.bg-gray { background-color: var(--color-surface-gray); }
+
+.hidden { display: none !important; }
+@media (min-width: 768px) {
+    .md-hidden { display: none !important; }
+    .md-block { display: block !important; }
+    .md-flex { display: flex !important; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-surface-gray);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-border-light);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-light);
+}

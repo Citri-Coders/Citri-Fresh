@@ -1,0 +1,80 @@
+/* ============================================
+   CITRI-FRESH — NAVIGATION
+   ============================================ */
+
+.navbar {
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.navbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+}
+
+/* Brand */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: var(--font-head);
+    font-size: var(--text-h3);
+    font-weight: 900;
+    color: var(--color-primary);
+}
+.navbar-logo-img {
+    height: 2.5rem;
+    width: auto;
+}
+
+/* Desktop Nav */
+.nav-menu {
+    display: none;
+}
+@media (min-width: 768px) {
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: var(--space-lg);
+    }
+}
+
+.nav-link {
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: var(--transition-fast);
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid transparent;
+}
+.nav-link:hover {
+    color: var(--color-primary);
+}
+.nav-link.active {
+    color: var(--color-primary);
+    font-weight: 700;
+    border-bottom-color: var(--color-primary);
+}
+
+/* Actions */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+/* Mobile Toggle */
+.mobile-menu-btn {
+    display: block;
+    color: var(--color-primary);
+    padding: 0.5rem;
+}
+@media (min-width: 768px) {
+    .mobile-menu-btn {
+        display: none;
+    }
+}

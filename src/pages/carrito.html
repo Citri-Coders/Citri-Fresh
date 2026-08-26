@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Carrito | Citri-Fresh</title>
+    <!-- CSS Independiente Local -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="../css/footer.css">
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="inicio.html" class="navbar-brand">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
+            </a>
+            
+            <div class="nav-menu">
+                <a class="nav-link" href="inicio.html">Inicio</a>
+                <a class="nav-link" href="producto.html">Productos</a>
+                <a class="nav-link" href="nosotros.html">Nosotros</a>
+            </div>
+            
+            <div class="nav-actions flex items-center gap-sm">
+                <a href="perfil.html" class="hidden md-flex items-center gap-xs text-primary" style="font-weight: 700; font-size: var(--text-label);">
+                    <span class="material-symbols-outlined">person</span>
+                    Mi Panel
+                </a>
+                <button class="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: var(--space-xl);">
+        <div class="container">
+            <!-- Header -->
+            <div class="flex items-center gap-md" style="margin-bottom: var(--space-xl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-md);">
+                <a href="producto.html" class="text-muted hover:text-primary transition-fast">
+                    <span class="material-symbols-outlined" style="font-size: 28px;">arrow_back</span>
+                </a>
+                <h1 style="margin: 0;">Carrito de Compras</h1>
+                <span class="badge" style="margin-left: auto; background-color: var(--color-surface-container); color: var(--color-primary-container);">3 Ítems</span>
+            </div>
+            
+            <div class="cart-layout">
+                <!-- Cart Items Section -->
+                <div class="cart-items">
+                    <!-- Cart Item 1 -->
+                    <div class="cart-item">
+                        <button aria-label="Eliminar" class="cart-item-delete">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        
+                        <div class="cart-item-img-wrap">
+                            <img alt="Naranjas Valencia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp">
+                        </div>
+                        
+                        <div class="cart-item-content">
+                            <div>
+                                <span class="badge badge-success" style="margin-bottom: var(--space-xs); display: inline-block;">Caja 20kg</span>
+                                <h3 class="cart-item-title">Naranjas Valencia Premium</h3>
+                                <p class="cart-item-desc">Origen: Finca El Rosario, León. Calibre grande, ideales para jugo fresco y exportación.</p>
+                            </div>
+                            
+                            <div class="cart-item-footer">
+                                <div class="quantity-control">
+                                    <button class="quantity-btn"><span class="material-symbols-outlined">remove</span></button>
+                                    <input class="quantity-input" type="number" value="2">
+                                    <button class="quantity-btn"><span class="material-symbols-outlined">add</span></button>
+                                </div>
+                                
+                                <div class="cart-item-price">
+                                    <span class="cart-item-price-old">C$ 550.00 / ud</span>
+                                    <span class="cart-item-price-current">C$ 1,000.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cart Item 2 -->
+                    <div class="cart-item">
+                        <button aria-label="Eliminar" class="cart-item-delete">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        
+                        <div class="cart-item-img-wrap">
+                            <img alt="Limón Persa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7">
+                        </div>
+                        
+                        <div class="cart-item-content">
+                            <div>
+                                <span class="badge badge-success" style="margin-bottom: var(--space-xs); display: inline-block;">Malla 5kg</span>
+                                <h3 class="cart-item-title">Limón Persa Primera</h3>
+                                <p class="cart-item-desc">Origen: Valle de Chinandega. Sin semilla, alta jugosidad, color verde intenso.</p>
+                            </div>
+                            
+                            <div class="cart-item-footer">
+                                <div class="quantity-control">
+                                    <button class="quantity-btn" disabled><span class="material-symbols-outlined">remove</span></button>
+                                    <input class="quantity-input" type="number" value="1">
+                                    <button class="quantity-btn"><span class="material-symbols-outlined">add</span></button>
+                                </div>
+                                
+                                <div class="cart-item-price">
+                                    <span class="cart-item-price-current">C$ 320.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Order Summary Section -->
+                <div class="cart-summary-wrapper">
+                    <div class="cart-summary">
+                        <h2 class="cart-summary-title">Resumen del Pedido</h2>
+                        
+                        <div class="summary-list">
+                            <div class="summary-item">
+                                <span>Subtotal (2 ítems)</span>
+                                <span>C$ 1,320.00</span>
+                            </div>
+                            <div class="summary-item discount">
+                                <span>Descuentos</span>
+                                <span>- C$ 0.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Impuestos (IVA 15%)</span>
+                                <span>C$ 198.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Costo de Envío</span>
+                                <span>C$ 150.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-total">
+                            <span class="summary-total-label">Total</span>
+                            <div class="summary-total-value">
+                                <span class="summary-total-currency">Córdobas (NIO)</span>
+                                <span class="summary-total-amount text-primary">C$ 1,668.00</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-accent btn-block flex justify-center items-center gap-sm">
+                            Finalizar Compra
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </button>
+                        
+                        <div class="payment-methods">
+                            <p class="payment-methods-title">Métodos de pago aceptados</p>
+                            <div class="payment-icons">
+                                <div class="payment-icon"><span class="material-symbols-outlined text-muted">credit_card</span></div>
+                                <div class="payment-icon"><span class="material-symbols-outlined text-muted">account_balance</span></div>
+                                <div class="payment-icon"><span class="material-symbols-outlined text-muted">payments</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="trust-badge">
+                            <span class="material-symbols-outlined">verified_user</span>
+                            <div>
+                                <p class="trust-badge-title">Compra Segura</p>
+                                <p class="trust-badge-text">Tus datos están protegidos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                Citri-Fresh
+            </div>
+            
+            <div class="footer-nav">
+                <a class="footer-link" href="#">Privacidad</a>
+                <a class="footer-link" href="#">Términos</a>
+                <a class="footer-link" href="#">Contacto</a>
+                <a class="footer-link" href="#">Soporte</a>
+            </div>
+            
+            <div class="footer-copy">
+                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

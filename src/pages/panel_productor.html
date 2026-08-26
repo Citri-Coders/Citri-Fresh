@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Panel del Productor - Citri-Fresh</title>
+    <!-- CSS Independiente Local -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .stat-grid-producer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+        }
+        @media (max-width: 768px) {
+            .stat-grid-producer {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="inicio.html" class="navbar-brand">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
+            </a>
+            
+            <div class="nav-menu">
+                <a class="nav-link" href="inicio.html">Inicio</a>
+                <a class="nav-link active" href="panel_productor.html">Panel Productor</a>
+                <a class="nav-link" href="producto.html">Catálogo Público</a>
+                <a class="nav-link" href="nosotros.html">Nosotros</a>
+            </div>
+            
+            <div class="nav-actions flex items-center gap-sm">
+                <div class="hidden md-flex items-center gap-xs text-primary" style="font-weight: 700;">
+                    <span class="material-symbols-outlined">eco</span>
+                    <span>Productor</span>
+                </div>
+                <a href="inicio.html" class="text-muted hover:text-primary transition-fast" title="Cerrar Sesión">
+                    <span class="material-symbols-outlined">logout</span>
+                </a>
+                <button class="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: var(--space-xl);">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h1 class="text-primary" style="margin-bottom: var(--space-xs); font-size: var(--text-h2);">Panel del Productor</h1>
+                    <p class="text-muted" style="font-size: var(--text-body-lg);">Resumen de actividad y gestión de cosechas.</p>
+                </div>
+                <a href="registro_cosecha.html" class="btn btn-primary flex items-center gap-xs">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Subir Cosecha
+                </a>
+            </div>
+            
+            <div class="dashboard-grid" style="grid-template-columns: 1fr; gap: var(--space-xl);">
+                <!-- Top Section: Stats & Chart Placeholder -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl);">
+                    
+                    <div class="stat-grid-producer">
+                        <!-- Stat 1 -->
+                        <div class="dashboard-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 160px;">
+                            <div class="flex justify-between items-start text-muted">
+                                <span style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Ventas Mensuales</span>
+                                <span class="material-symbols-outlined text-primary">monitoring</span>
+                            </div>
+                            <div>
+                                <div class="text-primary" style="font-size: var(--text-h2); font-weight: 700;">C$ 4,520</div>
+                                <div class="flex items-center gap-xs" style="color: var(--color-secondary); font-size: var(--text-label); margin-top: var(--space-xs);">
+                                    <span class="material-symbols-outlined" style="font-size: 16px;">trending_up</span> +12% vs mes anterior
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stat 2 -->
+                        <div class="dashboard-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 160px;">
+                            <div class="flex justify-between items-start text-muted">
+                                <span style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Pedidos Activos</span>
+                                <span class="material-symbols-outlined text-primary">local_shipping</span>
+                            </div>
+                            <div>
+                                <div class="text-primary" style="font-size: var(--text-h2); font-weight: 700;">18</div>
+                                <div class="text-muted flex items-center gap-xs" style="font-size: var(--text-label); margin-top: var(--space-xs);">
+                                    5 pendientes de envío
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stat 3 -->
+                        <div class="dashboard-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 160px;">
+                            <div class="flex justify-between items-start text-muted">
+                                <span style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Stock Crítico</span>
+                                <span class="material-symbols-outlined" style="color: var(--color-error);">warning</span>
+                            </div>
+                            <div>
+                                <div class="text-primary" style="font-size: var(--text-h2); font-weight: 700;">2 <span class="text-muted" style="font-size: var(--text-body-md); font-weight: 400;">Lotes</span></div>
+                                <div class="flex items-center gap-xs" style="color: var(--color-error); font-size: var(--text-label); margin-top: var(--space-xs);">
+                                    Requiere atención
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Placeholder -->
+                    <div class="dashboard-card" style="position: relative; overflow: hidden; height: 160px; display: flex; flex-direction: column;">
+                        <span style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; color: var(--color-text-dark); position: relative; z-index: 10;">Rendimiento Semanal</span>
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 70%; display: flex; align-items: flex-end; gap: 8px; padding: 0 1rem; opacity: 0.8;">
+                            <div style="width: 16%; background-color: var(--color-primary-container); height: 33%; border-radius: 2px 2px 0 0;"></div>
+                            <div style="width: 16%; background-color: var(--color-primary-container); height: 50%; border-radius: 2px 2px 0 0;"></div>
+                            <div style="width: 16%; background-color: var(--color-primary-container); height: 66%; border-radius: 2px 2px 0 0;"></div>
+                            <div style="width: 16%; background-color: var(--color-primary); height: 100%; border-radius: 2px 2px 0 0;"></div>
+                            <div style="width: 16%; background-color: var(--color-primary-container); height: 80%; border-radius: 2px 2px 0 0;"></div>
+                            <div style="width: 16%; background-color: var(--color-primary-container); height: 50%; border-radius: 2px 2px 0 0;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottom Section: Inventory & Orders -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl);">
+                    <!-- Inventory Management -->
+                    <div class="dashboard-card">
+                        <div class="flex justify-between items-center" style="margin-bottom: var(--space-lg);">
+                            <h2 style="font-size: var(--text-h3); margin: 0; color: var(--color-primary);">Inventario de Cítricos</h2>
+                            <a href="#" class="text-primary hover:underline" style="font-size: var(--text-label); font-weight: 700;">Ver todo</a>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                            <!-- Item 1 -->
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-lg); background-color: white;">
+                                <div class="flex items-center gap-md">
+                                    <img alt="Limón Persa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPGZf3QvyMP4KpwykuSd7MCEaroVjJKxNgHPdZZdPgDsPUaAY68uz0HVCWauyAitBpK6_FLl9Da13KzKRB3h-Ac-UN3r97LPb9QjJcEsNInbOVdcuxCHW7CXPvpJ2BioTlDG2wYTJ6QssrWMw1OHCaHwqzTpLZIrYD_AiwRPuRWPD4R9OsWD4YqycnaTt6lHrswViuudpRH537N3F-FZrhV9klwJqcmyuQmzYAKS7hTYuNvJ6OoF_r5VhDP8sxz3kb-Q" style="width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover;">
+                                    <div>
+                                        <h3 style="margin: 0; font-size: var(--text-label); font-weight: 700;">Limón Persa (Premium)</h3>
+                                        <p class="text-muted" style="margin: 0; font-size: var(--text-caption);">Zona: Masaya</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="text-primary" style="font-weight: 700; font-size: var(--text-label);">500 kg</div>
+                                    <div class="badge badge-success" style="margin-top: 4px;">En Stock</div>
+                                </div>
+                                <button class="btn btn-icon text-muted hover:text-primary">
+                                    <span class="material-symbols-outlined">edit</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Item 2 -->
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-lg); background-color: white;">
+                                <div class="flex items-center gap-md">
+                                    <img alt="Naranja Valencia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5NlBrwVQCmUkCLSscY3_IEnCs-xbBdHzo1XEYM8Xsmgv6G6ehonwO-rC_-ZlRYWZoX9TwdQnRhupM01cVynZfl_no7AvdVpGwSbqMdxgFyik5Okdb10vA8ZbJNzUFR3Z8WyVOfTME3Yi-CSyiBXB-YlOAFCpAw1UupPun8wXSmnApIjd5a-DY4eTzrtfoKgEwHZWo2KResH_qIsq0ahd-wHLAYP1sVUut-Z7RrdURGUzFVmd92ODJ_u96rmL6kZ0KzQ" style="width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover;">
+                                    <div>
+                                        <h3 style="margin: 0; font-size: var(--text-label); font-weight: 700;">Naranja Valencia</h3>
+                                        <p class="text-muted" style="margin: 0; font-size: var(--text-caption);">Zona: León</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="text-primary" style="font-weight: 700; font-size: var(--text-label);">50 kg</div>
+                                    <div class="badge" style="background-color: var(--color-error); color: white; margin-top: 4px;">Stock Bajo</div>
+                                </div>
+                                <button class="btn btn-icon text-muted hover:text-primary">
+                                    <span class="material-symbols-outlined">edit</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Orders -->
+                    <div class="dashboard-card" style="padding: 0; overflow: hidden;">
+                        <div class="flex justify-between items-center" style="padding: var(--space-md) var(--space-lg); border-bottom: 1px solid var(--color-border);">
+                            <h2 style="font-size: var(--text-h3); margin: 0; color: var(--color-primary);">Pedidos Recientes</h2>
+                            <a href="#" class="text-primary hover:underline" style="font-size: var(--text-label); font-weight: 700;">Historial</a>
+                        </div>
+                        
+                        <div style="overflow-x: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID Pedido</th>
+                                        <th>Comprador</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th style="text-align: right;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 700;">#ORD-982</td>
+                                        <td>Supermercados La Colonia</td>
+                                        <td class="text-muted">12 Oct 2024</td>
+                                        <td>
+                                            <span class="badge" style="background-color: rgba(255,199,59,0.2); color: var(--color-text-dark);">Procesando</span>
+                                        </td>
+                                        <td class="text-primary" style="font-weight: 700; text-align: right;">C$ 1,250</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700;">#ORD-981</td>
+                                        <td>Jugos Naturales S.A.</td>
+                                        <td class="text-muted">10 Oct 2024</td>
+                                        <td>
+                                            <span class="badge badge-success">Completado</span>
+                                        </td>
+                                        <td class="text-primary" style="font-weight: 700; text-align: right;">C$ 840</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700;">#ORD-980</td>
+                                        <td>Mercado Oriental (Mayorista)</td>
+                                        <td class="text-muted">08 Oct 2024</td>
+                                        <td>
+                                            <span class="badge badge-success">Completado</span>
+                                        </td>
+                                        <td class="text-primary" style="font-weight: 700; text-align: right;">C$ 2,100</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                Citri-Fresh
+            </div>
+            
+            <div class="footer-nav">
+                <a class="footer-link" href="#">Privacidad</a>
+                <a class="footer-link" href="#">Términos</a>
+                <a class="footer-link" href="#">Contacto</a>
+                <a class="footer-link" href="#">Soporte</a>
+            </div>
+            
+            <div class="footer-copy">
+                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

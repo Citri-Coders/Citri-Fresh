@@ -1,61 +1,68 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
+
     <title>Iniciar Sesión — CitriFresh</title>
     <link rel="icon" type="image/svg+xml" href="../../../public/images/favicon.svg" />
     <link rel="stylesheet" href="../../css/pages/auth.css" />
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="auth-wrapper">
-      <div class="auth-card-split">
-        <main class="auth-form-side">
-          <h1>Iniciar Sesión</h1>
+        <a href="inicio.html"
+            style="position: absolute; top: 2rem; left: 2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-primary); font-weight: 700; z-index: 10; text-decoration: none;">
+            <span class="material-symbols-outlined">arrow_back</span> Volver al inicio
+        </a>
 
-          <form id="login-form">
-            <div class="input-group">
-              <label for="email" class="input-label">Correo electrónico</label>
-              <input
-                type="email"
-                id="email"
-                class="input-field"
-                placeholder="Ingresa tu correo"
-                required
-              />
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg"
+                    alt="Citri-Fresh Logo" class="auth-logo">
+                <h1 class="auth-title">Bienvenido de nuevo</h1>
+                <p class="auth-subtitle">Ingresa a tu cuenta para gestionar tus cítricos.</p>
             </div>
 
-            <div class="input-group">
-              <label for="password" class="input-label">Contraseña</label>
-              <input
-                type="password"
-                id="password"
-                class="input-field"
-                placeholder="Ingresa tu contraseña"
-                required
-              />
+            <form class="auth-form" action="perfil.html">
+                <div class="input-group">
+                    <input type="email" class="auth-input" placeholder="Correo Electrónico" required>
+                    <span class="material-symbols-outlined input-icon">mail</span>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" class="auth-input" placeholder="Contraseña" required>
+                    <span class="material-symbols-outlined input-icon">lock</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" style="accent-color: var(--color-primary);"> Recordarme
+                    </label>
+                    <a href="#" class="auth-link" style="font-weight: 400;">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    Iniciar Sesión <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </form>
+
+            <div class="auth-divider">o</div>
+
+            <button class="auth-btn"
+                style="background: white; color: #444; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width: 24px;">
+                Continuar con Google
+            </button>
+
+            <div class="auth-links">
+                <p style="color: var(--color-text-light);">¿No tienes una cuenta? <a href="registro.html"
+                        class="auth-link">Regístrate aquí</a></p>
             </div>
-
-            <div class="checkbox-group">
-              <input type="checkbox" id="remember" />
-              <label for="remember">Recordar mi sesión</label>
-            </div>
-
-            <button type="submit" class="btn-submit">Ingresar</button>
-          </form>
-
-          <p class="auth-footer" style="margin-top: 24px">
-            ¿No tienes una cuenta? <a href="./register.html">Regístrate aquí</a>
-          </p>
-        </main>
-
-        <aside
-          class="auth-image-side"
-          aria-label="Imagen decorativa de CitriFresh"
-        ></aside>
-      </div>
+        </div>
     </div>
-  </body>
+</body>
+
 </html>

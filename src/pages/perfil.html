@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Mi Perfil | Citri-Fresh</title>
+    <!-- CSS Independiente Local -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/footer.css">
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="inicio.html" class="navbar-brand">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
+            </a>
+            
+            <div class="nav-menu">
+                <a class="nav-link" href="inicio.html">Inicio</a>
+                <a class="nav-link" href="producto.html">Productos</a>
+                <a class="nav-link active" href="perfil.html">Mi Panel</a>
+                <a class="nav-link" href="nosotros.html">Nosotros</a>
+            </div>
+            
+            <div class="nav-actions flex items-center gap-sm">
+                <a href="carrito.html" class="btn btn-icon" style="color: var(--color-primary);">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </a>
+                <div class="hidden md-flex items-center gap-xs" style="background-color: var(--color-surface-container); padding: 0.5rem 1rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                    <span class="material-symbols-outlined text-muted">person</span>
+                    <span style="font-weight: 700; font-size: var(--text-label);">Juan Pérez</span>
+                    <span class="material-symbols-outlined text-muted" style="cursor: pointer;">expand_more</span>
+                </div>
+                <button class="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: var(--space-xl);">
+        <div class="container">
+            <div style="margin-bottom: var(--space-xl);">
+                <h1 class="text-primary" style="margin-bottom: var(--space-xs);">¡Hola, Juan!</h1>
+                <p class="text-muted" style="font-size: var(--text-body-lg);">Bienvenido a tu panel de control Citri-Fresh.</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Sidebar (Profile & Quick Links) -->
+                <aside class="dashboard-sidebar">
+                    <!-- Profile Card -->
+                    <div class="dashboard-card" style="align-items: center; text-align: center;">
+                        <div style="width: 6rem; height: 6rem; border-radius: 50%; background-color: var(--color-primary-container); color: white; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-md); border: 2px solid var(--color-primary);">
+                            <span class="material-symbols-outlined icon-fill" style="font-size: 3rem;">person</span>
+                        </div>
+                        <h2 style="font-size: var(--text-h3); margin-bottom: 0;">Juan Pérez</h2>
+                        <p class="text-muted" style="font-size: var(--text-caption); margin-bottom: var(--space-md);">Cliente Mayorista</p>
+                        
+                        <div style="width: 100%; text-align: left; border-top: 1px solid var(--color-border); padding-top: var(--space-md); margin-bottom: var(--space-lg);">
+                            <div class="flex items-center gap-xs text-muted" style="margin-bottom: var(--space-xs);">
+                                <span class="material-symbols-outlined" style="font-size: 1.25rem;">mail</span>
+                                <span style="font-size: var(--text-caption);">juan.perez@ejemplo.com</span>
+                            </div>
+                            <div class="flex items-center gap-xs text-muted" style="margin-bottom: var(--space-xs);">
+                                <span class="material-symbols-outlined" style="font-size: 1.25rem;">phone</span>
+                                <span style="font-size: var(--text-caption);">+505 8888 8888</span>
+                            </div>
+                            <div class="flex items-start gap-xs text-muted">
+                                <span class="material-symbols-outlined" style="font-size: 1.25rem;">location_on</span>
+                                <span style="font-size: var(--text-caption); line-height: 1.4;">Carretera Panamericana, Km 92<br>León, Nicaragua</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-outline btn-block">Editar Perfil</button>
+                    </div>
+                    
+                    <!-- Quick Navigation -->
+                    <nav class="dashboard-card hidden md-block" style="padding: 0; overflow: hidden;">
+                        <a href="#" class="sidebar-link active flex items-center gap-sm">
+                            <span class="material-symbols-outlined icon-fill">inventory_2</span>
+                            Mis Pedidos
+                        </a>
+                        <a href="#" class="sidebar-link flex items-center gap-sm">
+                            <span class="material-symbols-outlined">favorite</span>
+                            Favoritos
+                        </a>
+                        <a href="inicio.html" class="sidebar-link flex items-center gap-sm" style="border-top: 1px solid var(--color-border);">
+                            <span class="material-symbols-outlined">logout</span>
+                            Cerrar Sesión
+                        </a>
+                    </nav>
+                </aside>
+                
+                <!-- Main Dashboard Area -->
+                <div class="dashboard-main">
+                    <!-- Order Status Overview -->
+                    <section style="margin-bottom: var(--space-xl);">
+                        <h2 class="flex items-center gap-sm" style="font-size: var(--text-h3); margin-bottom: var(--space-md);">
+                            <span class="material-symbols-outlined text-primary">local_shipping</span>
+                            Estado de Pedidos Recientes
+                        </h2>
+                        
+                        <div class="stat-grid">
+                            <!-- Pending -->
+                            <div class="stat-card">
+                                <div class="flex justify-between items-start" style="margin-bottom: var(--space-sm);">
+                                    <span class="material-symbols-outlined" style="background-color: rgba(255,199,59,0.2); color: var(--color-yellow); padding: 0.5rem; border-radius: var(--radius-lg);">pending_actions</span>
+                                    <span class="stat-value">2</span>
+                                </div>
+                                <h3 class="stat-title">Pendientes</h3>
+                            </div>
+                            
+                            <!-- Shipped -->
+                            <div class="stat-card">
+                                <div class="flex justify-between items-start" style="margin-bottom: var(--space-sm);">
+                                    <span class="material-symbols-outlined" style="background-color: var(--color-surface-container); color: var(--color-primary); padding: 0.5rem; border-radius: var(--radius-lg);">directions_boat</span>
+                                    <span class="stat-value">1</span>
+                                </div>
+                                <h3 class="stat-title">Enviados</h3>
+                            </div>
+                            
+                            <!-- Delivered -->
+                            <div class="stat-card">
+                                <div class="flex justify-between items-start" style="margin-bottom: var(--space-sm);">
+                                    <span class="material-symbols-outlined" style="background-color: var(--color-secondary-container); color: var(--color-secondary); padding: 0.5rem; border-radius: var(--radius-lg);">task_alt</span>
+                                    <span class="stat-value">15</span>
+                                </div>
+                                <h3 class="stat-title">Entregados</h3>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Order History Table -->
+                    <section class="dashboard-card" style="padding: 0; overflow: hidden; margin-bottom: var(--space-xl);">
+                        <div class="flex justify-between items-center" style="padding: var(--space-md); border-bottom: 1px solid var(--color-border); background-color: var(--color-surface-gray);">
+                            <h2 style="font-size: var(--text-h3); margin: 0;">Historial de Pedidos</h2>
+                            <a href="#" class="text-primary flex items-center gap-xs" style="font-weight: 700; font-size: var(--text-label);">
+                                Ver Todos <span class="material-symbols-outlined" style="font-size: 1.25rem;">arrow_forward</span>
+                            </a>
+                        </div>
+                        
+                        <div style="overflow-x: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Pedido #</th>
+                                        <th>Fecha</th>
+                                        <th>Productos</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th style="text-align: center;">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 700;">#CF-2405-001</td>
+                                        <td class="text-muted">15 May 2024</td>
+                                        <td class="text-muted" style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Naranja Valencia (x50 cjs), Limón Tahití (x20 cjs)
+                                        </td>
+                                        <td class="text-primary" style="font-weight: 700;">C$ 24,000.00</td>
+                                        <td>
+                                            <span class="badge" style="background-color: rgba(255,199,59,0.2); color: var(--color-text-dark); border: 1px solid rgba(255,199,59,0.5);">
+                                                <span class="material-symbols-outlined" style="font-size: 14px; margin-right: 4px;">pending</span> Pendiente
+                                            </span>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <button class="btn btn-icon text-muted hover:text-primary">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700;">#CF-2405-002</td>
+                                        <td class="text-muted">12 May 2024</td>
+                                        <td class="text-muted" style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Mandarina Criolla (x30 cjs)
+                                        </td>
+                                        <td class="text-primary" style="font-weight: 700;">C$ 8,500.00</td>
+                                        <td>
+                                            <span class="badge badge-success" style="background-color: var(--color-surface-container); color: var(--color-primary);">
+                                                <span class="material-symbols-outlined" style="font-size: 14px; margin-right: 4px;">local_shipping</span> Enviado
+                                            </span>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <button class="btn btn-icon text-muted hover:text-primary">
+                                                <span class="material-symbols-outlined">location_on</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                Citri-Fresh
+            </div>
+            
+            <div class="footer-nav">
+                <a class="footer-link" href="#">Privacidad</a>
+                <a class="footer-link" href="#">Términos</a>
+                <a class="footer-link" href="#">Contacto</a>
+                <a class="footer-link" href="#">Soporte</a>
+            </div>
+            
+            <div class="footer-copy">
+                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

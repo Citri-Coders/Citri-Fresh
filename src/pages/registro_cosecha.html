@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Registro de Producto - Panel del Productor | Citri-Fresh</title>
+    <!-- CSS Independiente Local -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <style>
+        .form-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+        }
+        @media (max-width: 992px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .form-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--color-primary);
+        }
+        .form-card.accent::before {
+            background-color: var(--color-secondary);
+        }
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="inicio.html" class="navbar-brand">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
+            </a>
+            
+            <div class="nav-actions flex items-center gap-sm">
+                <div class="hidden md-flex items-center gap-xs text-muted" style="font-weight: 500;">
+                    <span class="material-symbols-outlined">person</span>
+                    <span>Panel Productor</span>
+                </div>
+                <a href="inicio.html" class="text-muted hover:text-primary transition-fast" title="Cerrar Sesión">
+                    <span class="material-symbols-outlined">logout</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: var(--space-xl); padding-bottom: var(--space-xl);">
+        <div class="container">
+            <!-- Header -->
+            <div class="flex justify-between items-center" style="margin-bottom: var(--space-xl);">
+                <div>
+                    <nav class="flex items-center gap-xs text-muted" style="font-size: var(--text-caption); margin-bottom: var(--space-xs);">
+                        <a href="panel_productor.html" class="flex items-center hover:text-primary"><span class="material-symbols-outlined" style="font-size: 16px;">home</span> Panel</a>
+                        <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
+                        <span class="text-primary" style="font-weight: 700;">Nuevo Registro</span>
+                    </nav>
+                    <h1 class="text-primary" style="font-size: var(--text-h2); margin: 0 0 var(--space-xs) 0;">Registro de Nuevo Producto</h1>
+                    <p class="text-muted" style="font-size: var(--text-body-md); margin: 0;">Añade un nuevo producto cítrico a tu catálogo para ofrecerlo en el mercado.</p>
+                </div>
+                <a href="panel_productor.html" class="btn btn-outline hidden md-flex items-center gap-xs">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Volver
+                </a>
+            </div>
+            
+            <!-- Form -->
+            <form action="#" method="POST" class="form-grid">
+                <!-- Column 1: Main Details -->
+                <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                    
+                    <!-- Basic Info -->
+                    <div class="form-card">
+                        <h2 class="flex items-center gap-sm text-primary" style="font-size: var(--text-h3); margin-bottom: var(--space-lg);">
+                            <span class="material-symbols-outlined">edit_document</span>
+                            Información Básica
+                        </h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="product_name">Nombre del producto *</label>
+                            <input class="form-input" type="text" id="product_name" name="product_name" placeholder="Ej: Limón Persa Categoría A" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="description">Descripción detallada</label>
+                            <textarea class="form-input" id="description" name="description" rows="4" placeholder="Describe las características principales de tu producto, calibre, color, etc." style="resize: vertical;"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Sales Details -->
+                    <div class="form-card accent">
+                        <h2 class="flex items-center gap-sm text-secondary" style="font-size: var(--text-h3); margin-bottom: var(--space-lg);">
+                            <span class="material-symbols-outlined">inventory_2</span>
+                            Detalles de Venta y Logística
+                        </h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="price">Precio por unidad (NIO) *</label>
+                                <input class="form-input" type="number" id="price" name="price" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="unit">Unidad de medida *</label>
+                                <select class="form-input" id="unit" name="unit" required>
+                                    <option value="" disabled selected>Selecciona unidad</option>
+                                    <option value="caja">Caja (18 kg aprox)</option>
+                                    <option value="malla">Malla (10 kg aprox)</option>
+                                    <option value="kg">Kilogramo (kg)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="stock">Stock inicial disponible *</label>
+                                <input class="form-input" type="number" id="stock" name="stock" placeholder="Cantidad disponible" min="0" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="zone">Zona de cultivo *</label>
+                                <select class="form-input" id="zone" name="zone" required>
+                                    <option value="" disabled selected>Selecciona región</option>
+                                    <option value="leon">León</option>
+                                    <option value="chinandega">Chinandega</option>
+                                    <option value="masaya">Masaya</option>
+                                    <option value="carazo">Carazo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Media & Actions -->
+                <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                    
+                    <!-- Image Upload -->
+                    <div class="form-card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <h2 class="text-primary" style="font-size: var(--text-h3); margin-bottom: var(--space-md); width: 100%; text-align: left;">Imagen del Producto</h2>
+                        
+                        <div style="width: 100%; aspect-ratio: 1/1; border: 2px dashed var(--color-primary); border-radius: var(--radius-lg); display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: var(--color-surface-gray); cursor: pointer; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='var(--color-surface-container)'" onmouseout="this.style.backgroundColor='var(--color-surface-gray)'">
+                            
+                            <div style="width: 64px; height: 64px; background-color: var(--color-primary-container); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-sm);">
+                                <span class="material-symbols-outlined" style="font-size: 32px;">add_a_photo</span>
+                            </div>
+                            
+                            <p class="text-primary" style="font-weight: 700; font-size: var(--text-label); margin: 0 0 4px 0;">Sube una imagen</p>
+                            <p class="text-muted" style="font-size: var(--text-caption); margin: 0; padding: 0 var(--space-md);">PNG, JPG hasta 5MB. Se recomienda fondo blanco.</p>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="form-card" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                        <button type="submit" class="btn btn-primary flex justify-center items-center gap-xs">
+                            <span class="material-symbols-outlined">save</span>
+                            Publicar Producto
+                        </button>
+                        <button type="button" class="btn btn-outline flex justify-center items-center gap-xs">
+                            Guardar como Borrador
+                        </button>
+                        <a href="panel_productor.html" class="btn flex justify-center items-center" style="background: none; border: none; color: var(--color-text-dark);">
+                            Cancelar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer (Minimal) -->
+    <footer class="footer" style="margin-top: auto;">
+        <div class="container footer-inner">
+            <div class="footer-copy">
+                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+            </div>
+            <div class="footer-nav">
+                <a class="footer-link" href="#">Soporte al Productor</a>
+                <a class="footer-link" href="#">Términos</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

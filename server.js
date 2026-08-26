@@ -24,16 +24,12 @@ app.use(express.json());
 app.use('/api/productos', productosRouter);
 
 // 6. Archivos estáticos
-app.use('/css', express.static(path.join(__dirname, 'src', 'css')));
-app.use('/js', express.static(path.join(__dirname, 'src', 'js')));
-app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+app.use(express.static(path.join(__dirname, 'src')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // 7. Ruta principal - Sirve el HTML
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src', 'pages', 'index.html'));
-});
-app.get('/catalogo', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src', 'pages', 'catalogo.html'));
+  res.redirect('/pages/inicio.html');
 });
 
 // 8. API de prueba

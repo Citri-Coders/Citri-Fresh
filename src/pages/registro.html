@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Registro | Citri-Fresh</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <a href="inicio.html" style="position: absolute; top: 2rem; left: 2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-primary); font-weight: 700; z-index: 10; text-decoration: none;">
+            <span class="material-symbols-outlined">arrow_back</span> Volver al inicio
+        </a>
+        
+        <div class="auth-card" style="max-width: 600px;">
+            <div class="auth-header" style="margin-bottom: 1.5rem;">
+                <h1 class="auth-title">Crea tu cuenta</h1>
+                <p class="auth-subtitle">Únete a la principal red de cítricos en Nicaragua.</p>
+            </div>
+            
+            <form class="auth-form" action="login.html">
+                <p style="text-align: center; font-weight: 700; color: var(--color-text-dark); margin-bottom: 0.5rem;">¿Qué tipo de cuenta necesitas?</p>
+                <div class="role-selector">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="cliente" checked>
+                        <div class="role-label">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                            <span class="text">Cliente / Comprador</span>
+                        </div>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="productor">
+                        <div class="role-label">
+                            <span class="material-symbols-outlined">agriculture</span>
+                            <span class="text">Productor Cítrico</span>
+                        </div>
+                    </label>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="input-group">
+                        <input type="text" class="auth-input" placeholder="Nombres" required>
+                        <span class="material-symbols-outlined input-icon">person</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="auth-input" placeholder="Apellidos" required>
+                        <span class="material-symbols-outlined input-icon">person</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <input type="email" class="auth-input" placeholder="Correo Electrónico" required>
+                    <span class="material-symbols-outlined input-icon">mail</span>
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" class="auth-input" placeholder="Contraseña" required>
+                    <span class="material-symbols-outlined input-icon">lock</span>
+                </div>
+                
+                <button type="submit" class="auth-btn">
+                    Crear Cuenta <span class="material-symbols-outlined">person_add</span>
+                </button>
+            </form>
+            
+            <div class="auth-links" style="margin-top: 1.5rem;">
+                <p style="color: var(--color-text-light);">¿Ya tienes una cuenta? <a href="login.html" class="auth-link">Inicia sesión</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

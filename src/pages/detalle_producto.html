@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Detalle de Producto - Citri-Fresh</title>
+    <!-- CSS Independiente Local -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <style>
+        .product-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+        }
+        @media (max-width: 992px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .product-gallery-main {
+            width: 100%;
+            aspect-ratio: 4/3;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            margin-bottom: var(--space-md);
+            position: relative;
+            background-color: var(--color-surface-gray);
+            border: 1px solid var(--color-border);
+        }
+        .product-gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .product-gallery-main:hover img {
+            transform: scale(1.05);
+        }
+        .product-gallery-thumbs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-sm);
+        }
+        .product-thumb {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+        .product-thumb:hover {
+            border-color: rgba(0, 107, 51, 0.5);
+        }
+        .product-thumb.active {
+            border-color: var(--color-primary);
+        }
+        .product-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-specs {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .spec-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .format-selector {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+        .format-btn {
+            flex: 1;
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background-color: var(--color-surface-gray);
+            color: var(--color-text);
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .format-btn.active {
+            border-color: var(--color-primary);
+            background-color: rgba(0, 107, 51, 0.05);
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="inicio.html" class="navbar-brand">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
+            </a>
+            
+            <div class="nav-menu">
+                <a class="nav-link" href="inicio.html">Inicio</a>
+                <a class="nav-link active" href="producto.html">Productos</a>
+                <a class="nav-link" href="nosotros.html">Nosotros</a>
+            </div>
+            
+            <div class="nav-actions flex items-center gap-sm">
+                <a href="login.html" class="btn btn-primary hidden md-flex">
+                    Ingresar
+                </a>
+                <a href="carrito.html" class="btn btn-icon" style="color: var(--color-primary);">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </a>
+                <button class="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: var(--space-xl);">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav class="flex items-center gap-xs text-muted" style="font-size: var(--text-caption); margin-bottom: var(--space-xl);">
+                <a href="producto.html" class="hover:text-primary transition-fast">Productos</a>
+                <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
+                <span class="text-primary" style="font-weight: 700;">Naranjas Valencia</span>
+            </nav>
+            
+            <div class="product-detail-grid">
+                <!-- Gallery Section -->
+                <div>
+                    <div class="product-gallery-main">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Naranjas Valencia">
+                        <div style="position: absolute; top: var(--space-md); left: var(--space-md); display: flex; flex-direction: column; gap: var(--space-xs);">
+                            <span class="badge badge-success" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Cosecha Reciente</span>
+                            <span class="badge" style="background-color: white; color: var(--color-primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Calidad Exportación</span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-gallery-thumbs">
+                        <div class="product-thumb active">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp" alt="Thumb 1">
+                        </div>
+                        <div class="product-thumb">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7" alt="Thumb 2">
+                        </div>
+                        <div class="product-thumb">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPGZf3QvyMP4KpwykuSd7MCEaroVjJKxNgHPdZZdPgDsPUaAY68uz0HVCWauyAitBpK6_FLl9Da13KzKRB3h-Ac-UN3r97LPb9QjJcEsNInbOVdcuxCHW7CXPvpJ2BioTlDG2wYTJ6QssrWMw1OHCaHwqzTpLZIrYD_AiwRPuRWPD4R9OsWD4YqycnaTt6lHrswViuudpRH537N3F-FZrhV9klwJqcmyuQmzYAKS7hTYuNvJ6OoF_r5VhDP8sxz3kb-Q" alt="Thumb 3">
+                        </div>
+                        <div class="product-thumb" style="display: flex; align-items: center; justify-content: center; background-color: var(--color-surface-container);">
+                            <span class="material-symbols-outlined text-muted" style="font-size: 32px;">play_circle</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Details Section -->
+                <div style="display: flex; flex-direction: column;">
+                    <h1 style="font-size: var(--text-h2); margin-bottom: var(--space-xs);">Naranjas Valencia</h1>
+                    <p class="text-muted" style="font-size: var(--text-body-lg); line-height: 1.6; margin-bottom: var(--space-lg);">
+                        Cultivadas en el corazón fértil de Nicaragua, nuestras Naranjas Valencia destacan por su alto contenido de jugo, dulzor equilibrado y piel resistente, ideales para la industria y el mercado fresco.
+                    </p>
+                    
+                    <div style="background-color: var(--color-surface-gray); padding: var(--space-md); border-radius: var(--radius-lg); margin-bottom: var(--space-lg); border: 1px solid var(--color-border);">
+                        <div class="flex items-end gap-sm" style="margin-bottom: var(--space-xs);">
+                            <span class="text-primary" style="font-size: var(--text-h2); font-weight: 700;">C$ 550.00</span>
+                            <span class="text-muted" style="font-size: var(--text-body-md); margin-bottom: 4px;">/ Caja (20 kg)</span>
+                        </div>
+                        <div class="flex items-center gap-xs" style="color: var(--color-secondary); font-size: var(--text-label);">
+                            <span class="material-symbols-outlined icon-fill">check_circle</span>
+                            <span>Stock Disponible: <strong style="color: var(--color-primary-container);">Alta Disponibilidad</strong> para contratos B2B.</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: var(--space-lg);">
+                        <label style="display: block; font-size: var(--text-label); font-weight: 700; text-transform: uppercase; margin-bottom: var(--space-xs);">Formato de Envase</label>
+                        <div class="format-selector">
+                            <div class="format-btn active">Caja 20 kg</div>
+                            <div class="format-btn">Bin 400 kg</div>
+                        </div>
+                        
+                        <label style="display: block; font-size: var(--text-label); font-weight: 700; text-transform: uppercase; margin-bottom: var(--space-xs);">Cantidad (Cajas)</label>
+                        <div style="display: flex; align-items: center; width: 200px;">
+                            <button style="width: 48px; height: 48px; background-color: var(--color-surface-container); border: 1px solid var(--color-border); border-radius: var(--radius-lg) 0 0 var(--radius-lg); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                <span class="material-symbols-outlined">remove</span>
+                            </button>
+                            <input type="number" value="50" min="50" step="50" style="flex: 1; height: 48px; text-align: center; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); border-left: none; border-right: none; font-size: var(--text-body-lg); background-color: white;">
+                            <button style="width: 48px; height: 48px; background-color: var(--color-surface-container); border: 1px solid var(--color-border); border-radius: 0 var(--radius-lg) var(--radius-lg) 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                <span class="material-symbols-outlined">add</span>
+                            </button>
+                        </div>
+                        <span class="text-muted" style="font-size: var(--text-caption); margin-top: var(--space-xs); display: block;">Pedido mínimo: 50 cajas</span>
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--space-sm); border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-top: auto;">
+                        <button class="btn btn-accent flex-1 flex justify-center items-center gap-xs" style="padding: var(--space-md);">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                            Agregar al Carrito
+                        </button>
+                        <button class="btn btn-outline flex justify-center items-center" style="padding: var(--space-md);">
+                            Solicitar Cotización
+                        </button>
+                    </div>
+                    
+                    <div class="product-specs">
+                        <h3 class="flex items-center gap-xs" style="font-size: var(--text-h3); margin: 0 0 var(--space-md) 0;">
+                            <span class="material-symbols-outlined text-primary">analytics</span> Especificaciones Técnicas
+                        </h3>
+                        <div class="spec-item">
+                            <span class="text-muted">Calibre Promedio</span>
+                            <span style="font-weight: 700;">64 - 72 mm</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-muted">Grados Brix</span>
+                            <span style="font-weight: 700;">10.5 - 12.0</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-muted">Origen</span>
+                            <span style="font-weight: 700;">Masaya, Nicaragua</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="text-muted">Certificación</span>
+                            <span class="flex items-center gap-xs text-primary" style="font-weight: 700;">
+                                <span class="material-symbols-outlined icon-fill" style="font-size: 16px;">verified</span> Global GAP
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                Citri-Fresh
+            </div>
+            
+            <div class="footer-nav">
+                <a class="footer-link" href="#">Privacidad</a>
+                <a class="footer-link" href="#">Términos</a>
+                <a class="footer-link" href="#">Contacto</a>
+                <a class="footer-link" href="#">Soporte</a>
+            </div>
+            
+            <div class="footer-copy">
+                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
