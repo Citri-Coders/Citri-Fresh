@@ -8,61 +8,111 @@
 
     <title>Iniciar Sesión — CitriFresh</title>
     <link rel="icon" type="image/svg+xml" href="../../../public/images/favicon.svg" />
+    <link rel="stylesheet" href="../../css/reset.css" />
+    <link rel="stylesheet" href="../../css/variables.css" />
+    <link rel="stylesheet" href="../../css/fonts.css" />
+    <link rel="stylesheet" href="../../css/base.css" />
     <link rel="stylesheet" href="../../css/pages/auth.css" />
 </head>
 
 <body>
-    <div class="auth-wrapper">
-        <a href="inicio.html"
-            style="position: absolute; top: 2rem; left: 2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--color-primary); font-weight: 700; z-index: 10; text-decoration: none;">
-            <span class="material-symbols-outlined">arrow_back</span> Volver al inicio
+    <div class="auth-page">
+        <!-- Botón Volver Flotante -->
+        <a href="../inicio.html" class="auth-back-btn">
+            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+            <span>Volver al Inicio</span>
         </a>
 
-        <div class="auth-card">
-            <div class="auth-header">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg"
-                    alt="Citri-Fresh Logo" class="auth-logo">
-                <h1 class="auth-title">Bienvenido de nuevo</h1>
-                <p class="auth-subtitle">Ingresa a tu cuenta para gestionar tus cítricos.</p>
+        <!-- Contenedor Dividido Premium -->
+        <div class="auth-card-split">
+            <!-- Lado del Formulario -->
+            <div class="auth-form-side">
+                <div class="auth-brand-badge">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg"
+                        alt="Citri-Fresh Logo" class="auth-logo-main">
+                </div>
+
+                <div class="auth-heading-wrap">
+                    <h1 class="auth-title">Bienvenido de nuevo</h1>
+                    <p class="auth-subtitle">Ingresa tus credenciales para acceder a la plataforma citrícola de Nicaragua.</p>
+                </div>
+
+                <form class="auth-form" action="../perfil.html">
+                    <div class="form-field-group">
+                        <label class="form-field-label">Correo Electrónico</label>
+                        <div class="input-icon-wrapper">
+                            <input type="email" class="auth-input-modern" placeholder="ejemplo@citrifresh.ni" required autofocus>
+                            <span class="material-symbols-outlined field-icon">mail</span>
+                        </div>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="form-field-label">Contraseña</label>
+                        <div class="input-icon-wrapper">
+                            <input type="password" class="auth-input-modern" placeholder="••••••••••••" required>
+                            <span class="material-symbols-outlined field-icon">lock</span>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-options">
+                        <label class="remember-me">
+                            <input type="checkbox">
+                            <span>Recordarme</span>
+                        </label>
+                        <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="btn-auth-submit">
+                        <span>Iniciar Sesión</span>
+                        <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
+                    </button>
+                </form>
+
+                <div class="auth-divider-modern">
+                    <span>o continúa con</span>
+                </div>
+
+                <button type="button" class="btn-social-google">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                    <span>Continuar con Google</span>
+                </button>
+
+                <div class="auth-bottom-text">
+                    ¿Aún no tienes una cuenta? <a href="../registro.html" class="auth-link-highlight">Regístrate gratis</a>
+                </div>
             </div>
 
-            <form class="auth-form" action="perfil.html">
-                <div class="input-group">
-                    <input type="email" class="auth-input" placeholder="Correo Electrónico" required>
-                    <span class="material-symbols-outlined input-icon">mail</span>
+            <!-- Lado Visual / Marca -->
+            <div class="auth-visual-side">
+                <div class="auth-visual-bg-pattern"></div>
+                
+                <div class="visual-top-badge">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+                    <span>Plataforma Citrícola B2B</span>
                 </div>
 
-                <div class="input-group">
-                    <input type="password" class="auth-input" placeholder="Contraseña" required>
-                    <span class="material-symbols-outlined input-icon">lock</span>
+                <div class="visual-center-content">
+                    <div class="visual-hero-img">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh">
+                    </div>
+                    <h2 class="visual-title">Cítricos Frescos directos del Campo</h2>
+                    <p class="visual-desc">Conecta con los mejores productores de Nicaragua sin intermediarios.</p>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" style="accent-color: var(--color-primary);"> Recordarme
-                    </label>
-                    <a href="#" class="auth-link" style="font-weight: 400;">¿Olvidaste tu contraseña?</a>
+                <div class="visual-features">
+                    <div class="visual-feature-item">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        <span>Trazabilidad 100% garantizada de cosechas</span>
+                    </div>
+                    <div class="visual-feature-item">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        <span>Precios justos de origen León, Masaya y Carazo</span>
+                    </div>
                 </div>
-
-                <button type="submit" class="auth-btn">
-                    Iniciar Sesión <span class="material-symbols-outlined">arrow_forward</span>
-                </button>
-            </form>
-
-            <div class="auth-divider">o</div>
-
-            <button class="auth-btn"
-                style="background: white; color: #444; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width: 24px;">
-                Continuar con Google
-            </button>
-
-            <div class="auth-links">
-                <p style="color: var(--color-text-light);">¿No tienes una cuenta? <a href="registro.html"
-                        class="auth-link">Regístrate aquí</a></p>
             </div>
         </div>
     </div>
+    <script src="../../js/app.js"></script>
 </body>
 
 </html>

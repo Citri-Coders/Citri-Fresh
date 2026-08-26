@@ -176,16 +176,18 @@
                     <div class="form-card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                         <h2 class="text-primary" style="font-size: var(--text-h3); margin-bottom: var(--space-md); width: 100%; text-align: left;">Imagen del Producto</h2>
                         
-                        <div style="width: 100%; aspect-ratio: 1/1; border: 2px dashed var(--color-primary); border-radius: var(--radius-lg); display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: var(--color-surface-gray); cursor: pointer; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='var(--color-surface-container)'" onmouseout="this.style.backgroundColor='var(--color-surface-gray)'">
+                        <label for="cosecha_img" style="width: 100%; aspect-ratio: 1/1; border: 2px dashed var(--color-primary); border-radius: var(--radius-lg); display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: var(--color-surface-gray); cursor: pointer; transition: background-color 0.2s; overflow: hidden; position: relative;" onmouseover="this.style.backgroundColor='var(--color-surface-container)'" onmouseout="this.style.backgroundColor='var(--color-surface-gray)'">
+                            <input type="file" id="cosecha_img" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                            <img id="img_preview" src="" alt="Vista Previa" style="display: none; width: 100%; height: 100%; object-fit: cover;">
                             
-                            <div style="width: 64px; height: 64px; background-color: var(--color-primary-container); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-sm);">
-                                <span class="material-symbols-outlined" style="font-size: 32px;">add_a_photo</span>
+                            <div id="upload_prompt" style="display: flex; flex-direction: column; align-items: center;">
+                                <div style="width: 64px; height: 64px; background-color: var(--color-primary-container); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-sm);">
+                                    <span class="material-symbols-outlined" style="font-size: 32px;">add_a_photo</span>
+                                </div>
+                                <p class="text-primary" style="font-weight: 700; font-size: var(--text-label); margin: 0 0 4px 0;">Sube una imagen</p>
+                                <p class="text-muted" style="font-size: var(--text-caption); margin: 0; padding: 0 var(--space-md);">PNG, JPG hasta 5MB. Se recomienda fondo blanco.</p>
                             </div>
-                            
-                            <p class="text-primary" style="font-weight: 700; font-size: var(--text-label); margin: 0 0 4px 0;">Sube una imagen</p>
-                            <p class="text-muted" style="font-size: var(--text-caption); margin: 0; padding: 0 var(--space-md);">PNG, JPG hasta 5MB. Se recomienda fondo blanco.</p>
-                            
-                        </div>
+                        </label>
                     </div>
                     
                     <!-- Actions -->
@@ -194,7 +196,7 @@
                             <span class="material-symbols-outlined">save</span>
                             Publicar Producto
                         </button>
-                        <button type="button" class="btn btn-outline flex justify-center items-center gap-xs">
+                        <button type="button" onclick="alert('Borrador guardado correctamente')" class="btn btn-outline flex justify-center items-center gap-xs">
                             Guardar como Borrador
                         </button>
                         <a href="panel_productor.html" class="btn flex justify-center items-center" style="background: none; border: none; color: var(--color-text-dark);">
@@ -218,5 +220,31 @@
             </div>
         </div>
     </footer>
+    <script src="../js/app.js"></script>
+    <script>
+        CitriAuth.requireAuth(['productor']);
+
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('img_preview');
+            const prompt = document.getElementById('upload_prompt');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    prompt.style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.querySelector('.form-grid').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('product_name').value;
+            alert(`🍊 ¡Cosecha "${nombre}" publicada exitosamente en el Catálogo!`);
+            window.location.href = 'panel_productor.html';
+        });
+    </script>
 </body>
 </html>
