@@ -1,66 +1,110 @@
 /* ============================================
    CITRI-FRESH — VARIABLES (Design Tokens)
+   Paleta Citrícola Armoniosa 2026
    ============================================ */
 :root {
-    /* ---- Paleta Principal ---- */
-    --color-primary:          #002714;
-    --color-secondary:        #006d34;
-    --color-accent:           #F27405;
-    --color-yellow:           #FFC73B;
-    --color-brown:            #3F1504;
-    --color-red:              #D64738;
-    --color-success:          #A3FF99;
-    --color-error:            #ba1a1a;
+    /* ────────────────────────────────────────
+       PALETA PRINCIPAL — Verde Esmeralda Cítrico
+       ──────────────────────────────────────── */
 
-    /* ---- Superficies ---- */
-    --color-bg:               #f9faf5;
-    --color-surface:          #ffffff;
-    --color-surface-gray:     #FAFAFA;
-    --color-surface-warm:     #fff8f6;
-    --color-surface-container: #ffe9e2;
-    --color-surface-low:      #fff1ec;
-    --color-surface-high:     #ffe2d8;
+    /* Verde principal: esmeralda fresco (no tan oscuro, no tan brillante) */
+    --color-primary:           #1a6b3c;
+    /* Verde secundario: hoja de cítrico, más claro */
+    --color-secondary:         #2da05a;
+    /* Acento dorado-naranja: color mandarina/naranja fresco */
+    --color-accent:            #f5a623;
+    /* Amarillo limón suave */
+    --color-yellow:            #ffd34e;
+    /* Verde claro para éxito / etiquetas */
+    --color-success:           #4caf7d;
+    /* Rojo suave para errores */
+    --color-error:             #d64738;
 
-    /* ---- Texto ---- */
-    --color-text:             #191c1a;
-    --color-text-dark:        #360f01;
-    --color-text-muted:       #414942;
-    --color-text-light:       #6d7a6d;
+    /* ────────────────────────────────────────
+       SUPERFICIES — Blancos frescos con toque cítrico
+       ──────────────────────────────────────── */
 
-    /* ---- Bordes ---- */
-    --color-border:           #c1c9c0;
-    --color-border-light:     #bccabb;
+    /* Fondo general: blanco marfil muy suave con tinte verdoso */
+    --color-bg:                #f5faf6;
+    /* Superficie blanca pura */
+    --color-surface:           #ffffff;
+    /* Gris muy claro neutro */
+    --color-surface-gray:      #f7f9f7;
+    /* Contenedor cálido: verde pálido muy sutil */
+    --color-surface-warm:      #eef7f1;
+    /* Contenedor hover/activo: verde agua muy suave */
+    --color-surface-container: #dff0e6;
+    /* Superficies de baja/alta elevación */
+    --color-surface-low:       #eef7f0;
+    --color-surface-high:      #c8e8d3;
 
-    /* ---- Verdes (Material 3) ---- */
-    --color-primary-container: #008742;
-    --color-secondary-container: #b8ecc9;
-    --color-on-primary:       #ffffff;
+    /* ────────────────────────────────────────
+       TEXTO — Escala neutral verdosa
+       ──────────────────────────────────────── */
 
-    /* ---- Naranjas (Material 3) ---- */
-    --color-tertiary:         #964500;
-    --color-tertiary-container: #bc5800;
-    --color-on-tertiary:      #ffffff;
+    /* Texto principal: casi negro con tinte verde */
+    --color-text:              #1a241d;
+    /* Encabezados: verde oscuro profundo */
+    --color-text-dark:         #0d3320;
+    /* Texto secundario / párrafos */
+    --color-text-muted:        #3d5046;
+    /* Texto auxiliar / placeholders */
+    --color-text-light:        #5e7a68;
 
-    /* ---- Inversas ---- */
-    --color-inverse-surface:  #512310;
-    --color-inverse-on-surface: #ffede7;
+    /* ────────────────────────────────────────
+       BORDES
+       ──────────────────────────────────────── */
 
-    /* ---- Tipografía ---- */
+    --color-border:            #b8d4c0;
+    --color-border-light:      #cfe4d6;
+
+    /* ────────────────────────────────────────
+       VERDES — Sistema Material 3
+       ──────────────────────────────────────── */
+
+    /* Botones primarios, badges de éxito */
+    --color-primary-container: #2da05a;
+    /* Chip / tag backgrounds */
+    --color-secondary-container: #c8e8d3;
+    --color-on-primary:        #ffffff;
+
+    /* ────────────────────────────────────────
+       DORADO CÍTRICO — Acentos y acciones
+       ──────────────────────────────────────── */
+
+    --color-tertiary:          #c87800;
+    --color-tertiary-container: #f5a623;
+    --color-on-tertiary:       #ffffff;
+
+    /* ────────────────────────────────────────
+       INVERSAS — Footer y Hero oscuro
+       Ahora verde esmeralda profundo (no café/tamarindo)
+       ──────────────────────────────────────── */
+
+    --color-inverse-surface:     #0d3320;
+    --color-inverse-on-surface:  #d4ede0;
+
+    /* ────────────────────────────────────────
+       TIPOGRAFÍA
+       ──────────────────────────────────────── */
+
     --font-head:  'Kiona', sans-serif;
     --font-body:  'Mont', sans-serif;
 
     /* ---- Tamaños tipográficos ---- */
-    --text-hero:     3.5rem;
-    --text-hero-mob: 2.25rem;
-    --text-h1:       3rem;
-    --text-h1-mob:   2rem;
-    --text-h2:       2rem;
-    --text-h2-mob:   1.5rem;
-    --text-h3:       1.5rem;
-    --text-body-lg:  1.125rem;
-    --text-body:     1rem;
-    --text-label:    0.875rem;
-    --text-caption:  0.75rem;
+    --text-hero:       3.5rem;
+    --text-hero-mob:   2.25rem;
+    --text-hero-mobile: 2.25rem;
+    --text-h1:         3rem;
+    --text-h1-mob:     2rem;
+    --text-h2:         2rem;
+    --text-h2-mob:     1.5rem;
+    --text-h3:         1.5rem;
+    --text-body-lg:    1.125rem;
+    --text-body-md:    1rem;
+    --text-body:       1rem;
+    --text-label:      0.875rem;
+    --text-caption:    0.75rem;
 
     /* ---- Espaciado ---- */
     --space-xs:  0.5rem;
@@ -80,15 +124,17 @@
     /* ---- Bordes redondeados ---- */
     --radius:      0.5rem;
     --radius-sm:   0.25rem;
+    --radius-md:   0.625rem;
     --radius-lg:   0.75rem;
     --radius-xl:   1rem;
+    --radius-2xl:  1.5rem;
     --radius-full: 9999px;
 
-    /* ---- Sombras ---- */
-    --shadow-sm:  0 1px 3px rgba(12, 62, 38, 0.06);
-    --shadow-md:  0 4px 12px rgba(12, 62, 38, 0.08);
-    --shadow-lg:  0 8px 30px rgba(12, 62, 38, 0.12);
-    --shadow-xl:  0 12px 32px rgba(12, 62, 38, 0.15);
+    /* ---- Sombras — con tinte verde ---- */
+    --shadow-sm:  0 1px 3px rgba(26, 107, 60, 0.06);
+    --shadow-md:  0 4px 12px rgba(26, 107, 60, 0.08);
+    --shadow-lg:  0 8px 30px rgba(26, 107, 60, 0.10);
+    --shadow-xl:  0 12px 32px rgba(26, 107, 60, 0.14);
 
     /* ---- Transiciones ---- */
     --transition-fast: 0.15s ease;
