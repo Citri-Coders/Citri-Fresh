@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import { corsMiddleware } from "./middlewares/corsMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import productoRoutes from "./routes/productoRoutes.js";
+import pedidoRoutes from "./routes/pedidoRoutes.js";
 
 const app = express();
 
@@ -10,8 +11,10 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use(cookieParser());
 
+// URLS base
 app.use("/api/auth", authRoutes);
 app.use("/api/productos", productoRoutes);
+app.use("/api/pedidos", pedidoRoutes);
 
 // Middleware para rutas no encontradas (404)
 app.use((req, res) => {
