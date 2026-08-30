@@ -4,6 +4,7 @@ import { corsMiddleware } from "./middlewares/corsMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import productoRoutes from "./routes/productoRoutes.js";
 import pedidoRoutes from "./routes/pedidoRoutes.js";
+import zonaRoutes from "./routes/zonaRoutes.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/productos", productoRoutes);
 app.use("/api/pedidos", pedidoRoutes);
+app.use("/api/zonas", zonaRoutes);
 
 // Middleware para rutas no encontradas (404)
 app.use((req, res) => {
