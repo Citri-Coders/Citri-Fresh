@@ -17,6 +17,14 @@ export const UsuarioModel = {
     );
   },
 
+  async findByIdWithPassword(id) {
+    const db = await getDB();
+    return db.get(
+      "SELECT id, nombre, email, password_hash, rol, creado_en FROM usuarios WHERE id = ?",
+      [id],
+    );
+  },
+
   async create({ nombre, email, password_hash, rol = "cliente" }) {
     const db = await getDB();
     const result = await db.run(
@@ -30,5 +38,27 @@ export const UsuarioModel = {
       email,
       rol,
     };
+  },
+
+  async update(id, { nombre, email, password_hash }) {
+    const db = await getDB();
+
+    if (password_hash) {
+      await db.run(
+        `UPDATE usuarios
+         SET nombre = ?, email = ?, password_hash = ?
+         WHERE id = ?`,
+        [nombre, email, password_hash, id],
+      );
+    } else {
+      await db.run(
+        `UPDATE usuarios
+         SET nombre = ?, email = ?
+         WHERE id = ?`,
+        [nombre, email, id],
+      );
+    }
+
+    return this.findById(id);
   },
 };

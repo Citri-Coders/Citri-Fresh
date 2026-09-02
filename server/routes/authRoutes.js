@@ -4,10 +4,12 @@ import {
   login,
   logout,
   getMe,
+  actualizarPerfil,
 } from "../controllers/authController.js";
 import {
   validateRegister,
   validateLogin,
+  validateActualizarPerfil,
 } from "../middlewares/validateAuth.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 
@@ -18,7 +20,8 @@ router.post("/register", validateRegister, register);
 router.post("/login", validateLogin, login);
 router.post("/logout", logout);
 
-// Ruta protegida (requiere cookie con token válido)
+// Rutas protegidas (requieren cookie con token válido)
 router.get("/me", verifyToken, getMe);
+router.put("/perfil", verifyToken, validateActualizarPerfil, actualizarPerfil);
 
 export default router;

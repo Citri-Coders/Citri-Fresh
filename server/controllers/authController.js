@@ -108,3 +108,60 @@ export const getMe = async (req, res) => {
     return res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
+export const actualizarPerfil = async (req, res) => {
+  try {
+    const { nombre, email, password_actual, password_nuevo } = req.body;
+    const usuarioId = req.user.id;
+
+    const usuarioActual = await UsuarioModel.findByIdWithPassword(usuarioId);
+    if (!usuarioActual) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    // 1. Si cambia el email, verificar que no esté ocupado por otro usuario
+    const nuevoEmail = email ? email.trim().toLowerCase() : usuarioActual.email;
+    if (nuevoEmail !== usuarioActual.email) {
+      const emailEnUso = await UsuarioModel.findByEmail(nuevoEmail);
+      if (emailEnUso && emailEnUso.id !== usuarioId) {
+        return res
+          .status(409)
+          .json({ error: "El correo electrónico ya está en uso por otra cuenta" });
+      }
+    }
+
+    // 2. Si cambia la contraseña, verificar la contraseña actual
+    let nuevoPasswordHash = null;
+    if (password_nuevo) {
+      const passwordValido = await bcrypt.compare(
+        password_actual,
+        usuarioActual.password_hash,
+      );
+
+      if (!passwordValido) {
+        return res
+          .status(400)
+          .json({ error: "La contraseña actual es incorrecta" });
+      }
+
+      nuevoPasswordHash = await bcrypt.hash(password_nuevo, SALT_ROUNDS);
+    }
+
+    // 3. Actualizar datos en la base de datos
+    const usuarioActualizado = await UsuarioModel.update(usuarioId, {
+      nombre: nombre !== undefined ? nombre.trim() : usuarioActual.nombre,
+      email: nuevoEmail,
+      password_hash: nuevoPasswordHash,
+    });
+
+    return res.status(200).json({
+      message: "Perfil actualizado exitosamente",
+      user: usuarioActualizado,
+    });
+  } catch (error) {
+    console.error("Error en actualizarPerfil:", error);
+    return res
+      .status(500)
+      .json({ error: "Error interno al actualizar el perfil" });
+  }
+};
