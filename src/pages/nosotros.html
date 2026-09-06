@@ -5,6 +5,12 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Nosotros - Citri-Fresh</title>
+    <!-- PWA & Mobile Web App -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a6b3c">
+    <!-- Iconos y Fuentes -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <!-- CSS Independiente Local -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
@@ -22,15 +28,16 @@
     <nav class="navbar">
         <div class="container navbar-inner">
             <a href="inicio.html" class="navbar-brand">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg"
+                    alt="Citri-Fresh Logo" class="navbar-logo-img">
             </a>
-            
+
             <div class="nav-menu">
                 <a class="nav-link" href="inicio.html">Inicio</a>
                 <a class="nav-link" href="producto.html">Productos</a>
                 <a class="nav-link active" href="nosotros.html">Nosotros</a>
             </div>
-            
+
             <div class="nav-actions">
                 <a href="auth/login.html" class="btn btn-primary">Ingresar</a>
                 <button class="mobile-menu-btn">
@@ -45,10 +52,12 @@
         <!-- Hero Section -->
         <header class="hero-section hero-medium">
             <div class="hero-bg">
-                <img alt="A sweeping drone shot of a lush citrus orchard in Nicaragua at sunrise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbF6CqjorS7j3Z4Cr3EdBxktbXiWQ416FZzA9w1hGnemFGqQ-aZYQOPVJIgc9swjYk59ZMfqtIuYnxnIaPcicXzKv7k_4LiTqPiopYjfcg3cQRe-zVE1Wi-0GaVGP3zHR7wcvuueCTdL-4ZQGm49oePXDwUEQtN0ikXDLaq_pDvmvSEe557Q9rLRpK4BPP-ueWVIwEBtSig0Zu_QK5h9bbQFEUCkzYuba0E8y3iOlXtEgN30nEuRIN">
-                <div class="hero-overlay" style="opacity: 0.6; mix-blend-mode: multiply; background-color: var(--color-primary);"></div>
+                <img alt="A sweeping drone shot of a lush citrus orchard in Nicaragua at sunrise."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbF6CqjorS7j3Z4Cr3EdBxktbXiWQ416FZzA9w1hGnemFGqQ-aZYQOPVJIgc9swjYk59ZMfqtIuYnxnIaPcicXzKv7k_4LiTqPiopYjfcg3cQRe-zVE1Wi-0GaVGP3zHR7wcvuueCTdL-4ZQGm49oePXDwUEQtN0ikXDLaq_pDvmvSEe557Q9rLRpK4BPP-ueWVIwEBtSig0Zu_QK5h9bbQFEUCkzYuba0E8y3iOlXtEgN30nEuRIN">
+                <div class="hero-overlay"
+                    style="opacity: 0.6; mix-blend-mode: multiply; background-color: var(--color-primary);"></div>
             </div>
-            
+
             <div class="container hero-content hero-content-center flex flex-col items-center text-center">
                 <h1 class="hero-title" style="text-shadow: 0 4px 12px rgba(0,0,0,0.3);">
                     Nuestra Historia
@@ -64,30 +73,47 @@
             <div class="container grid md-grid-cols-2">
                 <!-- Mission Card -->
                 <div class="card card-hover" style="padding: var(--space-xl); position: relative; overflow: hidden;">
-                    <div style="position: absolute; top: -2rem; right: -2rem; width: 8rem; height: 8rem; background-color: var(--color-secondary-container); border-radius: 50%; opacity: 0.2; transition: transform 0.7s;"></div>
-                    
+                    <div
+                        style="position: absolute; top: -2rem; right: -2rem; width: 8rem; height: 8rem; background-color: var(--color-secondary-container); border-radius: 50%; opacity: 0.2; transition: transform 0.7s;">
+                    </div>
+
                     <div style="position: relative; z-index: 10;">
-                        <div class="btn-icon" style="background-color: var(--color-primary-container); color: white; width: 4rem; height: 4rem; border-radius: 50%; margin-bottom: var(--space-lg); box-shadow: var(--shadow-sm);">
+                        <div class="btn-icon"
+                            style="background-color: var(--color-primary-container); color: white; width: 4rem; height: 4rem; border-radius: 50%; margin-bottom: var(--space-lg); box-shadow: var(--shadow-sm);">
                             <span class="material-symbols-outlined icon-fill" style="font-size: 32px;">handshake</span>
                         </div>
                         <h2 class="text-primary">Misión</h2>
                         <p class="text-muted" style="font-size: var(--text-body-lg);">
-                            Nuestra misión es empoderar a los productores locales de cítricos en Nicaragua, proporcionándoles una plataforma tecnológica que los conecte directamente con compradores comerciales. Buscamos eliminar intermediarios innecesarios, garantizando precios justos para los agricultores y productos frescos y de calidad premium para el mercado global.
+                            Impulsar la transformación digital del sector agro cítrico mediante una plataforma que
+                            conecte de forma directa a pequeños y medianos productores de cítricos y otros productos
+                            perecederos con consumidores, negocios e instituciones, optimizando la comercialización, la
+                            gestión productiva y la trazabilidad de los productos, reduciendo las pérdidas postcosecha,
+                            eliminando intermediarios innecesarios y promoviendo prácticas agrícolas sostenibles que
+                            fortalezcan el desarrollo económico y social de las comunidades productoras de Nicaragua.
                         </p>
                     </div>
                 </div>
 
                 <!-- Vision Card -->
                 <div class="card card-hover" style="padding: var(--space-xl); position: relative; overflow: hidden;">
-                    <div style="position: absolute; bottom: -2rem; left: -2rem; width: 8rem; height: 8rem; background-color: var(--color-yellow); border-radius: 50%; opacity: 0.1; transition: transform 0.7s;"></div>
-                    
+                    <div
+                        style="position: absolute; bottom: -2rem; left: -2rem; width: 8rem; height: 8rem; background-color: var(--color-yellow); border-radius: 50%; opacity: 0.1; transition: transform 0.7s;">
+                    </div>
+
                     <div style="position: relative; z-index: 10;">
-                        <div class="btn-icon" style="background-color: var(--color-tertiary-container); color: white; width: 4rem; height: 4rem; border-radius: 50%; margin-bottom: var(--space-lg); box-shadow: var(--shadow-sm);">
+                        <div class="btn-icon"
+                            style="background-color: var(--color-tertiary-container); color: white; width: 4rem; height: 4rem; border-radius: 50%; margin-bottom: var(--space-lg); box-shadow: var(--shadow-sm);">
                             <span class="material-symbols-outlined icon-fill" style="font-size: 32px;">visibility</span>
                         </div>
                         <h2 class="text-accent">Visión</h2>
                         <p class="text-muted" style="font-size: var(--text-body-lg);">
-                            Ser el mercado digital líder y más confiable para la comercialización de cítricos en Nicaragua y Centroamérica. Aspiramos a transformar la industria agrícola regional mediante la innovación tecnológica, promoviendo prácticas sostenibles, trazabilidad total y estableciendo el estándar de oro en la exportación de frutas frescas.
+                            Ser la plataforma líder en comercialización agrícola inteligente de Centroamérica,
+                            reconocida por transformar la relación entre productores y consumidores mediante tecnología
+                            accesible, impulsando cadenas de suministro más justas, eficientes y sostenibles, hasta
+                            consolidarnos como el principal ecosistema digital para la agricultura en Latinoamérica,
+                            contribuyendo al fortalecimiento económico del sector agro cítrico y a la preservación de
+                            prácticas agrícolas responsables.
+
                         </p>
                     </div>
                 </div>
@@ -98,27 +124,99 @@
         <section class="section bg-gray">
             <div class="container">
                 <div class="text-center" style="margin-bottom: var(--space-2xl);">
-                    <h2 class="text-primary">Nuestros Valores</h2>
-                    <p class="text-muted max-w-2xl mx-auto">Los principios que guían nuestro trabajo diario en el campo y en la plataforma.</p>
+                    <span class="badge" style="background-color: var(--primary-50); color: var(--primary); font-weight: 600; margin-bottom: var(--space-xs); display: inline-block;">Nuestros Principios</span>
+                    <h2 class="text-primary" style="font-size: 2.2rem; margin-top: 0.5rem; margin-bottom: var(--space-sm);">Valores de la Marca</h2>
+                    <p class="text-muted max-w-2xl mx-auto" style="font-size: 1.05rem; line-height: 1.6;">
+                        Los valores de Citri-Fresh representan los principios que orientan su identidad, comportamiento y relación con los diferentes actores de su ecosistema. Los principales valores de la marca son:
+                    </p>
                 </div>
-                
-                <div class="grid grid-cols-1 md-grid-cols-3">
-                    <div class="card" style="padding: var(--space-lg); text-align: center;">
-                        <span class="material-symbols-outlined text-primary" style="font-size: 48px; margin-bottom: var(--space-sm);">eco</span>
-                        <h3>Sostenibilidad</h3>
-                        <p class="text-muted">Fomentamos prácticas agrícolas que respetan y nutren la tierra nicaragüense.</p>
+
+                <div class="grid grid-cols-1 md-grid-cols-2 lg-grid-cols-3" style="gap: var(--space-lg); margin-bottom: var(--space-2xl);">
+                    <!-- 1. Adaptabilidad -->
+                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center;">
+                                <span class="material-symbols-outlined text-primary" style="font-size: 30px;">published_with_changes</span>
+                            </div>
+                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">01</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Adaptabilidad</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
+                            Evoluciona para responder a las necesidades de productores y consumidores, integrando comercio, información y preservación de prácticas agrícolas.
+                        </p>
                     </div>
-                    
-                    <div class="card" style="padding: var(--space-lg); text-align: center;">
-                        <span class="material-symbols-outlined text-accent" style="font-size: 48px; margin-bottom: var(--space-sm);">verified</span>
-                        <h3>Calidad</h3>
-                        <p class="text-muted">Garantizamos estándares premium en cada cosecha que llega a nuestros clientes.</p>
+
+                    <!-- 2. Cooperación y Conexión -->
+                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--accent);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(245, 158, 11, 0.12); display: flex; align-items: center; justify-content: center;">
+                                <span class="material-symbols-outlined text-accent" style="font-size: 30px;">diversity_3</span>
+                            </div>
+                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">02</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Cooperación y Conexión</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
+                            Fortalece el vínculo entre productores y consumidores mediante la colaboración, la confianza y el intercambio, creando una comunidad agrícola más cercana, eficiente y sostenible.
+                        </p>
                     </div>
-                    
-                    <div class="card" style="padding: var(--space-lg); text-align: center;">
-                        <span class="material-symbols-outlined text-secondary" style="font-size: 48px; margin-bottom: var(--space-sm);">diversity_3</span>
-                        <h3>Comunidad</h3>
-                        <p class="text-muted">Crecemos junto a nuestros productores, construyendo relaciones duraderas.</p>
+
+                    <!-- 3. Innovación y mejora continua -->
+                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--secondary);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); display: flex; align-items: center; justify-content: center;">
+                                <span class="material-symbols-outlined text-secondary" style="font-size: 30px;">lightbulb</span>
+                            </div>
+                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">03</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Innovación y mejora continua</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
+                            Promueve la evolución constante de sus herramientas y soluciones para responder a los desafíos del sector agrícola.
+                        </p>
+                    </div>
+
+                    <!-- 4. Valor compartido -->
+                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid #8b5cf6;">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(139, 92, 246, 0.1); display: flex; align-items: center; justify-content: center;">
+                                <span class="material-symbols-outlined" style="font-size: 30px; color: #8b5cf6;">handshake</span>
+                            </div>
+                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">04</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Valor compartido</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
+                            Genera beneficios para productores, consumidores y demás actores, impulsando el crecimiento y las prácticas responsables.
+                        </p>
+                    </div>
+
+                    <!-- 5. Sostenibilidad -->
+                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center;">
+                                <span class="material-symbols-outlined text-primary" style="font-size: 30px;">eco</span>
+                            </div>
+                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">05</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Sostenibilidad</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
+                            Promueve un modelo agrícola responsable mediante la reducción de pérdidas, el uso eficiente de recursos y el cuidado del entorno.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Closing Reflection Banner -->
+                <div class="card" style="background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border: 1px solid rgba(16, 185, 129, 0.2); padding: var(--space-xl); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm);">
+                    <div style="display: flex; gap: var(--space-lg); align-items: flex-start;">
+                        <div style="min-width: 48px; height: 48px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);">
+                            <span class="material-symbols-outlined" style="font-size: 26px;">verified_user</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                            <p style="color: var(--text-dark); font-size: 1.05rem; line-height: 1.7; margin: 0; font-weight: 500;">
+                                Estos valores reflejan el compromiso de la marca con la transformación del sector agrícola mediante la tecnología, la colaboración y la sostenibilidad, buscando generar relaciones de confianza y beneficios para productores y consumidores.
+                            </p>
+                            <p class="text-muted" style="font-size: 0.98rem; line-height: 1.7; margin: 0;">
+                                Cada valor define la manera en que Citri-Fresh actúa, evoluciona y construye una propuesta de valor centrada en conectar oportunidades, impulsar la innovación y contribuir al desarrollo responsable de la agricultura nicaragüense.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,21 +227,23 @@
     <footer class="footer">
         <div class="container footer-inner">
             <a href="inicio.html" class="footer-brand" title="Citri-Fresh">
-                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="footer-logo-img">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg"
+                    alt="Citri-Fresh Logo" class="footer-logo-img">
             </a>
-            
+
             <div class="footer-nav">
                 <a class="footer-link" href="#">Privacidad</a>
                 <a class="footer-link" href="#">Términos</a>
                 <a class="footer-link" href="#">Contacto</a>
                 <a class="footer-link" href="#">Soporte</a>
             </div>
-            
+
             <div class="footer-copy">
-                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+                © 2026 Citri-Fresh. Calidad Citrícola de Nicaragua.
             </div>
         </div>
     </footer>
     <script src="../js/app.js"></script>
 </body>
+
 </html>
