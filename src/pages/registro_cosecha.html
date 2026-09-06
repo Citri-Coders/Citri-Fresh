@@ -5,6 +5,11 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Registro de Producto - Panel del Productor | Citri-Fresh</title>
+    <!-- PWA & Mobile Web App -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a6b3c">
+    <!-- Iconos y Fuentes -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <!-- CSS Independiente Local -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
@@ -15,49 +20,388 @@
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/footer.css">
     <style>
+        :root {
+            --harvest-primary: #006837;
+            --harvest-primary-light: #e8f5e9;
+            --harvest-accent: #f57c00;
+            --harvest-accent-light: #fff3e0;
+            --harvest-card-bg: #ffffff;
+            --harvest-border: rgba(0, 0, 0, 0.08);
+            --harvest-shadow-sm: 0 4px 12px rgba(0, 104, 55, 0.06);
+            --harvest-shadow-md: 0 12px 32px rgba(0, 104, 55, 0.09);
+            --harvest-shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.08);
+        }
+
+        .registro-hero {
+            background: linear-gradient(135deg, #004d26 0%, #006837 55%, #1b8a4e 100%);
+            border-radius: 24px;
+            padding: 2.25rem 2.5rem;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0, 77, 38, 0.22);
+        }
+
+        .registro-hero::after {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            color: #ffffff;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.775rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 0.85rem;
+        }
+
+        .registro-hero h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .registro-hero p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 620px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
         .form-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: var(--space-xl);
+            grid-template-columns: 2.2fr 1.3fr;
+            gap: 2rem;
+            align-items: start;
         }
+
         @media (max-width: 992px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
+            .registro-hero {
+                padding: 1.75rem 1.5rem;
+            }
+            .registro-hero h1 {
+                font-size: 1.5rem;
+            }
         }
+
         .form-card {
-            background-color: var(--color-surface);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            border: 1px solid var(--color-border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            background-color: var(--harvest-card-bg);
+            border-radius: 24px;
+            padding: 2.25rem;
+            border: 1px solid var(--harvest-border);
+            box-shadow: var(--harvest-shadow-sm);
             position: relative;
-            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .form-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--color-primary);
+
+        .form-card:hover {
+            box-shadow: var(--harvest-shadow-md);
+            border-color: rgba(0, 104, 55, 0.2);
+            transform: translateY(-2px);
         }
-        .form-card.accent::before {
-            background-color: var(--color-secondary);
+
+        .card-header-styled {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1.5px solid #f0f3f1;
         }
+
+        .card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-title-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #006837;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 104, 55, 0.1);
+        }
+
+        .card-title-icon.orange {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            color: #e65100;
+            box-shadow: 0 4px 10px rgba(230, 81, 0, 0.1);
+        }
+
+        .card-title-icon .material-symbols-outlined {
+            font-size: 24px;
+        }
+
+        .card-title-text h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0 0 2px 0;
+            letter-spacing: -0.3px;
+        }
+
+        .card-title-text span {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
         .form-group {
-            margin-bottom: var(--space-md);
+            margin-bottom: 1.45rem;
         }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.55rem;
+            letter-spacing: 0.15px;
+        }
+
+        .form-label .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--harvest-primary);
+        }
+
+        .input-wrapper-modern {
+            position: relative;
+            display: flex;
+            align-items: center;
+            border-radius: 14px;
+            transition: all 0.25s ease;
+        }
+
+        .input-wrapper-modern .prefix-icon {
+            position: absolute;
+            left: 1.1rem;
+            color: #94a3b8;
+            font-size: 20px;
+            pointer-events: none;
+            transition: color 0.25s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.95rem 1.2rem 0.95rem 3rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background-color: #f8fafc;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 500;
+        }
+
+        .form-input.no-icon {
+            padding-left: 1.2rem;
+        }
+
+        .form-input:hover {
+            background-color: #ffffff;
+            border-color: #cbd5e1;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: #008742;
+            box-shadow: 0 0 0 4px rgba(0, 135, 66, 0.12);
+        }
+
+        .form-input:focus + .prefix-icon,
+        .input-wrapper-modern:focus-within .prefix-icon {
+            color: #008742;
+        }
+
+        .form-input::placeholder {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--space-md);
+            gap: 1.25rem;
         }
+
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
             }
+        }
+
+        .helper-text {
+            display: block;
+            font-size: 0.775rem;
+            color: #64748b;
+            margin-top: 0.45rem;
+            line-height: 1.4;
+        }
+
+        /* Sugerencias Rápidas Modernizadas */
+        .category-pills {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.5rem 1rem;
+            border-radius: 24px;
+            font-size: 0.825rem;
+            font-weight: 600;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .category-pill:hover, .category-pill.active {
+            background: #e8f5e9;
+            border-color: #008742;
+            color: #006837;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0, 104, 55, 0.1);
+        }
+
+        .category-pill .material-symbols-outlined {
+            font-size: 17px;
+            color: #008742;
+        }
+
+        /* Foto Cosecha Dropzone Estilizada */
+        .photo-dropzone {
+            width: 100%;
+            aspect-ratio: 1.15/1;
+            border: 2px dashed #94a3b8;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-dropzone:hover {
+            border-color: #008742;
+            background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+            box-shadow: 0 10px 24px rgba(0, 135, 66, 0.12);
+        }
+
+        .dropzone-icon-circle {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #008742 0%, #005c2d 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.85rem;
+            box-shadow: 0 8px 20px rgba(0, 135, 66, 0.3);
+            transition: transform 0.25s ease;
+        }
+
+        .photo-dropzone:hover .dropzone-icon-circle {
+            transform: scale(1.08);
+        }
+
+        /* Botón de Publicar Estilo Primario Elevado */
+        .btn-submit-harvest {
+            width: 100%;
+            height: 3.35rem;
+            background: linear-gradient(135deg, #006837 0%, #008742 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0, 104, 55, 0.28);
+        }
+
+        .btn-submit-harvest:hover {
+            background: linear-gradient(135deg, #00552c 0%, #007438 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0, 104, 55, 0.36);
+        }
+
+        .btn-submit-harvest:active {
+            transform: translateY(0);
+        }
+
+        .btn-draft-offline {
+            width: 100%;
+            height: 3.125rem;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            color: #334155;
+            border-radius: 14px;
+            font-size: 0.925rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-draft-offline:hover {
+            background-color: #f8fafc;
+            border-color: #94a3b8;
+            color: #0f172a;
         }
     </style>
 </head>
@@ -69,138 +413,237 @@
             <a href="inicio.html" class="navbar-brand">
                 <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
             </a>
+
+            <div class="nav-menu">
+                <a class="nav-link" href="inicio.html">Inicio</a>
+                <a class="nav-link" href="producto.html">Productos</a>
+                <a class="nav-link" href="nosotros.html">Nosotros</a>
+            </div>
             
             <div class="nav-actions flex items-center gap-sm">
-                <div class="hidden md-flex items-center gap-xs text-muted" style="font-weight: 500;">
-                    <span class="material-symbols-outlined">person</span>
-                    <span>Panel Productor</span>
-                </div>
-                <a href="inicio.html" class="text-muted hover:text-primary transition-fast" title="Cerrar Sesión">
-                    <span class="material-symbols-outlined">logout</span>
-                </a>
+                <!-- Se actualiza con CitriAuth -->
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content" style="padding-top: var(--space-xl); padding-bottom: var(--space-xl);">
+    <main class="main-content" style="padding-top: var(--space-lg); padding-bottom: 3.5rem;">
         <div class="container">
-            <!-- Header -->
-            <div class="flex justify-between items-center" style="margin-bottom: var(--space-xl);">
-                <div>
-                    <nav class="flex items-center gap-xs text-muted" style="font-size: var(--text-caption); margin-bottom: var(--space-xs);">
-                        <a href="panel_productor.html" class="flex items-center hover:text-primary"><span class="material-symbols-outlined" style="font-size: 16px;">home</span> Panel</a>
-                        <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
-                        <span class="text-primary" style="font-weight: 700;">Nuevo Registro</span>
-                    </nav>
-                    <h1 class="text-primary" style="font-size: var(--text-h2); margin: 0 0 var(--space-xs) 0;">Registro de Nuevo Producto</h1>
-                    <p class="text-muted" style="font-size: var(--text-body-md); margin: 0;">Añade un nuevo producto cítrico a tu catálogo para ofrecerlo en el mercado.</p>
+            <!-- Hero Banner del Formulario -->
+            <div class="registro-hero">
+                <div class="hero-badge">
+                    <span class="material-symbols-outlined" style="font-size: 15px;">verified</span>
+                    <span>Panel Oficial del Productor</span>
                 </div>
-                <a href="panel_productor.html" class="btn btn-outline hidden md-flex items-center gap-xs">
-                    <span class="material-symbols-outlined">arrow_back</span>
-                    Volver
-                </a>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h1>Registro y Publicación de Cosecha</h1>
+                        <p>Publica tus lotes de cítricos nicaragüenses certificados para conectarte de manera transparente y directa con compradores comerciales y agroindustriales.</p>
+                    </div>
+                    <a href="panel_productor.html" class="btn" style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: #ffffff; backdrop-filter: blur(6px); border-radius: 12px; padding: 0.65rem 1.25rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+                        <span>Volver al Panel</span>
+                    </a>
+                </div>
             </div>
             
             <!-- Form -->
             <form action="#" method="POST" class="form-grid">
                 <!-- Column 1: Main Details -->
-                <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
                     
                     <!-- Basic Info -->
                     <div class="form-card">
-                        <h2 class="flex items-center gap-sm text-primary" style="font-size: var(--text-h3); margin-bottom: var(--space-lg);">
-                            <span class="material-symbols-outlined">edit_document</span>
-                            Información Básica
-                        </h2>
-                        
+                        <div class="card-header-styled">
+                            <div class="card-title-group">
+                                <div class="card-title-icon">
+                                    <span class="material-symbols-outlined">eco</span>
+                                </div>
+                                <div class="card-title-text">
+                                    <h2>Información de la Variedad</h2>
+                                    <span>Identificación botánica y estándares de selección</span>
+                                </div>
+                            </div>
+                            <span class="badge badge-success" style="font-size: 0.75rem; padding: 0.35rem 0.75rem; border-radius: 20px;">Global G.A.P. Ready</span>
+                        </div>
+
                         <div class="form-group">
-                            <label class="form-label" for="product_name">Nombre del producto *</label>
-                            <input class="form-input" type="text" id="product_name" name="product_name" placeholder="Ej: Limón Persa Categoría A" required>
+                            <label class="form-label">Sugerencias rápidas:</label>
+                            <div class="category-pills">
+                                <button type="button" class="category-pill" onclick="sugerirVariedad('Naranja Valencia Premium')">
+                                    <span class="material-symbols-outlined">nutrition</span> Naranja Valencia
+                                </button>
+                                <button type="button" class="category-pill" onclick="sugerirVariedad('Limón Criollo de Exportación')">
+                                    <span class="material-symbols-outlined">spa</span> Limón Criollo
+                                </button>
+                                <button type="button" class="category-pill" onclick="sugerirVariedad('Limón Persa Sin Semilla')">
+                                    <span class="material-symbols-outlined">energy_savings_leaf</span> Limón Persa
+                                </button>
+                                <button type="button" class="category-pill" onclick="sugerirVariedad('Mandarina Reina de Temporada')">
+                                    <span class="material-symbols-outlined">local_florist</span> Mandarina Reina
+                                </button>
+                            </div>
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label" for="description">Descripción detallada</label>
-                            <textarea class="form-input" id="description" name="description" rows="4" placeholder="Describe las características principales de tu producto, calibre, color, etc." style="resize: vertical;"></textarea>
+                            <label class="form-label" for="product_name">
+                                <span class="material-symbols-outlined">label</span>
+                                Nombre de la Variedad o Lote *
+                            </label>
+                            <div class="input-wrapper-modern">
+                                <span class="material-symbols-outlined prefix-icon">psychiatry</span>
+                                <input class="form-input" type="text" id="product_name" name="product_name" placeholder="Ej: Naranja Valencia Calibre 70mm" required>
+                            </div>
+                            <span class="helper-text">Incluye variedad, calibre o categoría de calidad para mayor interés de compradores.</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="description">
+                                <span class="material-symbols-outlined">notes</span>
+                                Descripción agronómica y detalles de calidad
+                            </label>
+                            <div class="input-wrapper-modern">
+                                <textarea class="form-input no-icon" id="description" name="description" rows="3" placeholder="Indica grados Brix estimados, nivel de acidez, grado de maduración, tipo de empaque o fecha prevista de corte." style="resize: vertical; min-height: 85px;"></textarea>
+                            </div>
+                            <span class="helper-text">Información como grados Brix (°Bx) y calibre aceleran el cierre de cotizaciones mayoristas.</span>
                         </div>
                     </div>
                     
                     <!-- Sales Details -->
-                    <div class="form-card accent">
-                        <h2 class="flex items-center gap-sm text-secondary" style="font-size: var(--text-h3); margin-bottom: var(--space-lg);">
-                            <span class="material-symbols-outlined">inventory_2</span>
-                            Detalles de Venta y Logística
-                        </h2>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="price">Precio por unidad (NIO) *</label>
-                                <input class="form-input" type="number" id="price" name="price" placeholder="0.00" min="0" step="0.01" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="unit">Unidad de medida *</label>
-                                <select class="form-input" id="unit" name="unit" required>
-                                    <option value="" disabled selected>Selecciona unidad</option>
-                                    <option value="caja">Caja (18 kg aprox)</option>
-                                    <option value="malla">Malla (10 kg aprox)</option>
-                                    <option value="kg">Kilogramo (kg)</option>
-                                </select>
+                    <div class="form-card">
+                        <div class="card-header-styled">
+                            <div class="card-title-group">
+                                <div class="card-title-icon orange">
+                                    <span class="material-symbols-outlined">inventory_2</span>
+                                </div>
+                                <div class="card-title-text">
+                                    <h2>Precios, Stock y Zona de Origen</h2>
+                                    <span>Condiciones comerciales y ubicación geográfica</span>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="stock">Stock inicial disponible *</label>
-                                <input class="form-input" type="number" id="stock" name="stock" placeholder="Cantidad disponible" min="0" required>
+                                <label class="form-label" for="price">
+                                    <span class="material-symbols-outlined">payments</span>
+                                    Precio Unitario (C$ NIO) *
+                                </label>
+                                <div class="input-wrapper-modern">
+                                    <span class="material-symbols-outlined prefix-icon">monetization_on</span>
+                                    <input class="form-input" type="number" id="price" name="price" placeholder="350.00" min="0" step="0.50" required>
+                                </div>
+                                <span class="helper-text">Precio de venta directo al comprador.</span>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="zone">Zona de cultivo *</label>
-                                <select class="form-input" id="zone" name="zone" required>
-                                    <option value="" disabled selected>Selecciona región</option>
-                                    <option value="leon">León</option>
-                                    <option value="chinandega">Chinandega</option>
-                                    <option value="masaya">Masaya</option>
-                                    <option value="carazo">Carazo</option>
-                                </select>
+                                <label class="form-label" for="unit">
+                                    <span class="material-symbols-outlined">scale</span>
+                                    Presentación / Unidad *
+                                </label>
+                                <div class="input-wrapper-modern">
+                                    <span class="material-symbols-outlined prefix-icon">category</span>
+                                    <select class="form-input" id="unit" name="unit" required>
+                                        <option value="" disabled selected>Selecciona unidad</option>
+                                        <option value="caja">Caja de Madera / Cartón (18 kg)</option>
+                                        <option value="cien">Cien unidades (100 frutos)</option>
+                                        <option value="docena">Docena (12 frutos)</option>
+                                        <option value="malla">Malla plástica (10 kg)</option>
+                                        <option value="kg">Kilogramo a granel (kg)</option>
+                                    </select>
+                                </div>
+                                <span class="helper-text">Presentación en que se despacha.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="stock">
+                                    <span class="material-symbols-outlined">production_quantity_limits</span>
+                                    Volumen Disponible *
+                                </label>
+                                <div class="input-wrapper-modern">
+                                    <span class="material-symbols-outlined prefix-icon">conveyor_belt</span>
+                                    <input class="form-input" type="number" id="stock" name="stock" placeholder="Cantidad en existencia" min="1" required>
+                                </div>
+                                <span class="helper-text">Unidades listas para entrega inmediata.</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="zone">
+                                    <span class="material-symbols-outlined">location_on</span>
+                                    Zona de Finca / Cultivo *
+                                </label>
+                                <div class="input-wrapper-modern">
+                                    <span class="material-symbols-outlined prefix-icon">map</span>
+                                    <select class="form-input" id="zone" name="zone" required>
+                                        <option value="" disabled selected>Selecciona región</option>
+                                        <option value="rivas">Rivas (Suelos volcánicos ricos)</option>
+                                        <option value="carazo">Carazo (Meseta de altura fresca)</option>
+                                        <option value="masaya">Masaya (Tierras fértiles tradicionales)</option>
+                                        <option value="chinandega">Chinandega (Valle cálido de occidente)</option>
+                                        <option value="leon">León (Planicies productivas)</option>
+                                    </select>
+                                </div>
+                                <span class="helper-text">Se mostrará geolocalizado en el mapa.</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Column 2: Media & Actions -->
-                <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
                     
                     <!-- Image Upload -->
-                    <div class="form-card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                        <h2 class="text-primary" style="font-size: var(--text-h3); margin-bottom: var(--space-md); width: 100%; text-align: left;">Imagen del Producto</h2>
+                    <div class="form-card" style="display: flex; flex-direction: column;">
+                        <div class="card-header-styled">
+                            <div class="card-title-group">
+                                <div class="card-title-icon">
+                                    <span class="material-symbols-outlined">photo_camera</span>
+                                </div>
+                                <div class="card-title-text">
+                                    <h2>Foto Real</h2>
+                                    <span>Imagen de alta resolución</span>
+                                </div>
+                            </div>
+                            <span class="badge" style="background: rgba(0, 109, 52, 0.1); color: var(--color-primary); font-size: 0.75rem; border-radius: 20px; padding: 0.35rem 0.75rem;">Recomendado</span>
+                        </div>
                         
-                        <label for="cosecha_img" style="width: 100%; aspect-ratio: 1/1; border: 2px dashed var(--color-primary); border-radius: var(--radius-lg); display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: var(--color-surface-gray); cursor: pointer; transition: background-color 0.2s; overflow: hidden; position: relative;" onmouseover="this.style.backgroundColor='var(--color-surface-container)'" onmouseout="this.style.backgroundColor='var(--color-surface-gray)'">
+                        <label for="cosecha_img" class="photo-dropzone">
                             <input type="file" id="cosecha_img" accept="image/*" style="display: none;" onchange="previewImage(event)">
                             <img id="img_preview" src="" alt="Vista Previa" style="display: none; width: 100%; height: 100%; object-fit: cover;">
                             
-                            <div id="upload_prompt" style="display: flex; flex-direction: column; align-items: center;">
-                                <div style="width: 64px; height: 64px; background-color: var(--color-primary-container); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-sm);">
-                                    <span class="material-symbols-outlined" style="font-size: 32px;">add_a_photo</span>
+                            <div id="upload_prompt" style="display: flex; flex-direction: column; align-items: center; padding: 1.5rem; text-align: center;">
+                                <div class="dropzone-icon-circle">
+                                    <span class="material-symbols-outlined" style="font-size: 30px;">add_a_photo</span>
                                 </div>
-                                <p class="text-primary" style="font-weight: 700; font-size: var(--text-label); margin: 0 0 4px 0;">Sube una imagen</p>
-                                <p class="text-muted" style="font-size: var(--text-caption); margin: 0; padding: 0 var(--space-md);">PNG, JPG hasta 5MB. Se recomienda fondo blanco.</p>
+                                <p style="color: #0f172a; font-weight: 700; font-size: 0.95rem; margin: 0 0 6px 0;">Sube una foto de tu cosecha</p>
+                                <p style="color: #64748b; font-size: 0.8rem; margin: 0; line-height: 1.4;">Haz clic para examinar o arrastra una foto (JPG, PNG).</p>
                             </div>
                         </label>
                     </div>
                     
                     <!-- Actions -->
-                    <div class="form-card" style="display: flex; flex-direction: column; gap: var(--space-sm);">
-                        <button type="submit" class="btn btn-primary flex justify-center items-center gap-xs">
-                            <span class="material-symbols-outlined">save</span>
-                            Publicar Producto
+                    <div class="form-card" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div id="draft-alert" style="display: none; padding: 0.75rem 1rem; border-radius: 12px; font-size: 0.85rem; background: #e8f5e9; color: #006837; border: 1px solid #bbf7d0; font-weight: 600;"></div>
+                        
+                        <button type="submit" class="btn-submit-harvest">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">publish</span>
+                            <span>Publicar Cosecha en Catálogo</span>
                         </button>
-                        <button type="button" onclick="alert('Borrador guardado correctamente')" class="btn btn-outline flex justify-center items-center gap-xs">
-                            Guardar como Borrador
+                        
+                        <button type="button" onclick="guardarBorrador()" class="btn-draft-offline">
+                            <span class="material-symbols-outlined" style="font-size: 20px; color: #006837;">save</span>
+                            <span>Guardar como Borrador (Offline)</span>
                         </button>
-                        <a href="panel_productor.html" class="btn flex justify-center items-center" style="background: none; border: none; color: var(--color-text-dark);">
-                            Cancelar
+                        
+                        <button type="button" id="btn-limpiar-borrador" onclick="limpiarBorrador()" class="btn flex justify-center items-center gap-xs" style="display: none; background: none; border: none; color: #dc2626; font-size: 0.825rem; cursor: pointer; padding: 0.5rem; font-weight: 600;">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                            <span>Descartar Borrador Guardado</span>
+                        </button>
+                        
+                        <a href="panel_productor.html" class="btn flex justify-center items-center" style="background: none; border: none; color: #64748b; font-size: 0.875rem; padding: 0.5rem; text-decoration: none;">
+                            Cancelar y regresar
                         </a>
                     </div>
                 </div>
@@ -212,7 +655,7 @@
     <footer class="footer" style="margin-top: auto;">
         <div class="container footer-inner">
             <div class="footer-copy">
-                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+                © 2026 Citri-Fresh. Calidad Citrícola de Nicaragua.
             </div>
             <div class="footer-nav">
                 <a class="footer-link" href="#">Soporte al Productor</a>
@@ -222,7 +665,23 @@
     </footer>
     <script src="../js/app.js"></script>
     <script>
-        CitriAuth.requireAuth(['productor']);
+        CitriAuth.requireAuth(['productor', 'admin']);
+
+        window.currentImageBase64 = '';
+
+        function sugerirVariedad(nombre) {
+            const input = document.getElementById('product_name');
+            if (input) {
+                input.value = nombre;
+                input.focus();
+            }
+            const unit = document.getElementById('unit');
+            if (unit) {
+                if (nombre.includes('Naranja')) unit.value = 'caja';
+                else if (nombre.includes('Criollo') || nombre.includes('Mandarina')) unit.value = 'docena';
+                else if (nombre.includes('Persa')) unit.value = 'malla';
+            }
+        }
 
         function previewImage(event) {
             const input = event.target;
@@ -231,6 +690,7 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    window.currentImageBase64 = e.target.result;
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                     prompt.style.display = 'none';
@@ -239,12 +699,83 @@
             }
         }
 
-        document.querySelector('.form-grid').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('product_name').value;
-            alert(`🍊 ¡Cosecha "${nombre}" publicada exitosamente en el Catálogo!`);
-            window.location.href = 'panel_productor.html';
-        });
+        // ── Persistencia de Borrador (Online / Offline) ─────────────────────
+        function guardarBorrador() {
+            const borrador = {
+                nombre: document.getElementById('product_name')?.value || '',
+                descripcion: document.getElementById('description')?.value || '',
+                precio: document.getElementById('price')?.value || '',
+                unidad: document.getElementById('unit')?.value || '',
+                stock: document.getElementById('stock')?.value || '',
+                zone: document.getElementById('zone')?.value || '',
+                imagen: currentImageBase64 || '',
+                fechaGuardado: new Date().toISOString()
+            };
+
+            localStorage.setItem('citrifresh_borrador_cosecha', JSON.stringify(borrador));
+            mostrarAlertaBorrador('💾 Borrador guardado localmente (disponible Online/Offline).');
+            document.getElementById('btn-limpiar-borrador').style.display = 'flex';
+        }
+
+        function cargarBorrador() {
+            try {
+                const guardado = localStorage.getItem('citrifresh_borrador_cosecha');
+                if (!guardado) return;
+                const data = JSON.parse(guardado);
+                if (data.nombre) document.getElementById('product_name').value = data.nombre;
+                if (data.descripcion) document.getElementById('description').value = data.descripcion;
+                if (data.precio) document.getElementById('price').value = data.precio;
+                if (data.unidad) document.getElementById('unit').value = data.unidad;
+                if (data.stock) document.getElementById('stock').value = data.stock;
+                if (data.zone) document.getElementById('zone').value = data.zone;
+                if (data.imagen) {
+                    currentImageBase64 = data.imagen;
+                    const preview = document.getElementById('img_preview');
+                    const prompt = document.getElementById('upload_prompt');
+                    if (preview && prompt) {
+                        preview.src = data.imagen;
+                        preview.style.display = 'block';
+                        prompt.style.display = 'none';
+                    }
+                }
+                mostrarAlertaBorrador('📝 Se ha restaurado tu borrador pendiente.');
+                document.getElementById('btn-limpiar-borrador').style.display = 'flex';
+            } catch (e) {
+                console.warn('Error al cargar borrador:', e);
+            }
+        }
+
+        function limpiarBorrador() {
+            if (!confirm('¿Deseas descartar los datos del borrador guardado?')) return;
+            localStorage.removeItem('citrifresh_borrador_cosecha');
+            document.getElementById('product_name').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('unit').value = '';
+            document.getElementById('stock').value = '';
+            document.getElementById('zone').value = '';
+            currentImageBase64 = '';
+            const preview = document.getElementById('img_preview');
+            const prompt = document.getElementById('upload_prompt');
+            preview.src = '';
+            preview.style.display = 'none';
+            prompt.style.display = 'flex';
+            document.getElementById('btn-limpiar-borrador').style.display = 'none';
+            document.getElementById('draft-alert').style.display = 'none';
+        }
+
+        function mostrarAlertaBorrador(msg) {
+            const el = document.getElementById('draft-alert');
+            if (el) {
+                el.style.display = 'block';
+                el.textContent = msg;
+                setTimeout(() => {
+                    el.style.display = 'none';
+                }, 4000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarBorrador);
     </script>
 </body>
 </html>

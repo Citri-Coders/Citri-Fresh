@@ -4,7 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Carrito | Citri-Fresh</title>
+    <title>Carrito de Compras | Citri-Fresh</title>
+    <!-- PWA & Mobile Web App -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a6b3c">
+    <!-- Iconos y Fuentes -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <!-- CSS Independiente Local -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
@@ -15,6 +20,67 @@
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/cart.css">
     <link rel="stylesheet" href="../css/footer.css">
+    <style>
+        .checkout-modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .checkout-modal-card {
+            background: white;
+            border-radius: 28px;
+            max-width: 580px;
+            width: 100%;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .payment-choice-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.75rem;
+        }
+        .payment-choice-card:hover {
+            border-color: #006837;
+            background: #f0fdf4;
+        }
+        .payment-choice-card.active {
+            border-color: #006837;
+            background: #ecfdf5;
+            box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.15);
+        }
+        .payment-details-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        .empty-cart-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 24px;
+            border: 1px solid var(--color-border);
+        }
+    </style>
 </head>
 
 <body>
@@ -44,82 +110,22 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content" style="padding-top: var(--space-xl);">
+    <main class="main-content" style="padding-top: var(--space-xl); padding-bottom: var(--space-3xl);">
         <div class="container">
             <!-- Header -->
             <div class="flex items-center gap-md" style="margin-bottom: var(--space-xl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-md);">
-                <a href="producto.html" class="text-muted hover:text-primary transition-fast">
+                <a href="producto.html" class="text-muted hover:text-primary transition-fast" title="Regresar al Catálogo">
                     <span class="material-symbols-outlined" style="font-size: 28px;">arrow_back</span>
                 </a>
-                <h1 style="margin: 0;">Carrito de Compras</h1>
-                <span class="badge" style="margin-left: auto; background-color: var(--color-surface-container); color: var(--color-primary-container);">3 Ítems</span>
+                <h1 style="margin: 0; font-size: 1.75rem;">Carrito de Compras</h1>
+                <span id="cart-header-badge" class="badge" style="margin-left: auto; background-color: var(--color-surface-container); color: var(--color-primary-container); font-size: 0.9rem; padding: 0.4rem 0.85rem;">0 Ítems</span>
             </div>
             
-            <div class="cart-layout">
+            <!-- Cart Layout -->
+            <div id="cart-content-wrapper" class="cart-layout" style="display: none;">
                 <!-- Cart Items Section -->
-                <div class="cart-items">
-                    <!-- Cart Item 1 -->
-                    <div class="cart-item">
-                        <button aria-label="Eliminar" class="cart-item-delete">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
-                        
-                        <div class="cart-item-img-wrap">
-                            <img alt="Naranjas Valencia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6soMO-ALrjKizuY20t76fEOzbzePsV3JighY6q-tIkNy7GsXN8vJkausvtivIdDDAYjBuOV8h51DvWXG9ztsghckTcjXvDkGMu1rOZi_YUMB3XysgYeMHR3Bny98q8qvzCJf_Yzku7hm0AyAoFh-84zmuxQff_Hb8pXeYjRsYApBCJSi5ddl80DEbzwWm6rnmxM1cquJHD7S6RFXqu34Dhk8DDqfwtbWMxrmWSCOecj5CLllOH3Hp">
-                        </div>
-                        
-                        <div class="cart-item-content">
-                            <div>
-                                <span class="badge badge-success" style="margin-bottom: var(--space-xs); display: inline-block;">Caja 20kg</span>
-                                <h3 class="cart-item-title">Naranjas Valencia Premium</h3>
-                                <p class="cart-item-desc">Origen: Finca El Rosario, León. Calibre grande, ideales para jugo fresco y exportación.</p>
-                            </div>
-                            
-                            <div class="cart-item-footer">
-                                <div class="quantity-control">
-                                    <button class="quantity-btn"><span class="material-symbols-outlined">remove</span></button>
-                                    <input class="quantity-input" type="number" value="2">
-                                    <button class="quantity-btn"><span class="material-symbols-outlined">add</span></button>
-                                </div>
-                                
-                                <div class="cart-item-price">
-                                    <span class="cart-item-price-old">C$ 550.00 / ud</span>
-                                    <span class="cart-item-price-current">C$ 1,000.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Cart Item 2 -->
-                    <div class="cart-item">
-                        <button aria-label="Eliminar" class="cart-item-delete">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
-                        
-                        <div class="cart-item-img-wrap">
-                            <img alt="Limón Persa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKG3S4Ap-LB4V2BBK2i3PiV7GFFJ70i80Mylnhp5g9J2RtJ0OxABBZq-DShQ86UP6SP-LkqwhtfsCTwsIBJfE2JqXRfPghARWPDf6QufOHhGLuc5PLOLfDenkQJqkxingbaG4As3uzt99ADH-0XtsD_9q6_tmMCjcm-TIuulmLJwx-dp-jjYwiYFnGIrsx47viF7zafwzQncho5TcvOoAVTS3kE43fwujoyfthD62WLedli1_cEYF7">
-                        </div>
-                        
-                        <div class="cart-item-content">
-                            <div>
-                                <span class="badge badge-success" style="margin-bottom: var(--space-xs); display: inline-block;">Malla 5kg</span>
-                                <h3 class="cart-item-title">Limón Persa Primera</h3>
-                                <p class="cart-item-desc">Origen: Valle de Chinandega. Sin semilla, alta jugosidad, color verde intenso.</p>
-                            </div>
-                            
-                            <div class="cart-item-footer">
-                                <div class="quantity-control">
-                                    <button class="quantity-btn" disabled><span class="material-symbols-outlined">remove</span></button>
-                                    <input class="quantity-input" type="number" value="1">
-                                    <button class="quantity-btn"><span class="material-symbols-outlined">add</span></button>
-                                </div>
-                                
-                                <div class="cart-item-price">
-                                    <span class="cart-item-price-current">C$ 320.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="cart-items" id="cart-items-container">
+                    <!-- Los ítems se inyectan dinámicamente -->
                 </div>
                 
                 <!-- Order Summary Section -->
@@ -129,57 +135,188 @@
                         
                         <div class="summary-list">
                             <div class="summary-item">
-                                <span>Subtotal (2 ítems)</span>
-                                <span>C$ 1,320.00</span>
+                                <span id="summary-items-count-label">Subtotal (0 ítems)</span>
+                                <span id="summary-subtotal">C$ 0.00</span>
                             </div>
                             <div class="summary-item discount">
-                                <span>Descuentos</span>
+                                <span>Descuento Comercial</span>
                                 <span>- C$ 0.00</span>
                             </div>
                             <div class="summary-item">
-                                <span>Impuestos (IVA 15%)</span>
-                                <span>C$ 198.00</span>
+                                <span>Régimen Fiscal (Exención Agropecuaria LCT)</span>
+                                <span style="color: #006837; font-weight: 700;">Exento (0%)</span>
                             </div>
                             <div class="summary-item">
-                                <span>Costo de Envío</span>
-                                <span>C$ 150.00</span>
+                                <span>Envío Finca Directa</span>
+                                <span id="summary-shipping">C$ 150.00</span>
                             </div>
                         </div>
                         
                         <div class="summary-total">
-                            <span class="summary-total-label">Total</span>
+                            <span class="summary-total-label">Total a Pagar</span>
                             <div class="summary-total-value">
-                                <span class="summary-total-currency">Córdobas (NIO)</span>
-                                <span class="summary-total-amount text-primary">C$ 1,668.00</span>
+                                <span class="summary-total-currency">Córdobas Nicaragüenses (NIO)</span>
+                                <span id="summary-total" class="summary-total-amount text-primary">C$ 0.00</span>
                             </div>
                         </div>
                         
-                        <button class="btn btn-accent btn-block flex justify-center items-center gap-sm">
-                            Finalizar Compra
+                        <button id="btn-iniciar-checkout" onclick="abrirModalCheckout()" class="btn btn-accent btn-block flex justify-center items-center gap-sm" style="font-weight: 800; font-size: 1.05rem; padding: 1rem;">
+                            <span>Proceder al Pago</span>
                             <span class="material-symbols-outlined">arrow_forward</span>
                         </button>
                         
                         <div class="payment-methods">
-                            <p class="payment-methods-title">Métodos de pago aceptados</p>
+                            <p class="payment-methods-title">Métodos de pago habilitados</p>
                             <div class="payment-icons">
-                                <div class="payment-icon"><span class="material-symbols-outlined text-muted">credit_card</span></div>
-                                <div class="payment-icon"><span class="material-symbols-outlined text-muted">account_balance</span></div>
-                                <div class="payment-icon"><span class="material-symbols-outlined text-muted">payments</span></div>
+                                <div class="payment-icon" title="BAC / Banpro / LaFise"><span class="material-symbols-outlined text-muted">account_balance</span></div>
+                                <div class="payment-icon" title="Tarjeta Visa / Mastercard"><span class="material-symbols-outlined text-muted">credit_card</span></div>
+                                <div class="payment-icon" title="Pago Contra Entrega"><span class="material-symbols-outlined text-muted">payments</span></div>
                             </div>
                         </div>
                         
                         <div class="trust-badge">
                             <span class="material-symbols-outlined">verified_user</span>
                             <div>
-                                <p class="trust-badge-title">Compra Segura</p>
-                                <p class="trust-badge-text">Tus datos están protegidos.</p>
+                                <p class="trust-badge-title">Comercio Citrícola Seguro</p>
+                                <p class="trust-badge-text">Garantía directa de calidad entre productor nicaragüense y comprador.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Empty Cart State -->
+            <div id="cart-empty-view" class="empty-cart-state" style="display: none;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #ecfdf5; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <span class="material-symbols-outlined" style="font-size: 44px; color: #006837;">remove_shopping_cart</span>
+                </div>
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #1e293b;">Tu carrito de compras está vacío</h2>
+                <p style="color: #64748b; max-width: 460px; margin: 0 auto 1.75rem auto; line-height: 1.5;">
+                    Aún no has agregado ninguna cosecha cítrica. Explora nuestro catálogo de cosechas de León, Carazo, Chinandega y Masaya.
+                </p>
+                <a href="producto.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 0.85rem 1.75rem; border-radius: 14px; text-decoration: none;">
+                    <span class="material-symbols-outlined">storefront</span>
+                    <span>Explorar Catálogo Cítrico</span>
+                </a>
+            </div>
         </div>
     </main>
+
+    <!-- MODAL DE CHECKOUT Y PASARELA DE PAGO -->
+    <div id="modal-checkout" class="checkout-modal-backdrop">
+        <div class="checkout-modal-card">
+            <!-- Header Modal -->
+            <div style="background: linear-gradient(135deg, #006837 0%, #15803d 100%); padding: 1.75rem 2rem; border-radius: 28px 28px 0 0; color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div class="flex items-center gap-sm">
+                    <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                        <span class="material-symbols-outlined" style="font-size: 26px;">check_circle</span>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: white;">Finalizar Pedido</h3>
+                        <span style="font-size: 0.8rem; color: rgba(255,255,255,0.85);">Selecciona tu método de pago seguro</span>
+                    </div>
+                </div>
+                <button type="button" onclick="cerrarModalCheckout()" style="background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Body Modal -->
+            <div style="padding: 2rem;">
+                <form id="form-checkout-final" onsubmit="procesarPagoPedido(event)">
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                            Dirección de Entrega o Sucursal *
+                        </label>
+                        <input type="text" id="checkout-direccion" class="form-input no-icon" placeholder="Ej: Managua, Reparto San Juan, De la rotonda 2c al lago" required style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                            Teléfono de Contacto para la Entrega *
+                        </label>
+                        <input type="tel" id="checkout-telefono" class="form-input no-icon" placeholder="Ej: +505 8888-9999" required style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.6rem;">
+                            Selecciona tu Método de Pago:
+                        </label>
+
+                        <!-- Opción 1: Transferencia Bancaria -->
+                        <div class="payment-choice-card active" onclick="seleccionarMetodoPago('transferencia', this)">
+                            <span class="material-symbols-outlined" style="color: #006837; font-size: 28px;">account_balance</span>
+                            <div style="flex-grow: 1;">
+                                <strong style="color: #1e293b; font-size: 0.95rem; display: block;">Transferencia Bancaria Nacional</strong>
+                                <span style="font-size: 0.775rem; color: #64748b;">BAC Credomatic / Banpro / Banco LaFise</span>
+                            </div>
+                            <span class="material-symbols-outlined check-icon" style="color: #006837;">check_circle</span>
+                        </div>
+
+                        <!-- Opción 2: Tarjeta Crédito / Débito -->
+                        <div class="payment-choice-card" onclick="seleccionarMetodoPago('tarjeta', this)">
+                            <span class="material-symbols-outlined" style="color: #2563eb; font-size: 28px;">credit_card</span>
+                            <div style="flex-grow: 1;">
+                                <strong style="color: #1e293b; font-size: 0.95rem; display: block;">Tarjeta de Crédito o Débito</strong>
+                                <span style="font-size: 0.775rem; color: #64748b;">Visa o MasterCard (Pasarela Segura)</span>
+                            </div>
+                            <span class="material-symbols-outlined check-icon" style="display: none; color: #006837;">check_circle</span>
+                        </div>
+
+                        <!-- Opción 3: Pago Contra Entrega -->
+                        <div class="payment-choice-card" onclick="seleccionarMetodoPago('efectivo', this)">
+                            <span class="material-symbols-outlined" style="color: #16a34a; font-size: 28px;">payments</span>
+                            <div style="flex-grow: 1;">
+                                <strong style="color: #1e293b; font-size: 0.95rem; display: block;">Pago en Efectivo Contra Entrega</strong>
+                                <span style="font-size: 0.775rem; color: #64748b;">Paga al recibir el camión de cosecha</span>
+                            </div>
+                            <span class="material-symbols-outlined check-icon" style="display: none; color: #006837;">check_circle</span>
+                        </div>
+                    </div>
+
+                    <!-- Detalle de Cuentas para Transferencia -->
+                    <div id="payment-details-transferencia" class="payment-details-box">
+                        <strong style="color: #006837; display: block; margin-bottom: 6px;">🏦 Cuentas Oficiales Citri-Fresh Nicaragua:</strong>
+                        <ul style="margin: 0; padding-left: 1.25rem; line-height: 1.6; color: #334155; font-size: 0.85rem;">
+                            <li><b>BAC Credomatic (NIO):</b> 365-982-104</li>
+                            <li><b>Banpro Grupo Promerica:</b> 100-245-891-001</li>
+                            <li><b>Beneficiario:</b> Citri-Fresh S.A.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Detalle Simulado Tarjeta -->
+                    <div id="payment-details-tarjeta" class="payment-details-box" style="display: none;">
+                        <strong style="color: #2563eb; display: block; margin-bottom: 8px;">💳 Datos de la Tarjeta:</strong>
+                        <input type="text" placeholder="Número de Tarjeta (16 dígitos)" maxlength="19" class="form-input no-icon" style="width: 100%; box-sizing: border-box; margin-bottom: 6px; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <input type="text" placeholder="MM/AA" maxlength="5" class="form-input no-icon" style="width: 100%; box-sizing: border-box; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                            <input type="password" placeholder="CVV (3 dígitos)" maxlength="3" class="form-input no-icon" style="width: 100%; box-sizing: border-box; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                        </div>
+                    </div>
+
+                    <!-- Detalle Efectivo -->
+                    <div id="payment-details-efectivo" class="payment-details-box" style="display: none;">
+                        <strong style="color: #16a34a; display: block; margin-bottom: 4px;">🚚 Entrega en tu negocio o finca:</strong>
+                        <p style="margin: 0; color: #475569; font-size: 0.85rem;">
+                            El transportista llevará la factura física y podrás pagar en córdobas o dólares al momento de inspeccionar el lote.
+                        </p>
+                    </div>
+
+                    <!-- Resumen a Cobrar -->
+                    <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="font-size: 0.8rem; color: #64748b;">Monto Total:</span>
+                            <div id="modal-checkout-total" style="font-size: 1.35rem; font-weight: 900; color: #006837;">C$ 0.00</div>
+                        </div>
+                        <button type="submit" id="btn-confirmar-pedido" class="btn btn-accent" style="padding: 0.85rem 1.75rem; border-radius: 14px; font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 6px;">
+                            <span class="material-symbols-outlined">lock</span>
+                            <span>Confirmar Pedido</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -196,14 +333,186 @@
             </div>
             
             <div class="footer-copy">
-                © 2024 Citri-Fresh. Calidad Citrícola de Nicaragua.
+                © 2026 Citri-Fresh. Calidad Citrícola de Nicaragua.
             </div>
         </div>
     </footer>
+
     <script src="../js/app.js"></script>
     <script>
-        // Proteger vista de carrito: solo accesible para clientes logueados
-        CitriAuth.requireAuth(['cliente']);
+        // Proteger vista: requiere cuenta autenticada
+        CitriAuth.requireAuth(['cliente', 'admin']);
+
+        let metodoPagoSeleccionado = 'transferencia';
+
+        // Renderizar el carrito en vivo desde CitriCart
+        function renderizarCarritoCompleto() {
+            const items = CitriCart.getItems();
+            const wrapper = document.getElementById('cart-content-wrapper');
+            const emptyView = document.getElementById('cart-empty-view');
+            const container = document.getElementById('cart-items-container');
+            const totals = CitriCart.getTotals();
+
+            document.getElementById('cart-header-badge').textContent = `${totals.totalItems} Ítems`;
+
+            if (items.length === 0) {
+                wrapper.style.display = 'none';
+                emptyView.style.display = 'block';
+                return;
+            }
+
+            emptyView.style.display = 'none';
+            wrapper.style.display = 'flex';
+
+            // Inyectar ítems con controles de cantidad y eliminar
+            container.innerHTML = items.map(item => {
+                const subtotalItem = Number(item.precio) * Number(item.cantidad);
+                return `
+                    <div class="cart-item" data-id="${item.id}">
+                        <button onclick="eliminarItemCarrito(${item.id})" aria-label="Eliminar producto" class="cart-item-delete" title="Eliminar del carrito">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        
+                        <div class="cart-item-img-wrap">
+                            <img alt="${item.nombre}" src="${item.imagen || '/public/images/n-comer.jpg'}">
+                        </div>
+                        
+                        <div class="cart-item-content">
+                            <div>
+                                <span class="badge badge-success" style="margin-bottom: var(--space-xs); display: inline-block;">Presentación: ${item.unidad}</span>
+                                <h3 class="cart-item-title">${item.nombre}</h3>
+                                <p class="cart-item-desc">${item.productor || 'Productor Nicaragüense'}</p>
+                            </div>
+                            
+                            <div class="cart-item-footer">
+                                <div class="quantity-control">
+                                    <button onclick="cambiarCantidadCarrito(${item.id}, ${item.cantidad - 1})" class="quantity-btn" ${item.cantidad <= 1 ? 'disabled' : ''}>
+                                        <span class="material-symbols-outlined">remove</span>
+                                    </button>
+                                    <input class="quantity-input" type="number" min="1" value="${item.cantidad}" onchange="cambiarCantidadCarrito(${item.id}, this.value)">
+                                    <button onclick="cambiarCantidadCarrito(${item.id}, ${item.cantidad + 1})" class="quantity-btn">
+                                        <span class="material-symbols-outlined">add</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="cart-item-price">
+                                    <span class="cart-item-price-old">C$ ${Number(item.precio).toFixed(2)} c/u</span>
+                                    <span class="cart-item-price-current">C$ ${subtotalItem.toLocaleString('es-NI', { minimumFractionDigits: 2 })}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Actualizar resumen
+            document.getElementById('summary-items-count-label').textContent = `Subtotal (${totals.totalItems} ítems)`;
+            document.getElementById('summary-subtotal').textContent = `C$ ${totals.subtotal.toLocaleString('es-NI', { minimumFractionDigits: 2 })}`;
+            document.getElementById('summary-shipping').textContent = `C$ ${totals.envio.toLocaleString('es-NI', { minimumFractionDigits: 2 })}`;
+            document.getElementById('summary-total').textContent = `C$ ${totals.total.toLocaleString('es-NI', { minimumFractionDigits: 2 })}`;
+            document.getElementById('modal-checkout-total').textContent = `C$ ${totals.total.toLocaleString('es-NI', { minimumFractionDigits: 2 })}`;
+        }
+
+        function cambiarCantidadCarrito(id, qty) {
+            CitriCart.updateQuantity(id, qty);
+            renderizarCarritoCompleto();
+        }
+
+        function eliminarItemCarrito(id) {
+            CitriCart.removeItem(id);
+            renderizarCarritoCompleto();
+        }
+
+        function abrirModalCheckout() {
+            const totals = CitriCart.getTotals();
+            if (totals.totalItems === 0) {
+                alert('Tu carrito está vacío. Agrega productos primero.');
+                return;
+            }
+            const user = CitriAuth.getUser();
+            if (user) {
+                if (user.direccion) document.getElementById('checkout-direccion').value = user.direccion;
+                if (user.telefono) document.getElementById('checkout-telefono').value = user.telefono;
+            }
+            document.getElementById('modal-checkout').style.display = 'flex';
+        }
+
+        function cerrarModalCheckout() {
+            document.getElementById('modal-checkout').style.display = 'none';
+        }
+
+        function seleccionarMetodoPago(metodo, element) {
+            metodoPagoSeleccionado = metodo;
+            document.querySelectorAll('.payment-choice-card').forEach(card => {
+                card.classList.remove('active');
+                card.querySelector('.check-icon').style.display = 'none';
+            });
+            element.classList.add('active');
+            element.querySelector('.check-icon').style.display = 'inline-block';
+
+            document.getElementById('payment-details-transferencia').style.display = metodo === 'transferencia' ? 'block' : 'none';
+            document.getElementById('payment-details-tarjeta').style.display = metodo === 'tarjeta' ? 'block' : 'none';
+            document.getElementById('payment-details-efectivo').style.display = metodo === 'efectivo' ? 'block' : 'none';
+        }
+
+        async function procesarPagoPedido(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-confirmar-pedido');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined">sync</span> Procesando...';
+
+            const items = CitriCart.getItems().map(item => ({
+                producto_id: Number(item.id),
+                cantidad: Number(item.cantidad)
+            }));
+
+            try {
+                const res = await fetch('/api/pedidos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ items })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(data.error || 'No se pudo registrar el pedido');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="material-symbols-outlined">lock</span> Confirmar Pedido';
+                    return;
+                }
+
+                // Pedido exitoso
+                CitriCart.clear();
+                cerrarModalCheckout();
+                alert(`✅ ¡Pedido #CF-${data.pedido.id} registrado con éxito con método de pago "${metodoPagoSeleccionado.toUpperCase()}"! Puedes ver su estado en tu panel.`);
+                window.location.href = 'perfil.html';
+            } catch (err) {
+                console.warn('Conexión perdida. Guardando pedido en cola offline:', err);
+                CitriSync.addToQueue({
+                    tipo: 'pedido',
+                    url: '/api/pedidos',
+                    metodo: 'POST',
+                    datos: { items }
+                });
+                CitriCart.clear();
+                cerrarModalCheckout();
+                alert(`💾 ¡Pedido guardado sin conexión!\nSe procesará y enviará al productor automáticamente en cuanto tu dispositivo detecte internet.`);
+                window.location.href = 'perfil.html';
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            renderizarCarritoCompleto();
+            CitriCart.updateCartBadge();
+        });
+
+        window.addEventListener('citri:cart-updated', () => {
+            renderizarCarritoCompleto();
+        });
     </script>
 </body>
+
 </html>
