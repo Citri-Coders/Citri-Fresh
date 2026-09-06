@@ -83,25 +83,6 @@
                 <div class="auth-bottom-text">
                     ¿Aún no tienes una cuenta? <a href="../registro.html" class="auth-link-highlight">Regístrate gratis</a>
                 </div>
-
-                <!-- Credenciales Rápidas para Evaluación del Jurado -->
-                <div style="margin-top: 1.5rem; padding: 1rem; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; font-size: 0.8rem;">
-                    <div style="font-weight: 700; color: #334155; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 6px;">
-                        <span class="material-symbols-outlined" style="font-size: 16px; color: #006837;">badge</span>
-                        <span>Cuentas de Demostración y Rúbrica:</span>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                        <button type="button" onclick="cargarDemoLogin('auditor@citrifresh.com', 'auditor123')" style="border: 1px solid #0f766e; background: #f0fdfa; color: #0f766e; padding: 4px 8px; border-radius: 6px; font-size: 0.725rem; font-weight: 700; cursor: pointer;">
-                            🧐 Auditor: auditor@citrifresh.com
-                        </button>
-                        <button type="button" onclick="cargarDemoLogin('admin@citrifresh.com', 'admin123')" style="border: 1px solid #006837; background: #f0fdf4; color: #006837; padding: 4px 8px; border-radius: 6px; font-size: 0.725rem; font-weight: 700; cursor: pointer;">
-                            🛡️ Admin: admin@citrifresh.com
-                        </button>
-                        <button type="button" onclick="cargarDemoLogin('productor@citrifresh.com', 'productor123')" style="border: 1px solid #ea580c; background: #fff7ed; color: #ea580c; padding: 4px 8px; border-radius: 6px; font-size: 0.725rem; font-weight: 700; cursor: pointer;">
-                            🚜 Productor: productor@citrifresh.com
-                        </button>
-                    </div>
-                </div>
             </div>
 
             <!-- Lado Visual / Marca -->
@@ -229,17 +210,6 @@
     </div>
 
     <script src="../../js/app.js"></script>
-    <script>
-        function cargarDemoLogin(email, password) {
-            const emailInput = document.querySelector('input[type="email"]');
-            const passInput = document.querySelector('input[type="password"]');
-            if (emailInput && passInput) {
-                emailInput.value = email;
-                passInput.value = password;
-                emailInput.focus();
-            }
-        }
-    </script>
 </body>
 
 </html>
