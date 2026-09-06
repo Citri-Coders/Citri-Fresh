@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Dashboard de Administración | Citri-Fresh</title>
+    <!-- Iconos y Fuentes -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <!-- Leaflet CSS para Mapa Interactivo -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- CSS Independiente Local -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <style>
+        .admin-stat-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .admin-stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .admin-stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-tab-btn {
+            background: none;
+            border: none;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text-light);
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all var(--transition-fast);
+        }
+        .admin-tab-btn:hover {
+            background-color: var(--color-surface-container);
+            color: var(--color-primary);
+        }
+        .admin-tab-btn.active {
+            background-color: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(26, 107, 60, 0.2);
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.875rem;
+        }
+        .admin-table th {
+            background-color: var(--color-surface-gray);
+            color: var(--color-text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid var(--color-border);
+            text-align: left;
+        }
+        .admin-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: middle;
+        }
+        .admin-table tr:hover td {
+            background-color: var(--color-surface-warm);
+        }
+        #admin-map {
+            width: 100%;
+            height: 380px;
+            border-radius: var(--radius-xl);
+            border: 1.5px solid var(--color-border);
+            z-index: 10;
+        }
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            animation: fadeInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content-pro {
+            background: #ffffff;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 620px;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 104, 55, 0.08);
+            position: relative;
+            padding: 0;
+            animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUpModal {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-header-pro {
+            background: linear-gradient(135deg, #006837 0%, #15803d 100%);
+            padding: 1.75rem 2rem;
+            border-radius: 28px 28px 0 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+        .modal-header-pro::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b, #10b981);
+        }
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        .modal-body-pro {
+            padding: 2rem;
+        }
+        .admin-form-group {
+            margin-bottom: 1.25rem;
+        }
+        .admin-field-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.45rem;
+            letter-spacing: 0.2px;
+        }
+        .admin-field-label .material-symbols-outlined {
+            font-size: 18px;
+            color: #006837;
+        }
+        .admin-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .admin-input-wrapper .prefix-icon {
+            position: absolute;
+            left: 1rem;
+            color: #94a3b8;
+            font-size: 20px;
+            pointer-events: none;
+            transition: color 0.2s ease;
+        }
+        .admin-input-pro {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.85rem 1rem 0.85rem 2.75rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background-color: #f8fafc;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 500;
+        }
+        .admin-input-pro.no-prefix {
+            padding-left: 1rem;
+        }
+        .admin-input-pro:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: #006837;
+            box-shadow: 0 0 0 4px rgba(0, 104, 55, 0.12);
+        }
+        .admin-input-pro:focus + .prefix-icon,
+        .admin-input-wrapper:focus-within .prefix-icon {
+            color: #006837;
+        }
+        .admin-select-pro {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.25rem;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+        .admin-upload-card {
+            border: 2px dashed #cbd5e1;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .admin-upload-card:hover {
+            border-color: #006837;
+            background: #f0fdf4;
+        }
+        .btn-action-cancel {
+            padding: 0.85rem 1.5rem;
+            border-radius: 14px;
+            border: 1.5px solid #cbd5e1;
+            background: white;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-action-cancel:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .btn-action-save {
+            padding: 0.85rem 1.75rem;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #006837 0%, #15803d 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 104, 55, 0.25);
+            transition: all 0.25s ease;
+        }
+        .btn-action-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 104, 55, 0.35);
+            background: linear-gradient(135deg, #00562e 0%, #166534 100%);
+        }
+        .btn-action-save:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="container navbar-inner">
+            <a href="inicio.html" class="navbar-brand">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="navbar-logo-img">
+            </a>
+            
+            <div class="nav-menu">
+                <a class="nav-link" href="inicio.html">Inicio</a>
+                <a class="nav-link" href="producto.html">Productos</a>
+                <a class="nav-link" href="nosotros.html">Nosotros</a>
+                <a class="nav-link active" href="admin.html">Panel Admin</a>
+            </div>
+            
+            <div class="nav-actions flex items-center gap-sm">
+                <!-- Se actualiza dinámicamente con CitriAuth -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: var(--space-xl); padding-bottom: var(--space-3xl);">
+        <div class="container">
+            <!-- Header -->
+            <div class="flex justify-between items-center flex-wrap gap-md" style="margin-bottom: var(--space-xl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-md);">
+                <div>
+                    <div class="flex items-center gap-xs text-primary" style="font-weight: 700; font-size: var(--text-label); margin-bottom: 4px;">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">admin_panel_settings</span>
+                        <span>ADMINISTRACIÓN GENERAL CITRI-FRESH</span>
+                    </div>
+                    <h1 style="margin: 0; font-size: var(--text-h2);">Panel de Control Maestro</h1>
+                    <p class="text-muted" style="margin: 4px 0 0 0; font-size: var(--text-body-md);">Supervisión total de productos, pedidos, usuarios y geolocalización de cosechas.</p>
+                </div>
+                <div class="flex items-center gap-sm">
+                    <button onclick="abrirModalProducto()" class="btn btn-primary flex items-center gap-xs">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span>Nuevo Producto</span>
+                    </button>
+                    <a href="producto.html" target="_blank" class="btn btn-outline flex items-center gap-xs" title="Ver Catálogo Público">
+                        <span class="material-symbols-outlined">open_in_new</span>
+                        <span>Ver Catálogo</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Metrics Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-2xl);">
+                <div class="admin-stat-card">
+                    <div>
+                        <span class="text-muted" style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Cosechas Activas</span>
+                        <h2 id="stat-productos" style="font-size: 2.2rem; font-weight: 900; margin: 4px 0 0 0; color: var(--color-primary);">0</h2>
+                        <span class="text-muted" style="font-size: 0.75rem;">En catálogo público</span>
+                    </div>
+                    <div class="admin-stat-icon" style="background-color: var(--color-surface-container); color: var(--color-primary);">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">nutrition</span>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div>
+                        <span class="text-muted" style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Pedidos Registrados</span>
+                        <h2 id="stat-pedidos" style="font-size: 2.2rem; font-weight: 900; margin: 4px 0 0 0; color: var(--color-secondary);">0</h2>
+                        <span class="text-muted" style="font-size: 0.75rem;">Compras en plataforma</span>
+                    </div>
+                    <div class="admin-stat-icon" style="background-color: rgba(45, 160, 90, 0.15); color: var(--color-secondary);">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">receipt_long</span>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div>
+                        <span class="text-muted" style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Usuarios Totales</span>
+                        <h2 id="stat-usuarios" style="font-size: 2.2rem; font-weight: 900; margin: 4px 0 0 0; color: var(--color-text-dark);">0</h2>
+                        <span class="text-muted" style="font-size: 0.75rem;">Clientes y Productores</span>
+                    </div>
+                    <div class="admin-stat-icon" style="background-color: rgba(245, 166, 35, 0.15); color: var(--color-accent);">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">group</span>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div>
+                        <span class="text-muted" style="font-size: var(--text-caption); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Ventas Acumuladas</span>
+                        <h2 id="stat-ventas" style="font-size: 1.85rem; font-weight: 900; margin: 4px 0 0 0; color: var(--color-primary);">C$ 0</h2>
+                        <span class="text-muted" style="font-size: 0.75rem;">En pedidos completados</span>
+                    </div>
+                    <div class="admin-stat-icon" style="background-color: var(--color-surface-high); color: var(--color-primary);">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">payments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapa Interactivo de Cosechas por Región -->
+            <div style="background: white; border-radius: var(--radius-xl); padding: var(--space-xl); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); margin-bottom: var(--space-2xl);">
+                <div class="flex justify-between items-center flex-wrap gap-sm" style="margin-bottom: var(--space-md);">
+                    <div>
+                        <h2 class="flex items-center gap-xs text-primary" style="font-size: var(--text-h3); margin: 0;">
+                            <span class="material-symbols-outlined">map</span>
+                            Mapa Interactivo de Cosechas en Nicaragua
+                        </h2>
+                        <p class="text-muted" style="margin: 4px 0 0 0; font-size: var(--text-body-md);">
+                            Ubicación en tiempo real de los lotes y orígenes citrícolas registrados (León, Masaya, Carazo, Chinandega, Rivas).
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-xs" style="font-size: 0.75rem; background: var(--color-surface-container); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); color: var(--color-primary); font-weight: 700;">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">location_pin</span>
+                        Zonas Activas: <span id="map-active-zones">Cargando...</span>
+                    </div>
+                </div>
+                <div id="admin-map"></div>
+            </div>
+
+            <!-- Navigation Tabs for Tables -->
+            <div style="display: flex; gap: var(--space-xs); margin-bottom: var(--space-lg); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; overflow-x: auto;">
+                <button class="admin-tab-btn active" onclick="cambiarTab('productos', this)">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                    <span>Productos y Cosechas</span>
+                </button>
+                <button class="admin-tab-btn" onclick="cambiarTab('pedidos', this)">
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                    <span>Pedidos y Ventas</span>
+                </button>
+                <button class="admin-tab-btn" onclick="cambiarTab('usuarios', this)">
+                    <span class="material-symbols-outlined">badge</span>
+                    <span>Directorio de Usuarios</span>
+                </button>
+            </div>
+
+            <!-- SECCIÓN TAB 1: PRODUCTOS -->
+            <div id="tab-productos" class="tab-content" style="display: block;">
+                <div style="background: white; border-radius: var(--radius-xl); border: 1px solid var(--color-border); overflow: hidden; box-shadow: var(--shadow-sm);">
+                    <div class="flex justify-between items-center" style="padding: var(--space-md) var(--space-lg); background-color: var(--color-surface-warm); border-bottom: 1px solid var(--color-border);">
+                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--color-primary);">Inventario Global de Cítricos</h3>
+                        <span id="cant-productos" class="badge badge-success">0 productos</span>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Imagen</th>
+                                    <th>Producto</th>
+                                    <th>Zona</th>
+                                    <th>Productor</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th style="text-align: right;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-productos-body">
+                                <tr><td colspan="8" style="text-align: center; padding: 2rem;">Cargando productos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN TAB 2: PEDIDOS -->
+            <div id="tab-pedidos" class="tab-content" style="display: none;">
+                <div style="background: white; border-radius: var(--radius-xl); border: 1px solid var(--color-border); overflow: hidden; box-shadow: var(--shadow-sm);">
+                    <div class="flex justify-between items-center" style="padding: var(--space-md) var(--space-lg); background-color: var(--color-surface-warm); border-bottom: 1px solid var(--color-border);">
+                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--color-secondary);">Pedidos de la Plataforma</h3>
+                        <span id="cant-pedidos" class="badge" style="background-color: var(--color-secondary); color: white;">0 pedidos</span>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Comprador</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th style="text-align: right;">Cambiar Estado / Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-pedidos-body">
+                                <tr><td colspan="6" style="text-align: center; padding: 2rem;">Cargando pedidos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN TAB 3: USUARIOS -->
+            <div id="tab-usuarios" class="tab-content" style="display: none;">
+                <div style="background: white; border-radius: var(--radius-xl); border: 1px solid var(--color-border); overflow: hidden; box-shadow: var(--shadow-sm);">
+                    <div class="flex justify-between items-center" style="padding: var(--space-md) var(--space-lg); background-color: var(--color-surface-warm); border-bottom: 1px solid var(--color-border);">
+                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--color-text-dark);">Cuentas Registradas</h3>
+                        <span id="cant-usuarios" class="badge" style="background-color: var(--color-accent); color: white;">0 usuarios</span>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Correo Electrónico</th>
+                                    <th>Rol</th>
+                                    <th>Fecha de Registro</th>
+                                    <th style="text-align: right;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-usuarios-body">
+                                <tr><td colspan="6" style="text-align: center; padding: 2rem;">Cargando usuarios...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL AGREGAR / EDITAR PRODUCTO REDISEÑADO -->
+    <div id="modal-producto" class="modal-backdrop">
+        <div class="modal-content-pro">
+            <div class="modal-header-pro">
+                <div class="flex items-center gap-sm">
+                    <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                        <span class="material-symbols-outlined" style="font-size: 26px; color: white;">nutrition</span>
+                    </div>
+                    <div>
+                        <h3 id="modal-title" style="margin: 0; font-size: 1.25rem; font-weight: 800; color: white; letter-spacing: -0.3px;">Registrar Nuevo Producto Cítrico</h3>
+                        <span style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.85);">Catálogo Maestro de Productores Nicaragüenses</span>
+                    </div>
+                </div>
+                <button type="button" onclick="cerrarModalProducto()" class="modal-close-btn" title="Cerrar ventana">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                </button>
+            </div>
+
+            <div class="modal-body-pro">
+                <form id="form-producto-admin" onsubmit="guardarProductoAdmin(event)">
+                    <input type="hidden" id="prod-edit-id" value="">
+                    
+                    <div class="admin-form-group">
+                        <label class="admin-field-label" for="prod-nombre">
+                            <span class="material-symbols-outlined">label</span>
+                            Nombre del Producto Cítrico *
+                        </label>
+                        <div class="admin-input-wrapper">
+                            <input type="text" id="prod-nombre" class="admin-input-pro" placeholder="Ej: Naranja Valencia Exportación" required>
+                            <span class="material-symbols-outlined prefix-icon">spa</span>
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label class="admin-field-label" for="prod-descripcion">
+                            <span class="material-symbols-outlined">description</span>
+                            Descripción o Detalles del Lote
+                        </label>
+                        <div class="admin-input-wrapper">
+                            <textarea id="prod-descripcion" class="admin-input-pro no-prefix" rows="2" placeholder="Detalles de dulzor, calibre, empaque y calidad..." style="resize: vertical; min-height: 75px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem; margin-bottom: 1.25rem;">
+                        <div>
+                            <label class="admin-field-label" for="prod-precio">
+                                <span class="material-symbols-outlined">payments</span>
+                                Precio Unitario (NIO) *
+                            </label>
+                            <div class="admin-input-wrapper">
+                                <input type="number" id="prod-precio" class="admin-input-pro" placeholder="350" min="0" step="0.01" required>
+                                <span class="material-symbols-outlined prefix-icon">paid</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="admin-field-label" for="prod-unidad">
+                                <span class="material-symbols-outlined">inventory</span>
+                                Unidad de Medida *
+                            </label>
+                            <div class="admin-input-wrapper">
+                                <select id="prod-unidad" class="admin-input-pro admin-select-pro" required>
+                                    <option value="caja">Caja (20kg)</option>
+                                    <option value="malla">Malla (5kg)</option>
+                                    <option value="docena">Docena</option>
+                                    <option value="cien">Cien unidades</option>
+                                    <option value="kg">Kilogramo (kg)</option>
+                                </select>
+                                <span class="material-symbols-outlined prefix-icon">scale</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                        <div>
+                            <label class="admin-field-label" for="prod-stock">
+                                <span class="material-symbols-outlined">warehouse</span>
+                                Stock Disponible *
+                            </label>
+                            <div class="admin-input-wrapper">
+                                <input type="number" id="prod-stock" class="admin-input-pro" placeholder="100" min="0" required>
+                                <span class="material-symbols-outlined prefix-icon">production_quantity_limits</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="admin-field-label" for="prod-zona">
+                                <span class="material-symbols-outlined">pin_drop</span>
+                                Zona de Cultivo *
+                            </label>
+                            <div class="admin-input-wrapper">
+                                <select id="prod-zona" class="admin-input-pro admin-select-pro" required>
+                                    <option value="1">León (Occidente)</option>
+                                    <option value="2">Chinandega</option>
+                                    <option value="3">Carazo</option>
+                                    <option value="4">Rivas</option>
+                                    <option value="5">Masaya</option>
+                                </select>
+                                <span class="material-symbols-outlined prefix-icon">map</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label class="admin-field-label">
+                            <span class="material-symbols-outlined">photo_camera</span>
+                            Fotografía de la Cosecha
+                        </label>
+                        <div class="admin-upload-card" onclick="document.getElementById('prod-file').click()">
+                            <input type="file" id="prod-file" accept="image/*" style="display: none;" onchange="previewAdminFoto(event)">
+                            <input type="hidden" id="prod-imagen-base64" value="">
+                            
+                            <div id="admin-foto-empty-view">
+                                <span class="material-symbols-outlined" style="font-size: 32px; color: #006837; margin-bottom: 4px;">add_a_photo</span>
+                                <p style="margin: 0; font-weight: 700; color: #334155; font-size: 0.875rem;">Haz clic para subir imagen o lote</p>
+                                <span style="font-size: 0.75rem; color: #94a3b8;">PNG, JPG o WebP hasta 5MB</span>
+                            </div>
+
+                            <div id="admin-foto-preview-wrap" style="margin-top: 0.5rem; display: none;">
+                                <img id="admin-foto-preview" src="" alt="Vista previa" style="max-height: 140px; border-radius: 12px; border: 1.5px solid #006837; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.75rem; color: #006837; font-weight: 700; margin-top: 4px;">✓ Fotografía cargada (clic para cambiar)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center gap-sm" style="border-top: 1.5px solid #f1f5f9; padding-top: 1.25rem; margin-top: 1rem;">
+                        <button type="button" onclick="cerrarModalProducto()" class="btn-action-cancel">Cancelar</button>
+                        <button type="submit" id="btn-submit-prod" class="btn-action-save">
+                            <span class="material-symbols-outlined">verified</span>
+                            <span>Guardar Producto</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <a href="inicio.html" class="footer-brand" title="Citri-Fresh">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg" alt="Citri-Fresh Logo" class="footer-logo-img">
+            </a>
+            <div class="footer-copy">
+                © 2026 Citri-Fresh. Panel Maestro de Administración.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../js/app.js"></script>
+    <script>
+        // Proteger vista: SOLO administradores
+        CitriAuth.requireAuth(['admin']);
+
+        // Variables de datos
+        let productosData = [];
+        let pedidosData = [];
+        let usuariosData = [];
+        let adminMap = null;
+        let markersGroup = null;
+
+        // Coordenadas de Zonas Citrícolas en Nicaragua (IDs coincidentes con la base de datos)
+        const COORDENADAS_ZONAS = {
+            1: { nombre: 'León', lat: 12.4379, lng: -86.8780 },
+            2: { nombre: 'Chinandega', lat: 12.6294, lng: -87.1311 },
+            3: { nombre: 'Carazo', lat: 11.8342, lng: -86.2000 },
+            4: { nombre: 'Rivas', lat: 11.4372, lng: -85.8263 },
+            5: { nombre: 'Masaya', lat: 11.9744, lng: -86.0942 }
+        };
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            initLeafletMap();
+            await cargarDatosAdmin();
+        });
+
+        function initLeafletMap() {
+            try {
+                // Centrado en la región del Pacífico de Nicaragua (producción de cítricos)
+                adminMap = L.map('admin-map').setView([12.15, -86.5], 8);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    attribution: '© OpenStreetMap colaboradores'
+                }).addTo(adminMap);
+                markersGroup = L.layerGroup().addTo(adminMap);
+            } catch (err) {
+                console.error("Error al inicializar Leaflet:", err);
+            }
+        }
+
+        async function cargarDatosAdmin() {
+            await Promise.all([
+                cargarProductosAdmin(),
+                cargarPedidosAdmin(),
+                cargarUsuariosAdmin()
+            ]);
+            actualizarMetricas();
+            actualizarMapaCosechas();
+        }
+
+        async function cargarProductosAdmin() {
+            try {
+                const res = await fetch('/api/productos');
+                if (res.ok) {
+                    productosData = await res.json();
+                    renderTablaProductos();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function cargarPedidosAdmin() {
+            try {
+                const res = await fetch('/api/pedidos', { credentials: 'include' });
+                if (res.ok) {
+                    pedidosData = await res.json();
+                    renderTablaPedidos();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function cargarUsuariosAdmin() {
+            try {
+                const res = await fetch('/api/auth/usuarios', { credentials: 'include' });
+                if (res.ok) {
+                    usuariosData = await res.json();
+                    renderTablaUsuarios();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function actualizarMetricas() {
+            document.getElementById('stat-productos').textContent = productosData.length;
+            document.getElementById('stat-pedidos').textContent = pedidosData.length;
+            document.getElementById('stat-usuarios').textContent = usuariosData.length;
+
+            const totalVentas = pedidosData
+                .filter(p => p.estado !== 'cancelado')
+                .reduce((acc, p) => acc + (Number(p.total) || 0), 0);
+            document.getElementById('stat-ventas').textContent = `C$ ${totalVentas.toLocaleString('es-NI', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+
+            document.getElementById('cant-productos').textContent = `${productosData.length} productos`;
+            document.getElementById('cant-pedidos').textContent = `${pedidosData.length} pedidos`;
+            document.getElementById('cant-usuarios').textContent = `${usuariosData.length} usuarios`;
+        }
+
+        function actualizarMapaCosechas() {
+            if (!adminMap || !markersGroup) return;
+            markersGroup.clearLayers();
+
+            const zonasActivas = new Set();
+
+            // Agrupar productos por zona
+            const prodsPorZona = {};
+            productosData.forEach(p => {
+                const zId = p.zona_id || 1;
+                if (!prodsPorZona[zId]) prodsPorZona[zId] = [];
+                prodsPorZona[zId].push(p);
+                zonasActivas.add(p.zona_nombre || 'Nicaragua');
+            });
+
+            Object.keys(prodsPorZona).forEach(zId => {
+                const coord = COORDENADAS_ZONAS[zId] || COORDENADAS_ZONAS[1];
+                const prods = prodsPorZona[zId];
+                
+                const popupContent = `
+                    <div style="font-family: 'Mont', sans-serif; min-width: 180px;">
+                        <strong style="color: #1a6b3c; font-size: 14px; display:block; margin-bottom:4px;">📍 Zona: ${coord.nombre}</strong>
+                        <span style="font-size: 12px; color: #555;">${prods.length} cosecha(s) registrada(s):</span>
+                        <ul style="margin: 6px 0 0 0; padding-left: 16px; font-size: 12px;">
+                            ${prods.map(item => `<li><b>${item.nombre}</b> - C$ ${item.precio}/${item.unidad}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+
+                const marker = L.marker([coord.lat, coord.lng]).bindPopup(popupContent);
+                markersGroup.addLayer(marker);
+            });
+
+            document.getElementById('map-active-zones').textContent = Array.from(zonasActivas).join(', ') || 'Ninguna';
+        }
+
+        function renderTablaProductos() {
+            const tbody = document.getElementById('tabla-productos-body');
+            if (!tbody) return;
+
+            if (productosData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem;">No hay productos registrados.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = productosData.map(p => `
+                <tr>
+                    <td style="font-weight: 700;">#${p.id}</td>
+                    <td>
+                        <img src="${p.imagen || '/public/images/n-comer.jpg'}" alt="${p.nombre}" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover; border: 1px solid var(--color-border);">
+                    </td>
+                    <td>
+                        <strong style="color: var(--color-primary);">${p.nombre}</strong>
+                        <div class="text-muted" style="font-size: 0.75rem;">${p.descripcion ? p.descripcion.substring(0, 45) + '...' : 'Sin descripción'}</div>
+                    </td>
+                    <td><span class="badge badge-success">${p.zona_nombre || 'Nicaragua'}</span></td>
+                    <td>${p.productor_nombre || 'Finca San Carlos'}</td>
+                    <td style="font-weight: 700; color: var(--color-primary);">C$ ${Number(p.precio).toFixed(2)} / ${p.unidad}</td>
+                    <td>
+                        <span class="badge ${p.stock < 20 ? 'badge-error' : 'badge-success'}">${p.stock} ${p.unidad}s</span>
+                    </td>
+                    <td style="text-align: right;">
+                        <div class="flex items-center justify-end gap-xs">
+                            <button onclick="editarProductoModal(${p.id})" class="btn btn-icon text-muted hover:text-primary" title="Editar Producto">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                            <button onclick="eliminarProductoAdmin(${p.id}, '${p.nombre}')" class="btn btn-icon text-muted hover:text-error" title="Eliminar Producto">
+                                <span class="material-symbols-outlined" style="color: var(--color-error);">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderTablaPedidos() {
+            const tbody = document.getElementById('tabla-pedidos-body');
+            if (!tbody) return;
+
+            if (pedidosData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No hay pedidos registrados todavía.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = pedidosData.map(p => {
+                const fecha = p.creado_en || p.fecha ? new Date(p.creado_en || p.fecha).toLocaleDateString('es-NI', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Reciente';
+                return `
+                    <tr>
+                        <td style="font-weight: 700;">#CF-${p.id}</td>
+                        <td class="text-muted">${fecha}</td>
+                        <td>${p.cliente_nombre || p.usuario_nombre || 'Comprador Citri-Fresh'}</td>
+                        <td style="font-weight: 700; color: var(--color-primary);">C$ ${Number(p.total).toFixed(2)}</td>
+                        <td>
+                            <select onchange="cambiarEstadoPedido(${p.id}, this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--color-border); font-size: 0.8rem; font-weight: 600;">
+                                <option value="pendiente" ${p.estado === 'pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                                <option value="pagado" ${p.estado === 'pagado' ? 'selected' : ''}>💳 Pagado</option>
+                                <option value="enviado" ${p.estado === 'enviado' ? 'selected' : ''}>🚚 Enviado</option>
+                                <option value="completado" ${p.estado === 'completado' ? 'selected' : ''}>✅ Completado</option>
+                                <option value="cancelado" ${p.estado === 'cancelado' ? 'selected' : ''}>❌ Cancelado</option>
+                            </select>
+                        </td>
+                        <td style="text-align: right;">
+                            <a href="detalle_producto.html?id=1" target="_blank" class="btn btn-icon text-muted hover:text-primary" title="Ver Detalle">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderTablaUsuarios() {
+            const tbody = document.getElementById('tabla-usuarios-body');
+            if (!tbody) return;
+
+            if (usuariosData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No hay usuarios cargados.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = usuariosData.map(u => {
+                const fecha = u.creado_en ? new Date(u.creado_en).toLocaleDateString('es-NI', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Existente';
+                const rolBadge = u.rol === 'admin' 
+                    ? '<span class="badge" style="background-color: var(--color-primary); color: white;">Administrador</span>' 
+                    : (u.rol === 'productor' 
+                        ? '<span class="badge" style="background-color: var(--color-accent); color: white;">Productor</span>' 
+                        : '<span class="badge badge-success">Cliente Comprador</span>');
+
+                return `
+                    <tr>
+                        <td style="font-weight: 700;">#${u.id}</td>
+                        <td style="font-weight: 600;">${u.nombre}</td>
+                        <td class="text-muted">${u.email}</td>
+                        <td>${rolBadge}</td>
+                        <td class="text-muted">${fecha}</td>
+                        <td style="text-align: right;">
+                            <button onclick="eliminarUsuarioAdmin(${u.id}, '${u.nombre}')" class="btn btn-icon text-muted hover:text-error" title="Eliminar Usuario">
+                                <span class="material-symbols-outlined" style="color: var(--color-error); font-size: 18px;">person_remove</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Navegación de pestañas
+        function cambiarTab(tab, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(`tab-${tab}`).style.display = 'block';
+            btn.classList.add('active');
+        }
+
+        // Gestión de Productos (Modal / CRUD)
+        function abrirModalProducto() {
+            document.getElementById('modal-title').textContent = 'Registrar Nuevo Producto Cítrico';
+            document.getElementById('prod-edit-id').value = '';
+            document.getElementById('form-producto-admin').reset();
+            document.getElementById('prod-imagen-base64').value = '';
+            document.getElementById('admin-foto-preview-wrap').style.display = 'none';
+            document.getElementById('admin-foto-empty-view').style.display = 'block';
+            document.getElementById('modal-producto').style.display = 'flex';
+        }
+
+        function cerrarModalProducto() {
+            document.getElementById('modal-producto').style.display = 'none';
+        }
+
+        function previewAdminFoto(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prod-imagen-base64').value = e.target.result;
+                    document.getElementById('admin-foto-preview').src = e.target.result;
+                    document.getElementById('admin-foto-preview-wrap').style.display = 'block';
+                    document.getElementById('admin-foto-empty-view').style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function editarProductoModal(id) {
+            const p = productosData.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('modal-title').textContent = `Editar Producto: ${p.nombre}`;
+            document.getElementById('prod-edit-id').value = p.id;
+            document.getElementById('prod-nombre').value = p.nombre;
+            document.getElementById('prod-descripcion').value = p.descripcion || '';
+            document.getElementById('prod-precio').value = p.precio;
+            document.getElementById('prod-unidad').value = p.unidad || 'caja';
+            document.getElementById('prod-stock').value = p.stock;
+            document.getElementById('prod-zona').value = p.zona_id || 1;
+            document.getElementById('prod-imagen-base64').value = p.imagen || '';
+
+            if (p.imagen) {
+                document.getElementById('admin-foto-preview').src = p.imagen;
+                document.getElementById('admin-foto-preview-wrap').style.display = 'block';
+                document.getElementById('admin-foto-empty-view').style.display = 'none';
+            } else {
+                document.getElementById('admin-foto-preview-wrap').style.display = 'none';
+                document.getElementById('admin-foto-empty-view').style.display = 'block';
+            }
+
+            document.getElementById('modal-producto').style.display = 'flex';
+        }
+
+        async function guardarProductoAdmin(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-edit-id').value;
+            const submitBtn = document.getElementById('btn-submit-prod');
+            submitBtn.disabled = true;
+
+            const payload = {
+                nombre: document.getElementById('prod-nombre').value.trim(),
+                descripcion: document.getElementById('prod-descripcion').value.trim(),
+                precio: parseFloat(document.getElementById('prod-precio').value),
+                unidad: document.getElementById('prod-unidad').value,
+                stock: parseInt(document.getElementById('prod-stock').value, 10),
+                zona: parseInt(document.getElementById('prod-zona').value, 10),
+                imagen: document.getElementById('prod-imagen-base64').value
+            };
+
+            try {
+                const url = id ? `/api/productos/${id}` : '/api/productos';
+                const method = id ? 'PUT' : 'POST';
+
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    alert(data.error || 'Error al guardar el producto');
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                alert(id ? '✅ ¡Producto actualizado con éxito!' : '🍊 ¡Nuevo producto cítrico creado exitosamente!');
+                cerrarModalProducto();
+                await cargarDatosAdmin();
+            } catch (err) {
+                console.error(err);
+                alert('No se pudo conectar con el servidor.');
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function eliminarProductoAdmin(id, nombre) {
+            if (!confirm(`¿Estás seguro de que deseas eliminar permanentemente el producto "${nombre}"?`)) return;
+
+            try {
+                const res = await fetch(`/api/productos/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                if (res.ok) {
+                    alert('Producto eliminado correctamente.');
+                    await cargarDatosAdmin();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'No se pudo eliminar el producto');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Error al comunicar con el servidor.');
+            }
+        }
+
+        async function cambiarEstadoPedido(id, nuevoEstado) {
+            try {
+                const res = await fetch(`/api/pedidos/${id}/estado`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ estado: nuevoEstado })
+                });
+
+                if (res.ok) {
+                    await cargarPedidosAdmin();
+                    actualizarMetricas();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Error al cambiar estado del pedido');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function eliminarUsuarioAdmin(id, nombre) {
+            const aceptado = await confirm(`¿Deseas eliminar permanentemente al usuario "${nombre}" y todos sus registros vinculados?`);
+            if (!aceptado) return;
+
+            try {
+                const res = await fetch(`/api/auth/usuarios/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    await alert(`✅ Usuario "${nombre}" eliminado correctamente junto con sus registros.`);
+                    await cargarUsuariosAdmin();
+                    await cargarPedidosAdmin();
+                    actualizarMetricas();
+                } else {
+                    alert(data.error || 'No se pudo eliminar el usuario.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Ocurrió un error al contactar el servidor.');
+            }
+        }
+    </script>
+</body>
+
+</html>

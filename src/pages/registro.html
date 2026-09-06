@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Registro | Citri-Fresh</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/fonts.css">
@@ -18,7 +19,7 @@
             <span>Volver al Inicio</span>
         </a>
         
-        <div class="auth-card-split" style="max-width: 680px;">
+        <div class="auth-card-split" style="max-width: 760px; margin: 2rem auto;">
             <div class="auth-form-side" style="padding: 2.75rem 3rem;">
                 <div class="auth-brand-badge" style="justify-content: center; margin-bottom: 1rem;">
                     <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg"
@@ -26,63 +27,200 @@
                 </div>
 
                 <div class="auth-heading-wrap" style="text-align: center; margin-bottom: 1.5rem;">
-                    <h1 class="auth-title" style="font-size: 1.75rem;">Crea tu Cuenta</h1>
-                    <p class="auth-subtitle">Únete a la principal red de comercio cítrico en Nicaragua.</p>
+                    <h1 class="auth-title" style="font-size: 1.75rem; letter-spacing: -0.5px;">Crea tu Cuenta en Citri-Fresh</h1>
+                    <p class="auth-subtitle">Selecciona el tipo de cuenta adecuado para personalizar tu experiencia.</p>
                 </div>
                 
-                <form class="auth-form" action="auth/login.html">
-                    <p style="font-size: 0.8125rem; font-weight: 700; color: var(--color-text-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Tipo de Perfil</p>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
-                        <label style="border: 1.5px solid var(--color-border); padding: 0.75rem; border-radius: 12px; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; background: var(--color-surface-gray); font-size: 0.875rem; font-weight: 600;">
-                            <input type="radio" name="role" value="cliente" checked style="accent-color: var(--color-primary-container);">
-                            <span class="material-symbols-outlined" style="font-size: 20px; color: var(--color-primary-container);">shopping_cart</span>
-                            <span>Comprador</span>
-                        </label>
-                        <label style="border: 1.5px solid var(--color-border); padding: 0.75rem; border-radius: 12px; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; background: var(--color-surface-gray); font-size: 0.875rem; font-weight: 600;">
-                            <input type="radio" name="role" value="productor" style="accent-color: var(--color-primary-container);">
-                            <span class="material-symbols-outlined" style="font-size: 20px; color: var(--color-accent);">agriculture</span>
-                            <span>Productor</span>
-                        </label>
+                <!-- Selector de Roles con Diseño Visual Premium -->
+                <div style="margin-bottom: 1.75rem;">
+                    <p style="font-size: 0.8125rem; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Selecciona tu Perfil</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <!-- Opción Comprador -->
+                        <div id="card-rol-cliente" class="role-selector-card active" onclick="seleccionarRolRegistro('cliente')" style="border: 2px solid #006837; background: #f0fdf4; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: #006837; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <span class="material-symbols-outlined" style="font-size: 22px;">shopping_cart</span>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <strong style="display: block; font-size: 0.95rem; color: #0f172a;">Comprador</strong>
+                                <span style="font-size: 0.75rem; color: #64748b;">Comercial / Distribuidor</span>
+                            </div>
+                            <span class="material-symbols-outlined icon-selected" style="color: #006837; font-size: 22px;">check_circle</span>
+                        </div>
+
+                        <!-- Opción Productor -->
+                        <div id="card-rol-productor" class="role-selector-card" onclick="seleccionarRolRegistro('productor')" style="border: 2px solid #cbd5e1; background: #ffffff; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: #ea580c; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <span class="material-symbols-outlined" style="font-size: 22px;">agriculture</span>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <strong style="display: block; font-size: 0.95rem; color: #0f172a;">Productor</strong>
+                                <span style="font-size: 0.75rem; color: #64748b;">Finca / Cooperativa</span>
+                            </div>
+                            <span class="material-symbols-outlined icon-selected" style="display: none; color: #ea580c; font-size: 22px;">check_circle</span>
+                        </div>
                     </div>
-                    
+                </div>
+
+                <form id="form-registro-dinamico" class="auth-form" onsubmit="procesarRegistroDinamico(event)">
+                    <input type="hidden" id="reg-rol" value="cliente">
+
+                    <!-- ==================== CAMPOS COMUNES ==================== -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                         <div class="form-field-group" style="margin-bottom: 0;">
-                            <label class="form-field-label">Nombres</label>
+                            <label class="form-field-label">Nombres *</label>
                             <div class="input-icon-wrapper">
-                                <input type="text" class="auth-input-modern" placeholder="Carlos" required>
+                                <input type="text" id="reg-nombres" class="auth-input-modern" placeholder="Carlos" required>
                                 <span class="material-symbols-outlined field-icon">person</span>
                             </div>
                         </div>
                         <div class="form-field-group" style="margin-bottom: 0;">
-                            <label class="form-field-label">Apellidos</label>
+                            <label class="form-field-label">Apellidos *</label>
                             <div class="input-icon-wrapper">
-                                <input type="text" class="auth-input-modern" placeholder="Mendoza" required>
+                                <input type="text" id="reg-apellidos" class="auth-input-modern" placeholder="Mendoza" required>
                                 <span class="material-symbols-outlined field-icon">badge</span>
                             </div>
                         </div>
                     </div>
                     
                     <div class="form-field-group">
-                        <label class="form-field-label">Correo Electrónico</label>
+                        <label class="form-field-label">Correo Electrónico Verificado *</label>
                         <div class="input-icon-wrapper">
-                            <input type="email" class="auth-input-modern" placeholder="carlos@ejemplo.com" required>
+                            <input type="email" id="reg-email" class="auth-input-modern" placeholder="tu-correo@gmail.com" required>
                             <span class="material-symbols-outlined field-icon">mail</span>
                         </div>
                     </div>
-                    
-                    <div class="form-field-group">
-                        <label class="form-field-label">Contraseña</label>
-                        <div class="input-icon-wrapper">
-                            <input type="password" class="auth-input-modern" placeholder="Mínimo 8 caracteres" required>
-                            <span class="material-symbols-outlined field-icon">lock</span>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="form-field-group" style="margin-bottom: 0;">
+                            <label class="form-field-label">Teléfono / WhatsApp *</label>
+                            <div class="input-icon-wrapper">
+                                <input type="tel" id="reg-telefono" class="auth-input-modern" placeholder="+505 8888-9999" required>
+                                <span class="material-symbols-outlined field-icon">call</span>
+                            </div>
+                        </div>
+                        <div class="form-field-group" style="margin-bottom: 0;">
+                            <label class="form-field-label">Departamento / Ciudad *</label>
+                            <div class="input-icon-wrapper">
+                                <input type="text" id="reg-direccion" class="auth-input-modern" placeholder="Managua, León, etc." required>
+                                <span class="material-symbols-outlined field-icon">location_on</span>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- ==================== CAMPOS EXCLUSIVOS PRODUCTOR ==================== -->
+                    <div id="seccion-productor-fields" style="display: none; background: #fff7ed; border: 1.5px dashed #ea580c; border-radius: 18px; padding: 1.25rem; margin-bottom: 1.25rem; animation: fadeIn 0.3s ease;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
+                            <span class="material-symbols-outlined" style="color: #ea580c; font-size: 22px;">nature_people</span>
+                            <strong style="color: #9a3412; font-size: 0.95rem;">Datos de la Unidad de Producción Citrícola</strong>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="form-field-group" style="margin-bottom: 0;">
+                                <label class="form-field-label">Nombre de la Finca o Huerta *</label>
+                                <div class="input-icon-wrapper">
+                                    <input type="text" id="reg-finca" class="auth-input-modern" placeholder="Ej: Finca Cítricos Santa Rosa">
+                                    <span class="material-symbols-outlined field-icon">storefront</span>
+                                </div>
+                            </div>
+                            <div class="form-field-group" style="margin-bottom: 0;">
+                                <label class="form-field-label">Zona Citrícola Oficial *</label>
+                                <div class="input-icon-wrapper">
+                                    <select id="reg-zona" class="auth-input-modern" style="cursor: pointer;">
+                                        <option value="León">León (Occidente)</option>
+                                        <option value="Chinandega">Chinandega</option>
+                                        <option value="Carazo">Carazo (Meseta)</option>
+                                        <option value="Rivas">Rivas (Sur)</option>
+                                        <option value="Masaya">Masaya</option>
+                                    </select>
+                                    <span class="material-symbols-outlined field-icon">map</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.75rem;">
+                            <div class="form-field-group" style="margin-bottom: 0;">
+                                <label class="form-field-label">Capacidad de Cosecha Estimada</label>
+                                <div class="input-icon-wrapper">
+                                    <input type="text" id="reg-capacidad" class="auth-input-modern" placeholder="Ej: 500 Cajas / Mes">
+                                    <span class="material-symbols-outlined field-icon">inventory_2</span>
+                                </div>
+                            </div>
+                            <div class="form-field-group" style="margin-bottom: 0;">
+                                <label class="form-field-label">Tipos de Cítricos Cultivados</label>
+                                <div class="input-icon-wrapper">
+                                    <input type="text" id="reg-tipos" class="auth-input-modern" placeholder="Valencia, Limón Criollo, etc.">
+                                    <span class="material-symbols-outlined field-icon">nutrition</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== FOTO DE PERFIL / FINCA ==================== -->
+                    <div class="form-field-group" style="margin-bottom: 1rem;">
+                        <label class="form-field-label" id="label-foto-registro">Foto de Perfil (Opcional)</label>
+                        <div style="border: 1.5px dashed #cbd5e1; border-radius: 14px; padding: 0.85rem; text-align: center; background: #f8fafc; cursor: pointer;" onclick="document.getElementById('reg-file').click()">
+                            <input type="file" id="reg-file" accept="image/*" style="display: none;" onchange="previewRegistroFoto(event)">
+                            <input type="hidden" id="reg-foto-base64" value="">
+                            
+                            <div id="reg-foto-prompt" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <span class="material-symbols-outlined" style="color: #64748b; font-size: 24px;">add_a_photo</span>
+                                <span style="font-size: 0.85rem; color: #475569; font-weight: 600;">Haz clic para cargar imagen</span>
+                            </div>
+                            <div id="reg-foto-preview-wrap" style="display: none; margin-top: 6px;">
+                                <img id="reg-foto-preview" src="" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #006837;">
+                                <div style="font-size: 0.75rem; color: #006837; font-weight: 700;">✓ Fotografía seleccionada</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== CONTRASEÑA ==================== -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                        <div class="form-field-group" style="margin-bottom: 0;">
+                            <label class="form-field-label">Contraseña *</label>
+                            <div class="input-icon-wrapper">
+                                <input type="password" id="reg-password" class="auth-input-modern" placeholder="Mínimo 6 caracteres" required minlength="6">
+                                <span class="material-symbols-outlined field-icon">lock</span>
+                            </div>
+                        </div>
+                        <div class="form-field-group" style="margin-bottom: 0;">
+                            <label class="form-field-label">Confirmar Contraseña *</label>
+                            <div class="input-icon-wrapper">
+                                <input type="password" id="reg-confirm" class="auth-input-modern" placeholder="Repite la clave" required minlength="6">
+                                <span class="material-symbols-outlined field-icon">lock_reset</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enlace discreto para Administrador Autorizado -->
+                    <div style="text-align: right; margin-bottom: 1rem;">
+                        <button type="button" onclick="toggleAdminKeyInput()" style="background: none; border: none; font-size: 0.75rem; color: #94a3b8; cursor: pointer; text-decoration: underline;">
+                            ¿Eres Administrador con Clave Maestra?
+                        </button>
+                    </div>
+
+                    <div id="seccion-admin-key" style="display: none; background: #f1f5f9; border: 1.5px solid #0f172a; border-radius: 14px; padding: 1rem; margin-bottom: 1.25rem;">
+                        <label class="form-field-label" style="color: #0f172a;">Clave Maestra Única de Administrador</label>
+                        <div class="input-icon-wrapper">
+                            <input type="password" id="reg-admin-key" class="auth-input-modern" placeholder="Ingresa la clave secreta de administrador">
+                            <span class="material-symbols-outlined field-icon">key</span>
+                        </div>
+                        <span style="font-size: 0.725rem; color: #64748b; margin-top: 4px; display: block;">Solo personal autorizado con llave corporativa del marketplace.</span>
+                    </div>
                     
-                    <button type="submit" class="btn-auth-submit" style="margin-top: 0.5rem;">
-                        <span>Registrarse</span>
+                    <button type="submit" id="btn-submit-registro" class="btn-auth-submit" style="margin-top: 0.5rem; height: 50px;">
+                        <span>Crear Cuenta Registrada</span>
                         <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
                     </button>
                 </form>
+
+                <div class="auth-divider-modern">
+                    <span>o continúa con</span>
+                </div>
+
+                <button type="button" class="btn-social-google" onclick="iniciarLoginConGoogle('')">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                    <span>Continuar con Google</span>
+                </button>
                 
                 <div class="auth-bottom-text" style="margin-top: 1.25rem;">
                     ¿Ya tienes una cuenta? <a href="auth/login.html" class="auth-link-highlight">Inicia sesión</a>
@@ -91,5 +229,140 @@
         </div>
     </div>
     <script src="../js/app.js"></script>
+    <script>
+        function seleccionarRolRegistro(rol) {
+            document.getElementById('reg-rol').value = rol;
+            const cardCliente = document.getElementById('card-rol-cliente');
+            const cardProductor = document.getElementById('card-rol-productor');
+            const seccionProductor = document.getElementById('seccion-productor-fields');
+            const labelFoto = document.getElementById('label-foto-registro');
+
+            if (rol === 'cliente') {
+                cardCliente.style.borderColor = '#006837';
+                cardCliente.style.backgroundColor = '#f0fdf4';
+                cardCliente.querySelector('.icon-selected').style.display = 'inline-block';
+
+                cardProductor.style.borderColor = '#cbd5e1';
+                cardProductor.style.backgroundColor = '#ffffff';
+                cardProductor.querySelector('.icon-selected').style.display = 'none';
+
+                seccionProductor.style.display = 'none';
+                labelFoto.textContent = 'Foto de Perfil (Opcional)';
+            } else {
+                cardProductor.style.borderColor = '#ea580c';
+                cardProductor.style.backgroundColor = '#fff7ed';
+                cardProductor.querySelector('.icon-selected').style.display = 'inline-block';
+
+                cardCliente.style.borderColor = '#cbd5e1';
+                cardCliente.style.backgroundColor = '#ffffff';
+                cardCliente.querySelector('.icon-selected').style.display = 'none';
+
+                seccionProductor.style.display = 'block';
+                labelFoto.textContent = 'Foto de la Finca o del Productor (Opcional)';
+            }
+        }
+
+        function toggleAdminKeyInput() {
+            const sec = document.getElementById('seccion-admin-key');
+            sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
+            if (sec.style.display === 'block') {
+                document.getElementById('reg-rol').value = 'admin';
+            } else {
+                document.getElementById('reg-rol').value = 'cliente';
+            }
+        }
+
+        function previewRegistroFoto(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('reg-foto-base64').value = e.target.result;
+                    document.getElementById('reg-foto-preview').src = e.target.result;
+                    document.getElementById('reg-foto-preview-wrap').style.display = 'block';
+                    document.getElementById('reg-foto-prompt').style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function procesarRegistroDinamico(e) {
+            e.preventDefault();
+            const pass = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('reg-confirm').value;
+
+            if (pass !== confirm) {
+                alert('Las contraseñas ingresadas no coinciden.');
+                return;
+            }
+
+            const rol = document.getElementById('reg-rol').value;
+            const nombres = document.getElementById('reg-nombres').value.trim();
+            const apellidos = document.getElementById('reg-apellidos').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const telefono = document.getElementById('reg-telefono').value.trim();
+            const direccion = document.getElementById('reg-direccion').value.trim();
+            const foto = document.getElementById('reg-foto-base64').value;
+            const adminKey = document.getElementById('reg-admin-key')?.value || '';
+
+            const nombreFinca = document.getElementById('reg-finca')?.value.trim() || '';
+            const zonaCultivo = document.getElementById('reg-zona')?.value || '';
+            const capacidad = document.getElementById('reg-capacidad')?.value.trim() || '';
+            const tiposCitricos = document.getElementById('reg-tipos')?.value.trim() || '';
+
+            if (rol === 'productor' && !nombreFinca) {
+                alert('Por favor indica el nombre de tu finca o huerta.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit-registro');
+            btn.disabled = true;
+            btn.innerHTML = '<span>Registrando cuenta...</span>';
+
+            const payload = {
+                nombre: `${nombres} ${apellidos}`.trim(),
+                email,
+                password: pass,
+                rol,
+                admin_key: adminKey,
+                telefono,
+                direccion,
+                foto,
+                nombre_finca: nombreFinca,
+                zona_cultivo: zonaCultivo,
+                capacidad_produccion: capacidad,
+                tipos_citricos: tiposCitricos
+            };
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    alert(data.error || 'Error al procesar el registro.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>Crear Cuenta Registrada</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
+                    return;
+                }
+
+                CitriAuth.setUser(data.user);
+                alert(`✅ ¡Bienvenido a Citri-Fresh, ${data.user.nombre}! Tu cuenta de ${data.user.rol.toUpperCase()} ha sido creada.`);
+
+                if (data.user.rol === 'admin') window.location.href = 'admin.html';
+                else if (data.user.rol === 'productor') window.location.href = 'panel_productor.html';
+                else window.location.href = 'perfil.html';
+            } catch (err) {
+                console.error(err);
+                alert('No se pudo conectar con el servidor.');
+                btn.disabled = false;
+                btn.innerHTML = '<span>Crear Cuenta Registrada</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
+            }
+        }
+    </script>
 </body>
 </html>

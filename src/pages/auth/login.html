@@ -8,6 +8,7 @@
 
     <title>Iniciar Sesión — CitriFresh</title>
     <link rel="icon" type="image/svg+xml" href="../../../public/images/favicon.svg" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../../css/reset.css" />
     <link rel="stylesheet" href="../../css/variables.css" />
     <link rel="stylesheet" href="../../css/fonts.css" />
@@ -112,6 +113,100 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Recuperación de Contraseña -->
+    <div id="modal-recuperar-password" class="auth-recovery-modal-overlay" style="display: none;">
+        <div class="auth-recovery-modal-card">
+            <div class="auth-recovery-header">
+                <div class="auth-recovery-icon-wrap">
+                    <span class="material-symbols-outlined">lock_reset</span>
+                </div>
+                <div class="auth-recovery-titles">
+                    <h3>Recuperar Contraseña</h3>
+                    <p>Ingresa tu correo registrado para restablecer tu acceso a Citri-Fresh.</p>
+                </div>
+                <button type="button" id="btn-cerrar-recuperar" class="auth-recovery-close-btn" aria-label="Cerrar">&times;</button>
+            </div>
+
+            <!-- Paso 1: Ingreso de correo -->
+            <form id="form-recuperar-paso1" class="auth-recovery-body">
+                <div class="form-field-group">
+                    <label class="form-field-label">Correo Electrónico Registrado</label>
+                    <div class="input-icon-wrapper">
+                        <input type="email" id="recuperar-email" class="auth-input-modern" placeholder="tu-correo@ejemplo.com" required>
+                        <span class="material-symbols-outlined field-icon">mail</span>
+                    </div>
+                </div>
+
+                <div id="recuperar-error-1" class="auth-modal-alert-danger" style="display: none;"></div>
+
+                <div class="auth-recovery-actions">
+                    <button type="button" id="btn-cancelar-recuperar" class="btn-auth-cancel">Cancelar</button>
+                    <button type="submit" id="btn-submit-verificar-correo" class="btn-auth-submit" style="width: auto; padding: 0 1.5rem;">
+                        <span>Enviar Código</span>
+                        <span class="material-symbols-outlined" style="font-size: 18px;">send</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Paso 2: Validación de Código de Seguridad OTP (6 dígitos) -->
+            <form id="form-recuperar-paso2" class="auth-recovery-body" style="display: none;">
+                <div class="auth-modal-alert-success" id="recuperar-codigo-info"></div>
+
+                <div class="form-field-group" style="margin-top: 1rem;">
+                    <label class="form-field-label">Código de Seguridad (6 dígitos)</label>
+                    <div class="input-icon-wrapper">
+                        <input type="text" id="recuperar-codigo-input" class="auth-input-modern" placeholder="123456" maxlength="6" pattern="[0-9]{6}" required style="letter-spacing: 4px; font-size: 1.15rem; font-weight: 700; text-align: center;">
+                        <span class="material-symbols-outlined field-icon">key</span>
+                    </div>
+                    <span style="font-size: 0.775rem; color: #64748b; margin-top: 0.35rem; display: block;">
+                        Introduce el código numérico de 6 dígitos que fue emitido para tu cuenta.
+                    </span>
+                </div>
+
+                <div id="recuperar-error-2" class="auth-modal-alert-danger" style="display: none;"></div>
+
+                <div class="auth-recovery-actions">
+                    <button type="button" id="btn-volver-paso1" class="btn-auth-cancel">Volver</button>
+                    <button type="submit" id="btn-submit-validar-codigo" class="btn-auth-submit" style="width: auto; padding: 0 1.5rem;">
+                        <span>Validar Código</span>
+                        <span class="material-symbols-outlined" style="font-size: 18px;">verified_user</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Paso 3: Creación de nueva contraseña -->
+            <form id="form-recuperar-paso3" class="auth-recovery-body" style="display: none;">
+                <div class="auth-modal-alert-success" id="recuperar-exito-info"></div>
+
+                <div class="form-field-group" style="margin-top: 1rem;">
+                    <label class="form-field-label">Nueva Contraseña</label>
+                    <div class="input-icon-wrapper">
+                        <input type="password" id="recuperar-password-nuevo" class="auth-input-modern" placeholder="Mínimo 6 caracteres" required minlength="6">
+                        <span class="material-symbols-outlined field-icon">lock</span>
+                    </div>
+                </div>
+
+                <div class="form-field-group">
+                    <label class="form-field-label">Confirmar Nueva Contraseña</label>
+                    <div class="input-icon-wrapper">
+                        <input type="password" id="recuperar-password-confirm" class="auth-input-modern" placeholder="Repite la contraseña" required minlength="6">
+                        <span class="material-symbols-outlined field-icon">lock_clock</span>
+                    </div>
+                </div>
+
+                <div id="recuperar-error-3" class="auth-modal-alert-danger" style="display: none;"></div>
+
+                <div class="auth-recovery-actions">
+                    <button type="submit" id="btn-submit-nueva-clave" class="btn-auth-submit" style="width: 100%;">
+                        <span>Actualizar Contraseña y Acceder</span>
+                        <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="../../js/app.js"></script>
 </body>
 
