@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="design/logos/Propuesta_Logo_Citri_Fresh_Color.png" alt="Citri-Fresh Logo" width="180" style="margin-bottom: 12px; border-radius: 12px;"/>
+
 # 🍊 CITRI-FRESH
 ### *Ecosistema Digital para la Comercialización Directa de Cítricos en Nicaragua*
 
@@ -26,12 +28,14 @@
 2. [🌱 El Problema vs Nuestra Solución](#-el-problema-vs-nuestra-solución)
 3. [👥 Matriz de Roles y Accesos](#-matriz-de-roles-y-accesos)
 4. [🛠️ Stack Tecnológico](#️-stack-tecnológico)
-5. [📂 Arquitectura del Repositorio](#-arquitectura-del-repositorio)
-6. [🚀 Instalación y Puesta en Marcha](#-instalación-y-puesta-en-marcha)
-7. [📡 API REST Endpoints](#-api-endpoints)
-8. [☁️ Despliegue en Producción (Vercel & Servidor Dedicado)](#-despliegue-en-producción)
-9. [🔒 Seguridad, Resiliencia y PWA](#-seguridad-resiliencia-y-pwa)
-10. [👥 Equipo y Contacto](#-equipo-y-contacto)
+5. [📊 Diagrama Entidad-Relación (Base de Datos)](#-diagrama-entidad-relación)
+6. [📂 Estructura Detallada de Carpetas](#-estructura-detallada-de-carpetas)
+7. [🚀 Instalación y Puesta en Marcha](#-instalación-y-puesta-en-marcha)
+8. [📡 API REST Endpoints](#-api-endpoints)
+9. [☁️ Despliegue en Producción (Vercel & Servidor Dedicado)](#-despliegue-en-producción)
+10. [🔒 Seguridad, Resiliencia y PWA](#-seguridad-resiliencia-y-pwa)
+11. [🎨 Recursos de Diseño y Branding](#-recursos-de-diseño-y-branding)
+12. [👥 Equipo y Contacto](#-equipo-y-contacto)
 
 ---
 
@@ -82,54 +86,176 @@ El sistema implementa **RBAC (Role-Based Access Control)** integral con protecci
 └─────────────────┴────────────────────────────────────────────────────────────────────────┘
 ```
 
-> 💡 **Credenciales demo:** El sistema inicializa automáticamente usuarios para cada rol en bases de datos limpias para evaluación rápida por evaluadores y jurado.
-
 ---
 
 ## 🛠️ Stack Tecnológico
 
 ### Frontend (Modern Vanilla Architecture)
 - **HTML5 Semántico & Accesible:** Estructura modular preparada para lectores de pantalla y optimizada para SEO.
-- **Vanilla CSS3 Modular:** Design tokens (`variables.css`), grids responsivas, animaciones sutiles, micro-interacciones y tema oscuro/claro adaptable.
+- **Vanilla CSS3 Modular:** Design tokens (`variables.css`), layout modular por componentes (`src/css/`), grids responsivas, micro-interacciones y tema adaptable.
 - **JavaScript Moderno (ESModules):** Control de estado en cliente con `CitriAuth`, sincronización de pedidos `CitriSync` y carrito reactivo.
 - **PWA Ready:** Service Worker registrado para cacheo de assets estáticos y funcionamiento offline en el campo.
 
 ### Backend & API REST
-- **Node.js (v18+) & Express.js (v4):** Servidor HTTP rápido y liviano estructurado bajo patrón **Controlador - Servicio - Modelo**.
+- **Node.js (v18+) & Express.js (v4):** Servidor HTTP estructurado bajo patrón **Controlador - Servicio - Modelo**.
 - **SQLite3 & sqlite (async/await):** Base de datos relacional embebida, con soporte para inicialización en memoria/disco efímero (`/tmp`) en arquitecturas Serverless.
-- **Seguridad HTTP:** `bcrypt` (10 rounds) para hashing de contraseñas, tokens JWT en cookies `HttpOnly`, `cors` adaptativo para dominios locales y de nube, y `express-rate-limit` para defensa contra fuerza bruta.
+- **Seguridad HTTP:** `bcrypt` (10 rounds) para hashing de contraseñas, tokens JWT en cookies `HttpOnly`, `cors` adaptativo y `express-rate-limit` para defensa contra fuerza bruta.
 
 ---
 
-## 📂 Arquitectura del Repositorio
+## 📊 Diagrama Entidad-Relación
+
+El modelo de datos relacional está normalizado para garantizar integridad referencial y trazabilidad completa entre zonas, fincas productoras, cosechas y órdenes de compra:
+
+<div align="center">
+  <img src="docs/diagrama-er.png" alt="Diagrama Entidad-Relación Citri-Fresh" width="750" style="border-radius: 8px; border: 1px solid #e2e8f0; margin: 16px 0;"/>
+</div>
+
+```mermaid
+erDiagram
+    ZONAS ||--o{ PRODUCTOS : "clasifica_origen"
+    USUARIOS ||--o{ PRODUCTOS : "publica_cosecha"
+    USUARIOS ||--o{ PEDIDOS : "realiza_compra"
+    PEDIDOS ||--|{ PEDIDOS_ITEMS : "contiene"
+    PRODUCTOS ||--o{ PEDIDOS_ITEMS : "referenciado_en"
+
+    ZONAS {
+        int id PK
+        string nombre UK
+    }
+
+    USUARIOS {
+        int id PK
+        string nombre
+        string email UK
+        string password_hash
+        string rol "admin | productor | cliente | auditor"
+        string creado_en
+        string foto
+        string telefono
+        string direccion
+        string nombre_finca
+        string zona_cultivo
+        string capacidad_produccion
+        string tipos_citricos
+    }
+
+    PRODUCTOS {
+        int id PK
+        string nombre
+        string descripcion
+        real precio
+        string unidad
+        int stock
+        int zona FK
+        int productor_id FK
+        string imagen
+        string creado_en
+    }
+
+    PEDIDOS {
+        int id PK
+        int usuario_id FK
+        real total
+        string estado "pendiente | pagado | enviado | completado | cancelado"
+        string fecha
+    }
+
+    PEDIDOS_ITEMS {
+        int id PK
+        int pedido_id FK
+        int producto_id FK
+        int cantidad
+        real precio_unitario
+    }
+```
+
+---
+
+## 📂 Estructura Detallada de Carpetas
+
+La arquitectura real del proyecto está organizada de forma limpia separando la lógica del servidor, el frontend y los recursos de soporte:
 
 ```text
 citri-fresh/
 ├── db/
-│   └── schema.sql              # Esquema DDL relacional (zonas, usuarios, productos, pedidos)
+│   └── schema.sql                  # Esquema DDL SQL con integridad referencial e índices
+├── design/                         # Recursos de identidad visual y diseño
+│   ├── logos/                      # Logotipos vectoriales y PNG (B/N y Color)
+│   ├── manual/                     # Manual de identidad corporativa
+│   ├── moodboard/                  # MoodBoard V2.0 de inspiración visual
+│   ├── wireframes/                 # Prototipado y flujos de usuario
+│   ├── paleta-colores.md           # Definición de paleta cromática citrícola
+│   └── tipografia.md               # Pautas tipográficas (Kiona & Mont)
+├── docs/                           # Documentación técnica y diagramas
+│   ├── diagrama-er.png             # Diagrama Entidad-Relación visual
+│   ├── api.md                      # Especificación detallada de endpoints
+│   ├── seguridad.md                # Arquitectura de seguridad y mitigación de amenazas
+│   └── testing.md                  # Casos de prueba funcionales
+├── marketing/                      # Material comercial, pitch deck y estrategia
 ├── public/
-│   └── images/                 # Favicons, iconografía y logotipos oficiales
+│   └── images/                     # Favicons, apple-touch-icon y assets públicos
 ├── scripts/
-│   ├── init-db.js              # Script CLI para creación de tablas
-│   └── seed.js                 # Sembrado de datos demo e índices
-├── server/
+│   ├── init-db.js                  # Inicialización manual de la base de datos
+│   └── seed.js                     # Sembrado de usuarios y productos demo
+├── server/                         # Backend Express (Patrón MVC Modular)
 │   ├── config/
-│   │   └── db.js               # Conexión resiliente SQLite con migración y auto-seed
-│   ├── controllers/            # Lógica de negocio (auth, productos, pedidos, zonas)
-│   ├── middlewares/            # JWT auth, RBAC, rate-limiting, CORS y validaciones
-│   ├── models/                 # Capa de abstracción y consultas SQL parametrizadas
-│   ├── routes/                 # Enrutadores Express (/api/auth, /api/productos, etc.)
-│   ├── services/               # Notificaciones y servicios complementarios
-│   ├── utils/                  # Validadores de correo y generadores de hash
-│   └── app.js                  # Configuración de Express, middlewares y rutas
-├── src/                        # Frontend servido por Express
-│   ├── css/                    # Estilos modulares organizados por componentes y páginas
-│   ├── js/                     # Lógica de cliente, control de sesión y carrito
-│   └── pages/                  # Vistas HTML (inicio, catálogo, perfil, productor, admin)
-├── server.js                   # Punto de entrada para ejecución local (con fallback de puertos)
-├── vercel.json                 # Configuración de despliegue Serverless en Vercel
-├── .env.example                # Variables de entorno documentadas
-└── package.json                # Dependencias y scripts de ejecución
+│   │   └── db.js                   # Conexión SQLite resiliente, migraciones y auto-seed
+│   ├── controllers/
+│   │   ├── authController.js       # Registro, login JWT, perfil y OAuth
+│   │   ├── pedidoController.js     # Creación, cálculo y estados de pedidos
+│   │   ├── productoController.js   # CRUD de cosechas con filtros por zona
+│   │   └── zonaController.js       # Gestión de zonas geográficas
+│   ├── middlewares/
+│   │   ├── authMiddleware.js       # Verificación de JWT en cookies
+│   │   ├── roleMiddleware.js       # Restricción RBAC de accesos
+│   │   ├── corsMiddleware.js       # Política CORS adaptativa para nube y local
+│   │   ├── rateLimitMiddleware.js  # Limitador de peticiones y login
+│   │   └── validate*.js            # Validadores de carga útil (payloads)
+│   ├── models/
+│   │   ├── usuarioModel.js         # Consultas SQL para usuarios y productores
+│   │   ├── productoModel.js        # Consultas SQL para catálogo e inventario
+│   │   ├── pedidoModel.js          # Consultas SQL para órdenes y desglose
+│   │   └── zonaModel.js            # Consultas SQL para regiones
+│   ├── routes/
+│   │   ├── authRoutes.js           # Rutas /api/auth
+│   │   ├── productoRoutes.js       # Rutas /api/productos
+│   │   ├── pedidoRoutes.js         # Rutas /api/pedidos
+│   │   └── zonaRoutes.js           # Rutas /api/zonas
+│   ├── services/
+│   │   └── emailService.js         # Notificaciones por correo
+│   ├── utils/
+│   │   └── emailValidator.js       # Validaciones auxiliares
+│   └── app.js                      # Configuración de Express y middlewares
+├── src/                            # Frontend Servido al Cliente
+│   ├── css/                        # Estilos modulares organizados
+│   │   ├── base/                   # Reset y estilos base
+│   │   ├── components/             # Botones, cards, badges, inputs
+│   │   ├── fonts/                  # Definiciones tipográficas locales
+│   │   ├── layout/                 # Grid, nav, footer, contenedores
+│   │   ├── pages/                  # Estilos específicos de vistas
+│   │   └── variables.css           # Design tokens CSS
+│   ├── js/                         # Lógica JavaScript en cliente
+│   │   ├── common/                 # Utilidades compartidas
+│   │   ├── pages/                  # Lógica específica de vistas
+│   │   └── app.js                  # Control de sesión, sincronización y eventos
+│   └── pages/                      # Vistas HTML
+│       ├── inicio.html             # Landing page principal
+│       ├── producto.html           # Catálogo general de cítricos
+│       ├── detalle_producto.html   # Ficha técnica y compra
+│       ├── nosotros.html           # Historia, misión y visión
+│       ├── carrito.html            # Carrito y checkout (Cliente)
+│       ├── perfil.html             # Panel de cuenta y pedidos (Cliente)
+│       ├── panel_productor.html    # Panel de métricas y ventas (Productor)
+│       ├── registro_cosecha.html   # Publicación de cosechas (Productor)
+│       ├── admin.html              # Dashboard maestro / Vista auditor (Admin / Auditor)
+│       ├── registro.html           # Registro de cuentas
+│       └── auth/
+│           └── login.html          # Inicio de sesión moderno con split-card
+├── server.js                       # Entrada para ejecución local (con puertos dinámicos)
+├── vercel.json                     # Configuración de Serverless Functions en Vercel
+├── .env.example                    # Plantilla de variables de entorno
+└── package.json                    # Dependencias y scripts npm
 ```
 
 ---
@@ -156,14 +282,14 @@ Copia la plantilla `.env.example` hacia `.env`:
 ```bash
 cp .env.example .env
 ```
-> En desarrollo local no requieres editar variables adicionales; el servidor levantará con valores por defecto seguros.
+> En desarrollo local el servidor funciona sin configuración manual adicional gracias a sus valores por defecto seguros.
 
 ### 4. Inicializar Base de Datos (Opcional en local)
 ```bash
 npm run db:init
 npm run db:seed
 ```
-*(Nota: El servidor cuenta con inicialización y siembra automática al primer arranque en caso de no existir la base de datos).*
+*(Nota: El servidor inicializa y siembra automáticamente la base de datos al primer arranque en caso de no existir).*
 
 ### 5. Iniciar la aplicación
 
@@ -177,7 +303,7 @@ npm run dev
 npm start
 ```
 
-Visita **`http://localhost:3000`** (o el puerto alterno asignado en consola) para comenzar a explorar.
+Abre tu navegador en **`http://localhost:3000`** para interactuar con la plataforma.
 
 ---
 
@@ -225,9 +351,9 @@ Todos los endpoints responden en formato JSON estándar.
 
 ### Despliegue Automatizado en Vercel
 El repositorio incluye configuración nativa para Vercel mediante [`vercel.json`](vercel.json):
-1. Vincula el repositorio de GitHub en tu dashboard de **[Vercel](https://vercel.com/)**.
-2. Vercel detectará el proyecto y ejecutará [`server.js`](server.js) como Serverless Function vía `@vercel/node`.
-3. La base de datos SQLite se almacena de forma aislada y resiliente en `/tmp/citrifresh.db`, auto-migrando y sembrando los usuarios demo de forma instantánea al primer arranque.
+1. Conecta el repositorio de GitHub en tu panel de **[Vercel](https://vercel.com/)**.
+2. Vercel ejecutará [`server.js`](server.js) como Serverless Function mediante `@vercel/node`.
+3. La base de datos SQLite se aloja de forma aislada y resiliente en `/tmp/citrifresh.db`, auto-migrando y sembrando los usuarios demo de forma instantánea al primer arranque.
 
 ### Despliegue en Servidor Linux (VPS / Nginx / PM2)
 ```bash
@@ -250,6 +376,15 @@ pm2 startup
 - **Cookies Seguras:** Tokens JWT protegidos contra ataques XSS mediante banderas `HttpOnly`, `SameSite: 'lax'` y `secure` en producción.
 - **Saneamiento y Validación:** Sanitización de strings, validación de contraseñas robustas y parametrización completa de consultas SQL (prevención de SQL Injections).
 - **Offline Sync:** La cola local `CitriSync` almacena solicitudes cuando no hay cobertura y las sincroniza en cuanto el dispositivo recupera señal de red.
+
+---
+
+## 🎨 Recursos de Diseño y Branding
+
+En la carpeta [`design/`](design/) se encuentran todos los activos de identidad de la marca:
+- 🎨 [Paleta de Colores](design/paleta-colores.md) (Verde Follaje `#2D5A27`, Naranja Cítrico `#E65100`, Amarillo Limón `#FBC02D`).
+- ✍️ [Pautas Tipográficas](design/tipografia.md) con fuentes Kiona y Mont.
+- 🖼️ [MoodBoard Citri-Fresh V2.0](design/moodboard/MoodBoard_Citri-Fresh_V2.0.png).
 
 ---
 
