@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Nosotros - Citri-Fresh</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" href="/favicon.ico">
     <!-- PWA & Mobile Web App -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#1a6b3c">
@@ -121,100 +123,221 @@
         </section>
 
         <!-- Values Section -->
-        <section class="section bg-gray">
-            <div class="container">
-                <div class="text-center" style="margin-bottom: var(--space-2xl);">
-                    <span class="badge" style="background-color: var(--primary-50); color: var(--primary); font-weight: 600; margin-bottom: var(--space-xs); display: inline-block;">Nuestros Principios</span>
-                    <h2 class="text-primary" style="font-size: 2.2rem; margin-top: 0.5rem; margin-bottom: var(--space-sm);">Valores de la Marca</h2>
-                    <p class="text-muted max-w-2xl mx-auto" style="font-size: 1.05rem; line-height: 1.6;">
-                        Los valores de Citri-Fresh representan los principios que orientan su identidad, comportamiento y relación con los diferentes actores de su ecosistema. Los principales valores de la marca son:
+        <section class="section" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); position: relative; overflow: hidden; padding: 5rem 0;">
+            <!-- Background Decorative Glows -->
+            <div style="position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+            <div style="position: absolute; bottom: -60px; left: -60px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+
+            <div class="container" style="position: relative; z-index: 1;">
+                <div class="text-center" style="margin-bottom: 3.5rem;">
+                    <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 9999px; background: rgba(16, 185, 129, 0.12); color: #047857; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; border: 1px solid rgba(16, 185, 129, 0.25);">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">verified</span>
+                        Nuestros Principios Fundamentales
+                    </div>
+                    <h2 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 800; color: #0f172a; margin: 0 0 1rem 0; letter-spacing: -0.02em;">
+                        Valores que <span style="background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Transforman el Campo</span>
+                    </h2>
+                    <p class="text-muted max-w-2xl mx-auto" style="font-size: 1.1rem; line-height: 1.7; color: #475569;">
+                        Los valores de <strong>Citri-Fresh</strong> representan los principios que orientan su identidad, comportamiento y relación con los diferentes actores de su ecosistema:
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md-grid-cols-2 lg-grid-cols-3" style="gap: var(--space-lg); margin-bottom: var(--space-2xl);">
+                <style>
+                    .cf-value-card {
+                        background: #ffffff;
+                        border-radius: 20px;
+                        padding: 2.2rem 2rem;
+                        position: relative;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        border: 1px solid rgba(226, 232, 240, 0.9);
+                        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+                        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                        overflow: hidden;
+                    }
+                    .cf-value-card::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        height: 4px;
+                        background: var(--card-accent-gradient);
+                        border-radius: 20px 20px 0 0;
+                    }
+                    .cf-value-card:hover {
+                        transform: translateY(-8px);
+                        box-shadow: 0 20px 30px -10px var(--card-glow-color, rgba(16, 185, 129, 0.2)), 0 8px 12px -4px rgba(15, 23, 42, 0.05);
+                        border-color: var(--card-border-color, rgba(16, 185, 129, 0.3));
+                    }
+                    .cf-value-number {
+                        font-family: var(--font-heading, inherit);
+                        font-size: 2rem;
+                        font-weight: 900;
+                        line-height: 1;
+                        letter-spacing: -0.04em;
+                        opacity: 0.18;
+                        transition: opacity 0.3s ease;
+                    }
+                    .cf-value-card:hover .cf-value-number {
+                        opacity: 0.35;
+                    }
+                    .cf-value-icon-box {
+                        width: 58px;
+                        height: 58px;
+                        border-radius: 16px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: transform 0.3s ease;
+                    }
+                    .cf-value-card:hover .cf-value-icon-box {
+                        transform: scale(1.08) rotate(3deg);
+                    }
+                </style>
+
+                <div class="grid grid-cols-1 md-grid-cols-2 lg-grid-cols-3" style="gap: 2rem; margin-bottom: 3.5rem;">
                     <!-- 1. Adaptabilidad -->
-                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--primary);">
-                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
-                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center;">
-                                <span class="material-symbols-outlined text-primary" style="font-size: 30px;">published_with_changes</span>
+                    <div class="cf-value-card" style="--card-accent-gradient: linear-gradient(90deg, #10b981, #34d399); --card-glow-color: rgba(16, 185, 129, 0.22); --card-border-color: rgba(16, 185, 129, 0.4);">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div class="cf-value-icon-box" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.08) 100%); border: 1px solid rgba(16, 185, 129, 0.25);">
+                                    <span class="material-symbols-outlined" style="font-size: 30px; color: #059669;">published_with_changes</span>
+                                </div>
+                                <span class="cf-value-number" style="color: #059669;">01</span>
                             </div>
-                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">01</span>
+                            <div style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.08); color: #065f46; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem;">Resiliencia & Flexibilidad</div>
+                            <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; letter-spacing: -0.01em;">Adaptabilidad</h3>
+                            <p style="color: #475569; line-height: 1.65; font-size: 0.98rem; margin: 0;">
+                                Evoluciona para responder a las necesidades de productores y consumidores, integrando comercio, información y preservación de prácticas agrícolas.
+                            </p>
                         </div>
-                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Adaptabilidad</h3>
-                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
-                            Evoluciona para responder a las necesidades de productores y consumidores, integrando comercio, información y preservación de prácticas agrícolas.
-                        </p>
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 8px; color: #059669; font-size: 0.85rem; font-weight: 600;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+                            <span>Evolución continua</span>
+                        </div>
                     </div>
 
                     <!-- 2. Cooperación y Conexión -->
-                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--accent);">
-                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
-                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(245, 158, 11, 0.12); display: flex; align-items: center; justify-content: center;">
-                                <span class="material-symbols-outlined text-accent" style="font-size: 30px;">diversity_3</span>
+                    <div class="cf-value-card" style="--card-accent-gradient: linear-gradient(90deg, #f59e0b, #fbbf24); --card-glow-color: rgba(245, 158, 11, 0.22); --card-border-color: rgba(245, 158, 11, 0.4);">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div class="cf-value-icon-box" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(251, 191, 36, 0.08) 100%); border: 1px solid rgba(245, 158, 11, 0.28);">
+                                    <span class="material-symbols-outlined" style="font-size: 30px; color: #d97706;">diversity_3</span>
+                                </div>
+                                <span class="cf-value-number" style="color: #d97706;">02</span>
                             </div>
-                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">02</span>
+                            <div style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: rgba(245, 158, 11, 0.08); color: #92400e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem;">Comunidad & Confianza</div>
+                            <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; letter-spacing: -0.01em;">Cooperación y Conexión</h3>
+                            <p style="color: #475569; line-height: 1.65; font-size: 0.98rem; margin: 0;">
+                                Fortalece el vínculo entre productores y consumidores mediante la colaboración, la confianza y el intercambio, creando una comunidad agrícola más cercana, eficiente y sostenible.
+                            </p>
                         </div>
-                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Cooperación y Conexión</h3>
-                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
-                            Fortalece el vínculo entre productores y consumidores mediante la colaboración, la confianza y el intercambio, creando una comunidad agrícola más cercana, eficiente y sostenible.
-                        </p>
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 8px; color: #d97706; font-size: 0.85rem; font-weight: 600;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">handshake</span>
+                            <span>Trato directo sin intermediarios</span>
+                        </div>
                     </div>
 
                     <!-- 3. Innovación y mejora continua -->
-                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--secondary);">
-                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
-                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); display: flex; align-items: center; justify-content: center;">
-                                <span class="material-symbols-outlined text-secondary" style="font-size: 30px;">lightbulb</span>
+                    <div class="cf-value-card" style="--card-accent-gradient: linear-gradient(90deg, #3b82f6, #60a5fa); --card-glow-color: rgba(59, 130, 246, 0.22); --card-border-color: rgba(59, 130, 246, 0.4);">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div class="cf-value-icon-box" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(96, 165, 250, 0.08) 100%); border: 1px solid rgba(59, 130, 246, 0.25);">
+                                    <span class="material-symbols-outlined" style="font-size: 30px; color: #2563eb;">lightbulb</span>
+                                </div>
+                                <span class="cf-value-number" style="color: #2563eb;">03</span>
                             </div>
-                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">03</span>
+                            <div style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: rgba(59, 130, 246, 0.08); color: #1e40af; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem;">Tecnología Aplicada</div>
+                            <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; letter-spacing: -0.01em;">Innovación y mejora continua</h3>
+                            <p style="color: #475569; line-height: 1.65; font-size: 0.98rem; margin: 0;">
+                                Promueve la evolución constante de sus herramientas y soluciones para responder a los desafíos del sector agrícola con inteligencia y eficiencia.
+                            </p>
                         </div>
-                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Innovación y mejora continua</h3>
-                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
-                            Promueve la evolución constante de sus herramientas y soluciones para responder a los desafíos del sector agrícola.
-                        </p>
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 8px; color: #2563eb; font-size: 0.85rem; font-weight: 600;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">bolt</span>
+                            <span>Soluciones digitales ágiles</span>
+                        </div>
                     </div>
 
                     <!-- 4. Valor compartido -->
-                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid #8b5cf6;">
-                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
-                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(139, 92, 246, 0.1); display: flex; align-items: center; justify-content: center;">
-                                <span class="material-symbols-outlined" style="font-size: 30px; color: #8b5cf6;">handshake</span>
+                    <div class="cf-value-card" style="--card-accent-gradient: linear-gradient(90deg, #8b5cf6, #a78bfa); --card-glow-color: rgba(139, 92, 246, 0.22); --card-border-color: rgba(139, 92, 246, 0.4);">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div class="cf-value-icon-box" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(167, 139, 250, 0.08) 100%); border: 1px solid rgba(139, 92, 246, 0.25);">
+                                    <span class="material-symbols-outlined" style="font-size: 30px; color: #7c3aed;">workspace_premium</span>
+                                </div>
+                                <span class="cf-value-number" style="color: #7c3aed;">04</span>
                             </div>
-                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">04</span>
+                            <div style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: rgba(139, 92, 246, 0.08); color: #5b21b6; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem;">Comercio Justo</div>
+                            <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; letter-spacing: -0.01em;">Valor compartido</h3>
+                            <p style="color: #475569; line-height: 1.65; font-size: 0.98rem; margin: 0;">
+                                Genera beneficios mutuos para productores, consumidores y aliados, impulsando el crecimiento económico con prácticas transparentes y responsables.
+                            </p>
                         </div>
-                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Valor compartido</h3>
-                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
-                            Genera beneficios para productores, consumidores y demás actores, impulsando el crecimiento y las prácticas responsables.
-                        </p>
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 8px; color: #7c3aed; font-size: 0.85rem; font-weight: 600;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">trending_up</span>
+                            <span>Crecimiento mutuo sostenible</span>
+                        </div>
                     </div>
 
                     <!-- 5. Sostenibilidad -->
-                    <div class="card" style="padding: var(--space-xl); display: flex; flex-direction: column; border-radius: var(--radius-lg); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--primary);">
-                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
-                            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center;">
-                                <span class="material-symbols-outlined text-primary" style="font-size: 30px;">eco</span>
+                    <div class="cf-value-card" style="--card-accent-gradient: linear-gradient(90deg, #10b981, #059669); --card-glow-color: rgba(16, 185, 129, 0.22); --card-border-color: rgba(16, 185, 129, 0.4);">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div class="cf-value-icon-box" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(5, 150, 105, 0.08) 100%); border: 1px solid rgba(16, 185, 129, 0.28);">
+                                    <span class="material-symbols-outlined" style="font-size: 30px; color: #047857;">eco</span>
+                                </div>
+                                <span class="cf-value-number" style="color: #047857;">05</span>
                             </div>
-                            <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted); opacity: 0.6;">05</span>
+                            <div style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.08); color: #065f46; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.75rem;">Impacto Ecológico</div>
+                            <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; letter-spacing: -0.01em;">Sostenibilidad</h3>
+                            <p style="color: #475569; line-height: 1.65; font-size: 0.98rem; margin: 0;">
+                                Promueve un modelo agrícola responsable mediante la reducción de mermas, el uso eficiente de recursos y el cuidado activo de nuestra tierra.
+                            </p>
                         </div>
-                        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-xs); color: var(--text-dark);">Sostenibilidad</h3>
-                        <p class="text-muted" style="line-height: 1.6; font-size: 0.95rem;">
-                            Promueve un modelo agrícola responsable mediante la reducción de pérdidas, el uso eficiente de recursos y el cuidado del entorno.
-                        </p>
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #e2e8f0; display: flex; align-items: center; gap: 8px; color: #047857; font-size: 0.85rem; font-weight: 600;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">nest_eco_leaf</span>
+                            <span>Cero desperdicio cítrico</span>
+                        </div>
+                    </div>
+
+                    <!-- Highlight Mission Metric Card -->
+                    <div class="cf-value-card" style="background: linear-gradient(145deg, #0c3e26 0%, #1a6b3c 100%); border: none; color: #ffffff; --card-accent-gradient: linear-gradient(90deg, #ffa41c, #f27405); --card-glow-color: rgba(242, 116, 5, 0.25);">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div class="cf-value-icon-box" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25);">
+                                    <span class="material-symbols-outlined" style="font-size: 30px; color: #ffa41c;">workspace_premium</span>
+                                </div>
+                                <span style="font-size: 0.9rem; font-weight: 700; padding: 4px 12px; background: rgba(255, 164, 28, 0.2); border: 1px solid rgba(255, 164, 28, 0.4); border-radius: 9999px; color: #ffc73b;">100% Nica</span>
+                            </div>
+                            <h3 style="font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; letter-spacing: -0.01em;">Compromiso con Nicaragua</h3>
+                            <p style="color: rgba(255, 255, 255, 0.85); line-height: 1.65; font-size: 0.95rem; margin: 0;">
+                                Cada transacción en Citri-Fresh apoya directamente a familias agricultoras de Carazo, Masaya y Rivas con precios transparentes y trazabilidad garantizada.
+                            </p>
+                        </div>
+                        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed rgba(255, 255, 255, 0.2); display: flex; align-items: center; gap: 8px; color: #ffa41c; font-size: 0.85rem; font-weight: 600;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">star</span>
+                            <span>Calidad certificada de origen</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Closing Reflection Banner -->
-                <div class="card" style="background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border: 1px solid rgba(16, 185, 129, 0.2); padding: var(--space-xl); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm);">
-                    <div style="display: flex; gap: var(--space-lg); align-items: flex-start;">
-                        <div style="min-width: 48px; height: 48px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);">
-                            <span class="material-symbols-outlined" style="font-size: 26px;">verified_user</span>
+                <!-- Closing Reflection Banner (Modern Glass Design) -->
+                <div style="background: #ffffff; border: 1px solid rgba(16, 185, 129, 0.25); padding: 2.25rem 2.5rem; border-radius: 24px; box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.02); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: linear-gradient(180deg, #10b981 0%, #f59e0b 100%);"></div>
+                    <div style="display: flex; gap: 1.75rem; align-items: flex-start; flex-wrap: wrap; md:flex-nowrap;">
+                        <div style="min-width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #10b981 0%, #047857 100%); display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.4);">
+                            <span class="material-symbols-outlined" style="font-size: 32px;">verified_user</span>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
-                            <p style="color: var(--text-dark); font-size: 1.05rem; line-height: 1.7; margin: 0; font-weight: 500;">
-                                Estos valores reflejan el compromiso de la marca con la transformación del sector agrícola mediante la tecnología, la colaboración y la sostenibilidad, buscando generar relaciones de confianza y beneficios para productores y consumidores.
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; flex: 1;">
+                            <h4 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #0f172a;">Compromiso Ético y Productivo</h4>
+                            <p style="color: #334155; font-size: 1.02rem; line-height: 1.75; margin: 0; font-weight: 400;">
+                                Estos valores reflejan el compromiso de la marca con la transformación del sector agrícola mediante la <strong>tecnología</strong>, la <strong>colaboración</strong> y la <strong>sostenibilidad</strong>, generando relaciones duraderas de confianza y rentabilidad para productores y consumidores.
                             </p>
-                            <p class="text-muted" style="font-size: 0.98rem; line-height: 1.7; margin: 0;">
-                                Cada valor define la manera en que Citri-Fresh actúa, evoluciona y construye una propuesta de valor centrada en conectar oportunidades, impulsar la innovación y contribuir al desarrollo responsable de la agricultura nicaragüense.
+                            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.7; margin: 0;">
+                                Cada valor define la manera en que Citri-Fresh actúa y construye una propuesta de valor centrada en conectar oportunidades, impulsar la innovación y contribuir con orgullo al desarrollo sustentable de la agricultura nicaragüense.
                             </p>
                         </div>
                     </div>

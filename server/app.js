@@ -33,6 +33,14 @@ app.use("/api", generalLimiter);
 app.use("/api/auth/login", authLimiter);
 app.use("/api/auth/register", authLimiter);
 
+// Rutas de favicon oficiales del sistema
+app.get("/favicon.ico", (req, res) => {
+  res.sendFile(path.join(rootDir, "public", "images", "favicon.svg"));
+});
+app.get("/favicon.svg", (req, res) => {
+  res.sendFile(path.join(rootDir, "public", "images", "favicon.svg"));
+});
+
 // Redirección de la raíz al inicio de la aplicación
 app.get("/", (req, res) => {
   res.redirect("/pages/inicio.html");
