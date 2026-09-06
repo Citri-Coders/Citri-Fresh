@@ -1,3 +1,5 @@
+import "dotenv/config";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import sqlite3 from "sqlite3";
@@ -13,6 +15,11 @@ export async function getDB() {
     const dbPath = process.env.DB_PATH
       ? path.resolve(process.cwd(), process.env.DB_PATH)
       : path.resolve(__dirname, "../../db/citrifresh.db");
+
+    const dbDir = path.dirname(dbPath);
+    if (!fs.existsSync(dbDir)) {
+      fs.mkdirSync(dbDir, { recursive: true });
+    }
 
     dbInstance = await open({
       filename: dbPath,

@@ -1,4 +1,6 @@
-export const validateRegister = (req, res, next) => {
+import { validarCorreoReal } from "../utils/emailValidator.js";
+
+export const validateRegister = async (req, res, next) => {
   const { nombre, email, password, rol } = req.body;
 
   if (!nombre || !email || !password) {
@@ -7,11 +9,10 @@ export const validateRegister = (req, res, next) => {
       .json({ error: "Nombre, email y contraseña son obligatorios" });
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res
-      .status(400)
-      .json({ error: "Formato de correo electrónico inválido" });
+  // Verificación profunda y real del correo (sintaxis, no-desechable y existencia de servidor MX)
+  const verificacion = await validarCorreoReal(email);
+  if (!verificacion.valido) {
+    return res.status(400).json({ error: verificacion.error });
   }
 
   if (password.length < 6) {
@@ -24,6 +25,8 @@ export const validateRegister = (req, res, next) => {
     return res.status(400).json({ error: "Rol no válido" });
   }
 
+  // Guardar correo normalizado
+  req.body.email = verificacion.email;
   next();
 };
 
@@ -39,7 +42,7 @@ export const validateLogin = (req, res, next) => {
   next();
 };
 
-export const validateActualizarPerfil = (req, res, next) => {
+export const validateActualizarPerfil = async (req, res, next) => {
   const { nombre, email, password_actual, password_nuevo } = req.body;
 
   if (nombre !== undefined && (typeof nombre !== "string" || nombre.trim() === "")) {
@@ -49,12 +52,11 @@ export const validateActualizarPerfil = (req, res, next) => {
   }
 
   if (email !== undefined) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res
-        .status(400)
-        .json({ error: "Formato de correo electrónico inválido" });
+    const verificacion = await validarCorreoReal(email);
+    if (!verificacion.valido) {
+      return res.status(400).json({ error: verificacion.error });
     }
+    req.body.email = verificacion.email;
   }
 
   if (password_nuevo !== undefined) {

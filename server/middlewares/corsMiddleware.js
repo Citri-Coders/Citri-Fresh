@@ -7,14 +7,20 @@ const envOrigins = process.env.ALLOWED_ORIGINS
 const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+  "http://localhost:3050",
+  "http://127.0.0.1:3050",
   "http://localhost:5173",
   process.env.CLIENT_URL,
   ...envOrigins,
 ].filter(Boolean);
 
+const isLocalhostOrigin = (origin) => {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+};
+
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || isLocalhostOrigin(origin)) {
       callback(null, true);
     } else {
       const corsError = new Error(`Acceso bloqueado por política CORS: ${origin}`);

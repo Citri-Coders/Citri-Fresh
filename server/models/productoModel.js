@@ -136,9 +136,10 @@ export const ProductoModel = {
     return { cambios: result.changes };
   },
 
-  // Eliminar un producto
+  // Eliminar un producto (eliminando primero referencias en pedidos_items para evitar violación de FK)
   async eliminar(id) {
     const db = await getDB();
+    await db.run("DELETE FROM pedidos_items WHERE producto_id = ?", [id]);
     const query = "DELETE FROM productos WHERE id = ?";
     const result = await db.run(query, [id]);
     return { cambios: result.changes };

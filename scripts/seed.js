@@ -64,7 +64,7 @@ async function seedDB() {
           stock: 45,
           zona: 1, // León
           productor_id: productor.id,
-          imagen: "/public/images/naranja.jpg",
+          imagen: "/public/images/n-comer.jpg",
         },
         {
           nombre: "Limón Criollo (Docena)",
@@ -75,7 +75,7 @@ async function seedDB() {
           stock: 120,
           zona: 1, // León
           productor_id: productor.id,
-          imagen: "/public/images/limon.jpg",
+          imagen: "/public/images/l-criollo.jpg",
         },
         {
           nombre: "Mandarina Reina (Docena)",
@@ -86,7 +86,7 @@ async function seedDB() {
           stock: 30,
           zona: 3, // Carazo
           productor_id: productor.id,
-          imagen: "/public/images/mandarina.jpg",
+          imagen: "/public/images/mandarina.jpeg",
         },
       ];
 
