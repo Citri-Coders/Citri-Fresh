@@ -59,16 +59,16 @@ export const obtenerPedidoPorId = async (req, res) => {
     }
 
     // Regla de autorización:
-    // - Admin: acceso total
+    // - Admin y Auditor: acceso total a auditoría
     // - Cliente: solo puede ver sus propios pedidos
     // - Productor: puede ver el pedido si contiene productos de su autoría o si es su propia compra
-    const esAdmin = req.user.rol === "admin";
+    const esAdminOAuditor = req.user.rol === "admin" || req.user.rol === "auditor";
     const esComprador = pedido.usuario_id === req.user.id;
     const esProductorDeItem =
       req.user.rol === "productor" &&
       pedido.items.some((item) => item.productor_id === req.user.id);
 
-    if (!esAdmin && !esComprador && !esProductorDeItem) {
+    if (!esAdminOAuditor && !esComprador && !esProductorDeItem) {
       return res.status(403).json({
         error: "Acceso denegado: No tienes permiso para ver este pedido",
       });

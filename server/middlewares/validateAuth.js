@@ -21,7 +21,7 @@ export const validateRegister = async (req, res, next) => {
       .json({ error: "La contraseña debe tener al menos 6 caracteres" });
   }
 
-  if (rol && !["cliente", "productor", "admin"].includes(rol)) {
+  if (rol && !["cliente", "productor", "admin", "auditor"].includes(rol)) {
     return res.status(400).json({ error: "Rol no válido" });
   }
 

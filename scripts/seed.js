@@ -12,6 +12,7 @@ async function seedDB() {
     const adminPass = await bcrypt.hash("admin123", saltRounds);
     const producerPass = await bcrypt.hash("productor123", saltRounds);
     const clientPass = await bcrypt.hash("cliente123", saltRounds);
+    const auditorPass = await bcrypt.hash("auditor123", saltRounds);
 
     // 2. Insertar Zonas
     const zonas = ["León", "Chinandega", "Carazo", "Rivas"];
@@ -26,6 +27,12 @@ async function seedDB() {
         email: "admin@citrifresh.com",
         password_hash: adminPass,
         rol: "admin",
+      },
+      {
+        nombre: "Auditor General de Calidad",
+        email: "auditor@citrifresh.com",
+        password_hash: auditorPass,
+        rol: "auditor",
       },
       {
         nombre: "Finca Cítricos San Carlos",

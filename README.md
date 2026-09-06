@@ -69,6 +69,8 @@ Citri-Fresh ofrece una solución integral a través de una plataforma digital qu
   - **Invitado / Visitante:** Visualización de catálogo, detalles de productos e historia de la plataforma.
   - **Cliente / Comprador:** Acceso a carrito de compras con cálculos de impuestos y envío, panel de pedidos y favoritos.
   - **Productor Citrícola:** Panel del productor con métricas de ventas, inventario por zonas y formulario interactivo para registrar y publicar cosechas.
+  - **Auditor Oficial:** Panel de fiscalización en modo solo lectura para supervisar trazabilidad, cosechas, órdenes y emitir dictamen de auditoría.
+  - **Administrador Maestro:** Control total del ecosistema, catálogo, gestión de usuarios y mapa de geolocalización de zonas cítricas.
 - **Autenticación y Seguridad:** Módulo de inicio de sesión y registro con diseño split-card moderno y control de acceso basado en roles.
 - **Trazabilidad y Calidad:** Información de calibre, grados Brix, región de origen y certificaciones (Global GAP).
 
@@ -155,9 +157,10 @@ citri-fresh/
         ├── perfil.html           # Panel de usuario / Historial (Perfil Cliente)
         ├── panel_productor.html  # Panel de gestión y métricas (Perfil Productor)
         ├── registro_cosecha.html # Formulario de publicación (Perfil Productor)
+        ├── admin.html            # Panel de Administración y Modo Auditoría (Admin / Auditor)
         ├── registro.html         # Formulario de registro de cuentas
         └── auth/
-            └── login.html        # Inicio de sesión moderno con split-card
+            └── login.html        # Inicio de sesión moderno con split-card (Botones de acceso rápido para jurado)
 ```
 
 ---

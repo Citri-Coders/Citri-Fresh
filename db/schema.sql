@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     nombre TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    rol TEXT NOT NULL DEFAULT 'cliente' CHECK (rol IN ('admin', 'productor', 'cliente')),
+    rol TEXT NOT NULL DEFAULT 'cliente' CHECK (rol IN ('admin', 'productor', 'cliente', 'auditor')),
     creado_en TEXT NOT NULL DEFAULT (DATETIME('now'))
 );
 

@@ -265,7 +265,7 @@ const CitriAuth = {
         const userRole = user.rol || user.role;
         if (!allowedRoles.includes(userRole)) {
             alert('Acceso restringido para este tipo de cuenta.');
-            if (userRole === 'admin') {
+            if (userRole === 'admin' || userRole === 'auditor') {
                 window.location.href = 'admin.html';
             } else if (userRole === 'productor') {
                 window.location.href = 'panel_productor.html';
@@ -294,9 +294,10 @@ const CitriAuth = {
             } else if (role === 'productor') {
                 const isPanelActive = currentPath.includes('panel_productor.html') ? 'active' : '';
                 roleLinks = `<a class="nav-link ${isPanelActive}" href="${prefix}panel_productor.html">Panel Productor</a>`;
-            } else if (role === 'admin') {
+            } else if (role === 'admin' || role === 'auditor') {
                 const isAdminActive = currentPath.includes('admin.html') ? 'active' : '';
-                roleLinks = `<a class="nav-link ${isAdminActive}" href="${prefix}admin.html">Panel Admin</a>`;
+                const tabTitle = role === 'auditor' ? 'Auditoría' : 'Panel Admin';
+                roleLinks = `<a class="nav-link ${isAdminActive}" href="${prefix}admin.html">${tabTitle}</a>`;
             }
 
             const isInicioActive = (currentPath.includes('inicio.html') || currentPath.endsWith('/')) ? 'active' : '';
@@ -372,6 +373,22 @@ const CitriAuth = {
                     <a href="${prefix}admin.html" class="btn btn-primary hidden md-flex items-center gap-xs" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">
                         <span class="material-symbols-outlined" style="font-size: 18px;">admin_panel_settings</span>
                         <span>${userName}</span>
+                    </a>
+                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-primary" title="Cerrar Sesión">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                    <button class="mobile-menu-btn" aria-label="Abrir Menú">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                `;
+            }
+            // Si es Auditor -> Acceso a Modo Auditoría
+            else if (role === 'auditor') {
+                const userName = user.nombre || user.name || 'Auditor General';
+                navActions.innerHTML = `
+                    <a href="${prefix}admin.html" class="hidden md-flex items-center gap-xs" style="font-size: 0.8125rem; padding: 0.5rem 1rem; border-radius: 9999px; background: #0f766e; color: white; text-decoration: none; font-weight: 700;">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">policy</span>
+                        <span>Auditoría: ${userName}</span>
                     </a>
                     <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-primary" title="Cerrar Sesión">
                         <span class="material-symbols-outlined">logout</span>
@@ -537,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 CitriAuth.setUser(data.user);
 
                 // Redirigir según el rol retornado por la base de datos
-                if (data.user.rol === 'admin') {
+                if (data.user.rol === 'admin' || data.user.rol === 'auditor') {
                     window.location.href = '../admin.html';
                 } else if (data.user.rol === 'productor') {
                     window.location.href = '../panel_productor.html';
