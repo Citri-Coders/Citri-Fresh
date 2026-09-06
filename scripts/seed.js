@@ -50,8 +50,12 @@ async function seedDB() {
 
     for (const u of usuarios) {
       await db.run(
-        `INSERT OR IGNORE INTO usuarios (nombre, email, password_hash, rol)
-         VALUES (?, ?, ?, ?)`,
+        `INSERT INTO usuarios (nombre, email, password_hash, rol)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT(email) DO UPDATE SET 
+           nombre = excluded.nombre,
+           password_hash = excluded.password_hash,
+           rol = excluded.rol`,
         [u.nombre, u.email, u.password_hash, u.rol],
       );
     }
