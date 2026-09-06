@@ -40,74 +40,163 @@
     margin: 0 auto;
 }
 
-.catalog-filters {
+.catalog-filters-panel {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--color-border);
+    margin-bottom: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.catalog-search-row {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-box-prominent {
+    position: relative;
+    flex: 1;
+    min-width: 260px;
+    display: flex;
+    align-items: center;
+}
+
+.search-box-prominent input {
+    width: 100%;
+    padding: 0.85rem 2.8rem 0.85rem 3.2rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: 1.05rem;
+    font-family: var(--font-body);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition: all 0.25s ease;
+}
+
+.search-box-prominent input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(26, 107, 60, 0.15);
+    background-color: #ffffff;
+}
+
+.search-box-prominent .search-icon {
+    position: absolute;
+    left: 1.1rem;
+    color: var(--color-primary);
+    pointer-events: none;
+    font-size: 24px;
+}
+
+.search-box-prominent .btn-clear-search {
+    position: absolute;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-light);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem;
+    border-radius: 50%;
+}
+
+.search-box-prominent .btn-clear-search:hover {
+    color: var(--color-error);
+    background: rgba(214, 71, 56, 0.1);
+}
+
+.catalog-secondary-filters {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: var(--space-md);
-    margin-bottom: var(--space-xl);
-    padding: var(--space-sm);
-    background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    border: 1px solid var(--color-border);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-surface-container);
 }
 
 .filter-group {
     display: flex;
-    gap: var(--space-sm);
+    flex-wrap: wrap;
+    gap: 0.4rem;
 }
 
 .filter-btn {
-    background: none;
-    border: none;
-    padding: var(--space-sm) var(--space-md);
+    background: var(--color-surface-container);
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
     font-weight: 700;
-    color: var(--color-text-light);
-    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    border-radius: var(--radius-full);
     cursor: pointer;
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .filter-btn:hover {
-    background: var(--color-surface-container);
+    background: rgba(26, 107, 60, 0.1);
     color: var(--color-primary);
+    transform: translateY(-1px);
 }
 
 .filter-btn.active {
     background: var(--color-primary);
     color: white;
-    box-shadow: 0 4px 10px rgba(0, 107, 51, 0.2);
-}
-
-.search-box {
-    position: relative;
-    width: 100%;
-    max-width: 300px;
-}
-
-.search-box input {
-    width: 100%;
-    padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-xl);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.search-box input:focus {
-    outline: none;
+    box-shadow: 0 3px 8px rgba(26, 107, 60, 0.25);
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(0, 107, 51, 0.1);
 }
 
-.search-box .material-symbols-outlined {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
+.catalog-select-group {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.catalog-select {
+    padding: 0.55rem 1.8rem 0.55rem 0.9rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.catalog-select:focus {
+    border-color: var(--color-primary);
+}
+
+.catalog-count-badge {
+    font-size: 0.88rem;
+    font-weight: 600;
     color: var(--color-text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.catalog-empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-3xl) var(--space-lg);
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 2px dashed var(--color-border);
 }
 
 .product-grid {
