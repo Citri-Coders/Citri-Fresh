@@ -18,7 +18,14 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     rol TEXT NOT NULL DEFAULT 'cliente' CHECK (rol IN ('admin', 'productor', 'cliente', 'auditor')),
-    creado_en TEXT NOT NULL DEFAULT (DATETIME('now'))
+    creado_en TEXT NOT NULL DEFAULT (DATETIME('now')),
+    foto TEXT,
+    telefono TEXT,
+    direccion TEXT,
+    nombre_finca TEXT,
+    zona_cultivo TEXT,
+    capacidad_produccion TEXT,
+    tipos_citricos TEXT
 );
 
 -- +++++++++++++++++++++++++++

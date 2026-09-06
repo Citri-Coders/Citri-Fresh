@@ -10,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let dbInstance = null;
+let dbPromise = null;
 
 // En Vercel (producción serverless) el FS es solo-lectura excepto /tmp
 function resolveDbPath() {
@@ -30,8 +31,7 @@ async function initSchema(db) {
     const schemaSQL = fs.readFileSync(schemaPath, "utf-8");
     await db.exec(schemaSQL);
   } else {
-    // Schema embebido como fallback (útil en entornos donde el FS de solo-lectura
-    // no permite leer db/schema.sql — aunque en Vercel sí está disponible en build)
+    // Schema embebido como fallback
     await db.exec(`
       PRAGMA foreign_keys = ON;
       CREATE TABLE IF NOT EXISTS zonas (
@@ -92,6 +92,29 @@ async function initSchema(db) {
       CREATE INDEX IF NOT EXISTS idx_pedidos_items_producto ON pedidos_items(producto_id);
     `);
   }
+
+  // Asegurar que si la tabla usuarios ya existía con esquema viejo, tenga las columnas requeridas
+  const columns = await db.all("PRAGMA table_info(usuarios)");
+  const colNames = columns.map(c => c.name);
+  const requiredCols = [
+    { name: "foto", type: "TEXT" },
+    { name: "telefono", type: "TEXT" },
+    { name: "direccion", type: "TEXT" },
+    { name: "nombre_finca", type: "TEXT" },
+    { name: "zona_cultivo", type: "TEXT" },
+    { name: "capacidad_produccion", type: "TEXT" },
+    { name: "tipos_citricos", type: "TEXT" }
+  ];
+
+  for (const col of requiredCols) {
+    if (!colNames.includes(col.name)) {
+      try {
+        await db.run(`ALTER TABLE usuarios ADD COLUMN ${col.name} ${col.type}`);
+      } catch (err) {
+        // Ignorar si ya existe
+      }
+    }
+  }
 }
 
 async function seedDefaultUsers(db) {
@@ -123,25 +146,35 @@ async function seedDefaultUsers(db) {
   console.log("[CitriFresh DB] Usuarios por defecto creados correctamente.");
 }
 
-export async function getDB() {
-  if (!dbInstance) {
-    const dbPath = resolveDbPath();
-    const dbDir = path.dirname(dbPath);
+async function openAndInit() {
+  const dbPath = resolveDbPath();
+  const dbDir = path.dirname(dbPath);
 
-    if (!fs.existsSync(dbDir)) {
-      fs.mkdirSync(dbDir, { recursive: true });
-    }
-
-    dbInstance = await open({
-      filename: dbPath,
-      driver: sqlite3.Database,
-    });
-
-    await dbInstance.run("PRAGMA foreign_keys = ON");
-
-    // Auto-inicializar schema y datos al primer arranque
-    await initSchema(dbInstance);
-    await seedDefaultUsers(dbInstance);
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
   }
-  return dbInstance;
+
+  const db = await open({
+    filename: dbPath,
+    driver: sqlite3.Database,
+  });
+
+  await db.run("PRAGMA foreign_keys = ON");
+  await initSchema(db);
+  await seedDefaultUsers(db);
+  return db;
+}
+
+export async function getDB() {
+  if (dbInstance) return dbInstance;
+  if (!dbPromise) {
+    dbPromise = openAndInit().then((db) => {
+      dbInstance = db;
+      return dbInstance;
+    }).catch(err => {
+      dbPromise = null;
+      throw err;
+    });
+  }
+  return dbPromise;
 }

@@ -17,6 +17,9 @@ const rootDir = path.resolve(__dirname, "..");
 
 const app = express();
 
+// Confianza en proxies inversos (necesario para Vercel / serverless y rate-limiters)
+app.set("trust proxy", 1);
+
 app.use(corsMiddleware);
 app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ extended: true, limit: "15mb" }));
