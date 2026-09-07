@@ -139,11 +139,60 @@ async function seedDefaultUsers(db) {
     );
   }
 
-  // Zonas base
-  for (const zona of ["León", "Chinandega", "Carazo", "Rivas"]) {
+  // Zonas base de Nicaragua
+  for (const zona of ["León", "Chinandega", "Carazo", "Rivas", "Masaya"]) {
     await db.run("INSERT OR IGNORE INTO zonas (nombre) VALUES (?)", [zona]);
   }
-  console.log("[CitriFresh DB] Usuarios por defecto creados correctamente.");
+
+  // Si no hay productos, sembrar los productos de demostración para el productor base
+  const prodCount = await db.get("SELECT COUNT(*) AS total FROM productos");
+  if (!prodCount || prodCount.total === 0) {
+    const productor = await db.get("SELECT id FROM usuarios WHERE email = ?", ["productor@citrifresh.com"]);
+    if (productor) {
+      const productosBase = [
+        {
+          nombre: "Naranja Valencia (Cien)",
+          descripcion: "Naranja jugosa y dulce, ideal para consumo fresco o jugos.",
+          precio: 350.0,
+          unidad: "cien",
+          stock: 45,
+          zona: 1, // León
+          productor_id: productor.id,
+          imagen: "/public/images/n-comer.jpg"
+        },
+        {
+          nombre: "Limón Criollo (Docena)",
+          descripcion: "Limón agrio criollo de excelente calidad y alto contenido de jugo.",
+          precio: 40.0,
+          unidad: "docena",
+          stock: 120,
+          zona: 1, // León
+          productor_id: productor.id,
+          imagen: "/public/images/l-criollo.jpg"
+        },
+        {
+          nombre: "Mandarina Reina (Docena)",
+          descripcion: "Mandarina dulce de fácil pelado, cosecha fresca de temporada.",
+          precio: 60.0,
+          unidad: "docena",
+          stock: 30,
+          zona: 3, // Carazo
+          productor_id: productor.id,
+          imagen: "/public/images/mandarina.jpeg"
+        }
+      ];
+
+      for (const p of productosBase) {
+        await db.run(
+          `INSERT OR IGNORE INTO productos (nombre, descripcion, precio, unidad, stock, zona, productor_id, imagen)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [p.nombre, p.descripcion, p.precio, p.unidad, p.stock, p.zona, p.productor_id, p.imagen]
+        );
+      }
+    }
+  }
+
+  console.log("[CitriFresh DB] Usuarios, zonas y catálogo base inicializados correctamente.");
 }
 
 async function openAndInit() {

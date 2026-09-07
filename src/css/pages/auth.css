@@ -481,6 +481,64 @@
   }
 }
 
+/* Grids responsivos para formularios de autenticación */
+.auth-card-registro {
+  max-width: 760px;
+  margin: 2rem auto;
+}
+
+.auth-form-side-registro {
+  padding: 2.75rem 3rem;
+}
+
+.auth-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.auth-role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.auth-form-grid-finca {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .auth-page {
+    padding: 0.75rem;
+    align-items: flex-start;
+  }
+  .auth-back-btn {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
+  }
+  .auth-card-split {
+    margin: 3.5rem 0 1rem 0 !important;
+    border-radius: 18px;
+    max-width: 100% !important;
+  }
+  .auth-form-side {
+    padding: 1.75rem 1.25rem !important;
+  }
+  .auth-form-grid-2,
+  .auth-role-grid,
+  .auth-form-grid-finca {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  .role-selector-card {
+    padding: 0.85rem 1rem !important;
+  }
+}
+
 /* Forzar que los iconos de Material Symbols no sean sobrescritos por estilos de fuente del botón o input */
 .auth-page .material-symbols-outlined,
 .btn-auth-submit .material-symbols-outlined,

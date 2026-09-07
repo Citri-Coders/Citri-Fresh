@@ -1027,7 +1027,8 @@ async function cargarPanelProductor() {
 // Acción del Productor: Cambiar estado de un pedido (Aceptar/Enviar o Rechazar/Cancelar)
 async function cambiarEstadoPedidoProductor(pedidoId, nuevoEstado) {
     const accionTexto = nuevoEstado === 'enviado' ? 'despachar' : (nuevoEstado === 'cancelado' ? 'rechazar' : 'completar');
-    if (!confirm(`¿Estás seguro de que deseas ${accionTexto} el pedido #CF-${pedidoId}?`)) return;
+    const ok = await confirm(`¿Estás seguro de que deseas ${accionTexto} el pedido #CF-${pedidoId}?`);
+    if (!ok) return;
 
     try {
         const res = await fetch(`/api/pedidos/${pedidoId}/estado`, {
@@ -1053,7 +1054,8 @@ async function cambiarEstadoPedidoProductor(pedidoId, nuevoEstado) {
 
 // Acción del Productor: Eliminar producto
 async function eliminarProductoProductor(productoId) {
-    if (!confirm('¿Estás seguro de que deseas eliminar este lote de tu inventario? Esta acción no se puede deshacer.')) return;
+    const ok = await confirm('¿Estás seguro de que deseas eliminar este lote de tu inventario? Esta acción no se puede deshacer.');
+    if (!ok) return;
 
     try {
         const res = await fetch(`/api/productos/${productoId}`, {

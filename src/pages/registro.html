@@ -22,8 +22,8 @@
             <span>Volver al Inicio</span>
         </a>
         
-        <div class="auth-card-split" style="max-width: 760px; margin: 2rem auto;">
-            <div class="auth-form-side" style="padding: 2.75rem 3rem;">
+        <div class="auth-card-split auth-card-registro">
+            <div class="auth-form-side auth-form-side-registro">
                 <div class="auth-brand-badge" style="justify-content: center; margin-bottom: 1rem;">
                     <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUboCZ5aHR_9JEHTrgIXyfPcAx97feojrkrVUt-ocYuzC0jtZZXHSDsG6_88cbfZ46ZyK2wFNyn81Fn5HtjRASwBANXl6uPmEI9eubj_fMqrCXx-w2kjBsq1TNMP0ka2xmPpBH9bo-uaN-Z1BychBk59HZbwlJLMe8lWGRo4UURbh10qs7BqlNCl0qF8sqLJs8MstsKEGRy4W7f89sXwWsdFRTmLLGKwakV9vsYRQIjlFrd53-59E-DZ3eApLYLvtUXg"
                         alt="Citri-Fresh Logo" class="auth-logo-main">
@@ -37,7 +37,7 @@
                 <!-- Selector de Roles con Diseño Visual Premium -->
                 <div style="margin-bottom: 1.75rem;">
                     <p style="font-size: 0.8125rem; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Selecciona tu Perfil</p>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="auth-role-grid">
                         <!-- Opción Comprador -->
                         <div id="card-rol-cliente" class="role-selector-card active" onclick="seleccionarRolRegistro('cliente')" style="border: 2px solid #006837; background: #f0fdf4; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease;">
                             <div style="width: 40px; height: 40px; border-radius: 12px; background: #006837; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
@@ -68,7 +68,7 @@
                     <input type="hidden" id="reg-rol" value="cliente">
 
                     <!-- ==================== CAMPOS COMUNES ==================== -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="auth-form-grid-2" style="margin-bottom: 1rem;">
                         <div class="form-field-group" style="margin-bottom: 0;">
                             <label class="form-field-label">Nombres *</label>
                             <div class="input-icon-wrapper">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="auth-form-grid-2" style="margin-bottom: 1rem;">
                         <div class="form-field-group" style="margin-bottom: 0;">
                             <label class="form-field-label">Teléfono / WhatsApp *</label>
                             <div class="input-icon-wrapper">
@@ -117,7 +117,7 @@
                             <strong style="color: #9a3412; font-size: 0.95rem;">Datos de la Unidad de Producción Citrícola</strong>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="auth-form-grid-finca" style="margin-bottom: 1rem;">
                             <div class="form-field-group" style="margin-bottom: 0;">
                                 <label class="form-field-label">Nombre de la Finca o Huerta *</label>
                                 <div class="input-icon-wrapper">
@@ -140,7 +140,7 @@
                             </div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.75rem;">
+                        <div class="auth-form-grid-2" style="margin-bottom: 0.75rem;">
                             <div class="form-field-group" style="margin-bottom: 0;">
                                 <label class="form-field-label">Capacidad de Cosecha Estimada</label>
                                 <div class="input-icon-wrapper">
@@ -177,7 +177,7 @@
                     </div>
 
                     <!-- ==================== CONTRASEÑA ==================== -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div class="auth-form-grid-2" style="margin-bottom: 1.25rem;">
                         <div class="form-field-group" style="margin-bottom: 0;">
                             <label class="form-field-label">Contraseña *</label>
                             <div class="input-icon-wrapper">

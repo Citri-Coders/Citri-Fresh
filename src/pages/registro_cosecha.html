@@ -748,8 +748,9 @@
             }
         }
 
-        function limpiarBorrador() {
-            if (!confirm('¿Deseas descartar los datos del borrador guardado?')) return;
+        async function limpiarBorrador() {
+            const ok = await confirm('¿Deseas descartar los datos del borrador guardado?');
+            if (!ok) return;
             localStorage.removeItem('citrifresh_borrador_cosecha');
             document.getElementById('product_name').value = '';
             document.getElementById('description').value = '';
