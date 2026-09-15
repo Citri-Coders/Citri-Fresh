@@ -61,12 +61,12 @@
                 <p class="text-muted" style="font-size: var(--text-body-lg);">Bienvenido a tu panel de control Citri-Fresh.</p>
             </div>
             
-            <div class="dashboard-grid">
+            <div class="dashboard-layout">
                 <!-- Sidebar (Profile & Quick Links) -->
                 <aside class="dashboard-sidebar">
                     <!-- Profile Card -->
-                    <div class="dashboard-card" style="align-items: center; text-align: center;">
-                        <div style="position: relative; width: 6.5rem; height: 6.5rem; margin-bottom: var(--space-md);">
+                    <div class="dashboard-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px;">
+                        <div style="position: relative; width: 6.5rem; height: 6.5rem; margin: 0 auto var(--space-md) auto;">
                             <div id="profile-avatar-container" style="width: 100%; height: 100%; border-radius: 50%; background-color: var(--color-primary-container); color: white; display: flex; align-items: center; justify-content: center; border: 3px solid var(--color-primary); overflow: hidden;">
                                 <span id="profile-avatar-icon" class="material-symbols-outlined icon-fill" style="font-size: 3.5rem;">person</span>
                                 <img id="profile-avatar-img" src="" alt="Foto de Perfil" style="display: none; width: 100%; height: 100%; object-fit: cover;">
@@ -78,16 +78,16 @@
                         <h2 id="profile-name" style="font-size: var(--text-h3); margin-bottom: 0;">Cliente Citri-Fresh</h2>
                         <p id="profile-role" class="text-muted" style="font-size: var(--text-caption); margin-bottom: var(--space-md);">Cliente Comprador</p>
                         
-                        <div style="width: 100%; text-align: left; border-top: 1px solid var(--color-border); padding-top: var(--space-md); margin-bottom: var(--space-lg);">
-                            <div class="flex items-center gap-xs text-muted" style="margin-bottom: var(--space-xs);">
+                        <div class="profile-details" style="width: 100%; text-align: left; border-top: 1px solid var(--color-border); padding: var(--space-lg) 0; margin-bottom: 0;">
+                            <div class="profile-detail-item">
                                 <span class="material-symbols-outlined" style="font-size: 1.25rem;">mail</span>
                                 <span id="profile-email" style="font-size: var(--text-caption); word-break: break-all;">cliente@citrifresh.com</span>
                             </div>
-                            <div class="flex items-center gap-xs text-muted" style="margin-bottom: var(--space-xs);">
+                            <div class="profile-detail-item">
                                 <span class="material-symbols-outlined" style="font-size: 1.25rem;">phone</span>
                                 <span id="profile-phone" style="font-size: var(--text-caption);">+505 8888 8888</span>
                             </div>
-                            <div class="flex items-start gap-xs text-muted">
+                            <div class="profile-detail-item" style="margin-bottom: 0;">
                                 <span class="material-symbols-outlined" style="font-size: 1.25rem;">location_on</span>
                                 <span id="profile-address" style="font-size: var(--text-caption); line-height: 1.4;">Managua, Nicaragua</span>
                             </div>
@@ -101,19 +101,19 @@
                     
                     <!-- Quick Navigation -->
                     <nav class="dashboard-card hidden md-block" style="padding: 0; overflow: hidden;">
-                        <a href="#pedidos-section" class="sidebar-link active flex items-center gap-sm">
+                        <a href="#pedidos-section" class="profile-nav-link active">
                             <span class="material-symbols-outlined icon-fill">inventory_2</span>
                             Mis Pedidos
                         </a>
-                        <a href="producto.html" class="sidebar-link flex items-center gap-sm">
+                        <a href="producto.html" class="profile-nav-link">
                             <span class="material-symbols-outlined">storefront</span>
                             Explorar Cosechas
                         </a>
-                        <a href="carrito.html" class="sidebar-link flex items-center gap-sm">
+                        <a href="carrito.html" class="profile-nav-link">
                             <span class="material-symbols-outlined">shopping_cart</span>
                             Mi Carrito
                         </a>
-                        <a href="javascript:void(0)" onclick="CitriAuth.logout()" class="sidebar-link flex items-center gap-sm" style="border-top: 1px solid var(--color-border);">
+                        <a href="javascript:void(0)" onclick="CitriAuth.logout()" class="profile-nav-link" style="border-top: 1px solid var(--color-border);">
                             <span class="material-symbols-outlined">logout</span>
                             Cerrar Sesión
                         </a>

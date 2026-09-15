@@ -87,8 +87,24 @@
         .spec-item {
             display: flex;
             justify-content: space-between;
-            padding: var(--space-sm) 0;
+            align-items: flex-start;
+            gap: var(--space-xl);
+            padding: var(--space-md) 0;
             border-bottom: 1px solid var(--color-border);
+        }
+        .spec-item > *:last-child {
+            text-align: right;
+            justify-content: flex-end;
+        }
+        
+        /* Hide number input spinners */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
         }
         .spec-item:last-child {
             border-bottom: none;
@@ -233,7 +249,7 @@
                     </div>
                     
                     <div class="product-specs">
-                        <div class="flex justify-between items-center" style="margin-bottom: var(--space-md);">
+                        <div class="flex justify-start items-center gap-md" style="margin-bottom: var(--space-md);">
                             <h3 class="flex items-center gap-xs" style="font-size: var(--text-h3); margin: 0;">
                                 <span class="material-symbols-outlined text-primary">analytics</span> Especificaciones Técnicas
                             </h3>
