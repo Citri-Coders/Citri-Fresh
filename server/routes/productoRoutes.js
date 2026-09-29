@@ -31,18 +31,18 @@ router.post(
 
 router.put(
   "/:id",
-  validateIdParam,
   verifyToken,
   requireRole("productor", "admin"),
+  validateIdParam,
   validateActualizarProducto,
   actualizarProducto,
 );
 
 router.delete(
   "/:id",
-  validateIdParam,
   verifyToken,
   requireRole("productor", "admin"),
+  validateIdParam,
   eliminarProducto,
 );
 

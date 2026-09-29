@@ -31,18 +31,18 @@ router.post(
 
 router.put(
   "/:id",
-  validateIdParam,
   verifyToken,
   requireRole("admin"),
+  validateIdParam,
   validateActualizarZona,
   actualizarZona,
 );
 
 router.delete(
   "/:id",
-  validateIdParam,
   verifyToken,
   requireRole("admin"),
+  validateIdParam,
   eliminarZona,
 );
 

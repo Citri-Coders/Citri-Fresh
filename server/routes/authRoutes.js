@@ -74,6 +74,6 @@ router.put("/perfil", verifyToken, validateActualizarPerfil, actualizarPerfil);
 
 // Rutas administrativas (solo rol admin, auditor para lectura)
 router.get("/usuarios", verifyToken, requireRole("admin", "auditor"), listarUsuarios);
-router.delete("/usuarios/:id", validateIdParam, verifyToken, requireRole("admin"), eliminarUsuario);
+router.delete("/usuarios/:id", verifyToken, requireRole("admin"), validateIdParam, eliminarUsuario);
 
 export default router;

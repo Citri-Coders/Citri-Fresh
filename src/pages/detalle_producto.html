@@ -444,12 +444,27 @@
         // ── Add to Cart Button ────────────────────────────────────────────
         function handleAddCart() {
             const user = CitriAuth.getUser();
-            if (!user || user.role !== 'cliente') {
+            const rol = CitriAuth.getRole();
+            if (!user) {
                 window.location.href = 'auth/login.html';
                 return;
             }
+            if (rol === 'productor') {
+                alert('Las cuentas de Productor no compran en el catálogo. Tu perfil gestiona y publica cosechas.');
+                return;
+            }
+            const qty = parseInt(qtyInput.value, 10) || 50;
+            CitriCart.addItem({
+                id: 1,
+                nombre: 'Naranjas Valencia',
+                precio: currentPrice,
+                unidad: currentUnit,
+                imagen: '/public/images/n-comer.jpg',
+                cantidad: qty
+            });
+            CitriCart.updateCartBadge();
+
             const btn = document.getElementById('add-cart-btn');
-            const qty = qtyInput.value;
             btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> ¡Agregado al Carrito!';
             btn.style.background = 'var(--color-secondary)';
             setTimeout(() => {

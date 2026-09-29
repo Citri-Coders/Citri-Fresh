@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 // Configuración centralizada de autenticación JWT
 // Único punto de verdad para secretos y opciones de cookies
 
