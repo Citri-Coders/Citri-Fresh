@@ -1,9 +1,4 @@
 import { rateLimit } from "express-rate-limit";
-import { fileURLToPath } from "url";
-import path from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Configuración por defecto
 const DEFAULT_WINDOW_MS = process.env.RATE_LIMIT_WINDOW_MS

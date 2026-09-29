@@ -45,8 +45,13 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    // Fallback permisivo seguro: en lugar de arrojar error no controlado, reflejar el origin
-    return callback(null, true);
+    // En desarrollo, permitir cualquier origen para facilitar el trabajo
+    if (process.env.NODE_ENV !== "production") {
+      return callback(null, true);
+    }
+
+    // En producción, rechazar orígenes no autorizados
+    return callback(new Error(`Origen no permitido por CORS: ${origin}`), false);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],

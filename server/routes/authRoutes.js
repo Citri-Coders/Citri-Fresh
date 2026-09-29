@@ -20,6 +20,7 @@ import {
 } from "../middlewares/validateAuth.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { requireRole } from "../middlewares/roleMiddleware.js";
+import { validateIdParam } from "../middlewares/validateParams.js";
 
 const router = Router();
 
@@ -73,6 +74,6 @@ router.put("/perfil", verifyToken, validateActualizarPerfil, actualizarPerfil);
 
 // Rutas administrativas (solo rol admin, auditor para lectura)
 router.get("/usuarios", verifyToken, requireRole("admin", "auditor"), listarUsuarios);
-router.delete("/usuarios/:id", verifyToken, requireRole("admin"), eliminarUsuario);
+router.delete("/usuarios/:id", validateIdParam, verifyToken, requireRole("admin"), eliminarUsuario);
 
 export default router;

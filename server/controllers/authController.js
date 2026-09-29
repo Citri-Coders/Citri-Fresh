@@ -1,27 +1,19 @@
+import crypto from "crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UsuarioModel } from "../models/usuarioModel.js";
 import { validarCorreoReal } from "../utils/emailValidator.js";
 import { enviarCorreoRecuperacion, getUltimoCorreoEnviado } from "../services/emailService.js";
+import {
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
+  ADMIN_ACCESS_KEY,
+  SALT_ROUNDS,
+  COOKIE_OPTIONS,
+  CLEAR_COOKIE_OPTIONS,
+} from "../config/auth.js";
 
-const JWT_SECRET =
-  process.env.JWT_SECRET || "citrifresh_secret_key_super_segura";
-const ADMIN_ACCESS_KEY =
-  process.env.ADMIN_ACCESS_KEY || "CITRI_MASTER_ADMIN_2026!";
-const SALT_ROUNDS = 10;
-
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-  maxAge: 24 * 60 * 60 * 1000, // 1 día
-};
-
-const CLEAR_COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-};
+// COOKIE_OPTIONS y CLEAR_COOKIE_OPTIONS importadas desde config/auth.js
 
 export const register = async (req, res) => {
   try {
@@ -40,11 +32,11 @@ export const register = async (req, res) => {
       tipos_citricos
     } = req.body;
 
-    // Regla de seguridad para creación de Administradores: Solo con Clave Maestra Única
-    if (rol === "admin") {
+    // Regla de seguridad para creación de Administradores y Auditores: Solo con Clave Maestra Única
+    if (rol === "admin" || rol === "auditor") {
       if (!admin_key || admin_key.trim() !== ADMIN_ACCESS_KEY) {
         return res.status(403).json({
-          error: "Clave Maestra de Autorización para Administrador inválida o ausente. Acceso restringido.",
+          error: "Clave Maestra de Autorización inválida o ausente. Acceso restringido.",
         });
       }
     }
@@ -121,8 +113,7 @@ export const login = async (req, res) => {
   } catch (error) {
     console.error("Error en login:", error);
     return res.status(500).json({ 
-      error: "Error interno del servidor",
-      detalles: error.message || String(error)
+      error: "Error interno del servidor"
     });
   }
 };
@@ -331,7 +322,7 @@ export const recuperarPassword = async (req, res) => {
     }
 
     // Generar un código criptográfico / aleatorio de seguridad de 6 dígitos
-    const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+    const codigo = crypto.randomInt(100000, 999999).toString();
     const expiraEn = Date.now() + 15 * 60 * 1000; // 15 minutos de validez
 
     codigosRecuperacionCache.set(emailNorm, {

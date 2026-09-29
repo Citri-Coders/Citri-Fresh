@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { corsMiddleware } from "./middlewares/corsMiddleware.js";
@@ -21,8 +20,8 @@ const app = express();
 app.set("trust proxy", 1);
 
 app.use(corsMiddleware);
-app.use(express.json({ limit: "15mb" }));
-app.use(express.urlencoded({ extended: true, limit: "15mb" }));
+app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use(cookieParser());
 
 // Servir archivos estáticos del frontend (HTML, CSS, JS, imágenes) primero
@@ -55,14 +54,6 @@ app.use("/api/productos", productoRoutes);
 app.use("/api/pedidos", pedidoRoutes);
 app.use("/api/zonas", zonaRoutes);
 
-// Middleware para rutas no encontradas (404)
-app.use((req, res) => {
-  res.status(404).json({
-    error: "Ruta no encontrada",
-    path: req.originalUrl,
-  });
-});
-
 // Middleware para manejo de errores de rate limiting
 app.use(rateLimitErrorHandler);
 
@@ -72,6 +63,14 @@ app.use((err, req, res, next) => {
   const status = err.status || 500;
   res.status(status).json({
     error: err.message || "Error interno del servidor",
+  });
+});
+
+// Middleware para rutas no encontradas (404) — debe ir al final
+app.use((req, res) => {
+  res.status(404).json({
+    error: "Ruta no encontrada",
+    path: req.originalUrl,
   });
 });
 

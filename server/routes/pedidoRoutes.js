@@ -11,6 +11,7 @@ import {
   validateCrearPedido,
   validateActualizarEstado,
 } from "../middlewares/validatePedido.js";
+import { validateIdParam } from "../middlewares/validateParams.js";
 
 const router = Router();
 
@@ -24,11 +25,12 @@ router.post("/", validateCrearPedido, crearPedido);
 router.get("/", obtenerPedidos);
 
 // Ver detalle completo de un pedido con sus ítems
-router.get("/:id", obtenerPedidoPorId);
+router.get("/:id", validateIdParam, obtenerPedidoPorId);
 
 // Cambiar el estado de un pedido (Solo productores y administradores)
 router.patch(
   "/:id/estado",
+  validateIdParam,
   requireRole("productor", "admin"),
   validateActualizarEstado,
   actualizarEstadoPedido,

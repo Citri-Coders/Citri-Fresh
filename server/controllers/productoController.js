@@ -106,7 +106,7 @@ export const actualizarProducto = async (req, res) => {
           ? zona
             ? Number(zona)
             : null
-          : productoExistente.zona_id,
+          : productoExistente.zona_id,  // alias correcto del model (p.zona AS zona_id)
       imagen: imagen !== undefined ? imagen : productoExistente.imagen,
     });
 

@@ -12,12 +12,13 @@ import {
   validateCrearProducto,
   validateActualizarProducto,
 } from "../middlewares/validateProducto.js";
+import { validateIdParam } from "../middlewares/validateParams.js";
 
 const router = Router();
 
 // Rutas públicas (Cualquier visitante puede ver el catálogo)
 router.get("/", obtenerProductos);
-router.get("/:id", obtenerProductoPorId);
+router.get("/:id", validateIdParam, obtenerProductoPorId);
 
 // Rutas protegidas (Solo productores y administradores)
 router.post(
@@ -30,6 +31,7 @@ router.post(
 
 router.put(
   "/:id",
+  validateIdParam,
   verifyToken,
   requireRole("productor", "admin"),
   validateActualizarProducto,
@@ -38,6 +40,7 @@ router.put(
 
 router.delete(
   "/:id",
+  validateIdParam,
   verifyToken,
   requireRole("productor", "admin"),
   eliminarProducto,

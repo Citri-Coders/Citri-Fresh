@@ -12,12 +12,13 @@ import {
   validateCrearZona,
   validateActualizarZona,
 } from "../middlewares/validateZona.js";
+import { validateIdParam } from "../middlewares/validateParams.js";
 
 const router = Router();
 
 // Rutas públicas (Cualquier usuario o el frontend puede consultar zonas)
 router.get("/", obtenerZonas);
-router.get("/:id", obtenerZonaPorId);
+router.get("/:id", validateIdParam, obtenerZonaPorId);
 
 // Rutas protegidas (Solo administradores pueden crear, modificar o eliminar zonas)
 router.post(
@@ -30,6 +31,7 @@ router.post(
 
 router.put(
   "/:id",
+  validateIdParam,
   verifyToken,
   requireRole("admin"),
   validateActualizarZona,
@@ -38,6 +40,7 @@ router.put(
 
 router.delete(
   "/:id",
+  validateIdParam,
   verifyToken,
   requireRole("admin"),
   eliminarZona,

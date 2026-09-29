@@ -1,7 +1,5 @@
 import jwt from "jsonwebtoken";
-
-const JWT_SECRET =
-  process.env.JWT_SECRET || "citrifresh_secret_key_super_segura";
+import { JWT_SECRET } from "../config/auth.js";
 
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
