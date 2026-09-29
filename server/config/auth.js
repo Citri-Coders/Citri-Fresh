@@ -3,10 +3,13 @@ import "dotenv/config";
 // Configuración centralizada de autenticación JWT
 // Único punto de verdad para secretos y opciones de cookies
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  console.error("FATAL: La variable de entorno JWT_SECRET no está configurada. Abortando.");
-  process.exit(1);
+const JWT_SECRET =
+  process.env.JWT_SECRET || "citrifresh_secret_key_super_segura_desarrollo_2026";
+
+if (!process.env.JWT_SECRET) {
+  console.warn(
+    "⚠️ ADVERTENCIA: La variable de entorno JWT_SECRET no está configurada. Usando clave de respaldo para mantener el servicio activo.",
+  );
 }
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1d";

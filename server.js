@@ -24,6 +24,11 @@ function startServer(port, fallbackPort = 3050) {
   });
 }
 
-startServer(DEFAULT_PORT);
+// En Vercel Serverless, @vercel/node requiere la exportación por defecto y no debe llamar a listen()
+if (!process.env.VERCEL) {
+  startServer(DEFAULT_PORT);
+}
+
+export default app;
 
 
