@@ -8,6 +8,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:3050",
+  "http://localhost:3051",
   "http://127.0.0.1:3050",
   "http://localhost:5173",
   process.env.CLIENT_URL,
@@ -24,7 +25,7 @@ const corsOptions = {
     if (!origin) {
       return callback(null, true);
     }
-    
+
     // Si es localhost o 127.0.0.1 con cualquier puerto
     if (isLocalhostOrigin(origin)) {
       return callback(null, true);
