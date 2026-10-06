@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import bcrypt from "bcrypt";
+import { createClient } from "@libsql/client";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,12 +12,47 @@ const __dirname = path.dirname(__filename);
 let dbInstance = null;
 let dbPromise = null;
 
+function wrapLibsqlClient(client) {
+  return {
+    async all(sql, params = []) {
+      const res = await client.execute({ sql, args: Array.isArray(params) ? params : [params] });
+      return res.rows.map(row => {
+        const obj = {};
+        for (const col of res.columns) {
+          obj[col] = row[col];
+        }
+        return obj;
+      });
+    },
+    async get(sql, params = []) {
+      const res = await client.execute({ sql, args: Array.isArray(params) ? params : [params] });
+      if (!res.rows || res.rows.length === 0) return undefined;
+      const row = res.rows[0];
+      const obj = {};
+      for (const col of res.columns) {
+        obj[col] = row[col];
+      }
+      return obj;
+    },
+    async run(sql, params = []) {
+      const res = await client.execute({ sql, args: Array.isArray(params) ? params : [params] });
+      return {
+        lastID: res.lastInsertRowid !== undefined && res.lastInsertRowid !== null ? Number(res.lastInsertRowid) : undefined,
+        changes: res.rowsAffected !== undefined ? Number(res.rowsAffected) : 0,
+      };
+    },
+    async exec(sql) {
+      await client.executeMultiple(sql);
+    }
+  };
+}
+
 // En Vercel (producción serverless) el FS es solo-lectura excepto /tmp
 function resolveDbPath() {
   if (process.env.DB_PATH) {
     return path.resolve(process.cwd(), process.env.DB_PATH);
   }
-  // En producción Vercel usamos /tmp (único directorio escribible)
+  // En producción Vercel usamos /tmp (único directorio escribible) como fallback
   if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
     return "/tmp/citrifresh.db";
   }
@@ -195,6 +231,18 @@ async function seedDefaultUsers(db) {
 }
 
 async function openAndInit() {
+  if (process.env.TURSO_DATABASE_URL) {
+    console.log("[CitriFresh DB] Conectando a Turso (SQLite Cloud)...");
+    const client = createClient({
+      url: process.env.TURSO_DATABASE_URL,
+      authToken: process.env.TURSO_AUTH_TOKEN || "",
+    });
+    const db = wrapLibsqlClient(client);
+    await initSchema(db);
+    await seedDefaultUsers(db);
+    return db;
+  }
+
   const dbPath = resolveDbPath();
   const dbDir = path.dirname(dbPath);
 

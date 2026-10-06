@@ -76,3 +76,8 @@ public/images/uploads/
 # ============================================
 coverage/
 .nyc_output/
+
+# ============================================
+# AUDITORÍA INTERNA (NO SUBIR AL REPO PÚBLICO)
+# ============================================
+docs/AUDITORIA.md
