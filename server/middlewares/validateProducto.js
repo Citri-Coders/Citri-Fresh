@@ -7,6 +7,19 @@ export const validateCrearProducto = (req, res, next) => {
       .json({ error: "El nombre del producto es obligatorio" });
   }
 
+  if (typeof nombre === "string" && nombre.length > 100) {
+    return res
+      .status(400)
+      .json({ error: "El nombre del producto no puede superar los 100 caracteres" });
+  }
+
+  const { descripcion } = req.body;
+  if (typeof descripcion === "string" && descripcion.length > 1000) {
+    return res
+      .status(400)
+      .json({ error: "La descripción no puede superar los 1000 caracteres" });
+  }
+
   if (precio === undefined || precio === null || precio === "") {
     return res.status(400).json({ error: "El precio es obligatorio" });
   }
@@ -48,6 +61,18 @@ export const validateActualizarProducto = (req, res, next) => {
     return res
       .status(400)
       .json({ error: "El nombre del producto no puede estar vacío" });
+  }
+
+  if (nombre !== undefined && typeof nombre === "string" && nombre.length > 100) {
+    return res
+      .status(400)
+      .json({ error: "El nombre del producto no puede superar los 100 caracteres" });
+  }
+
+  if (req.body.descripcion !== undefined && typeof req.body.descripcion === "string" && req.body.descripcion.length > 1000) {
+    return res
+      .status(400)
+      .json({ error: "La descripción no puede superar los 1000 caracteres" });
   }
 
   if (precio !== undefined) {

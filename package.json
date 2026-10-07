@@ -9,7 +9,7 @@
     "dev": "node --watch server.js",
     "db:init": "node scripts/init-db.js",
     "db:seed": "node scripts/seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": [
     "agricultura",
@@ -31,6 +31,7 @@
     "google-auth-library": "^11.1.0",
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^10.0.0",
+    "pino": "^10.4.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },

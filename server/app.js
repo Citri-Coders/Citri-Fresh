@@ -1,3 +1,4 @@
+import logger from "./config/logger.js";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { corsMiddleware } from "./middlewares/corsMiddleware.js";
@@ -59,7 +60,7 @@ app.use(rateLimitErrorHandler);
 
 // Middleware global de manejo de errores
 app.use((err, req, res, next) => {
-  console.error("Error no controlado:", err.message || err);
+  logger.error({ err }, "Error no controlado:");
   const status = err.status || 500;
   res.status(status).json({
     error: err.message || "Error interno del servidor",

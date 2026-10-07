@@ -1,5 +1,31 @@
 import { validarCorreoReal } from "../utils/emailValidator.js";
 
+const LIMITES_CAMPOS = {
+  nombre: 100,
+  email: 254,
+  password: 128,
+  password_actual: 128,
+  telefono: 30,
+  direccion: 255,
+  nombre_finca: 100,
+  zona_cultivo: 100,
+  capacidad_produccion: 100,
+  tipos_citricos: 255,
+  foto: 500,
+};
+
+// Devuelve un mensaje de error si algún campo excede su longitud máxima, o null.
+const validarLongitudes = (body, campos) => {
+  for (const campo of campos) {
+    const valor = body[campo];
+    const max = LIMITES_CAMPOS[campo];
+    if (typeof valor === "string" && max && valor.length > max) {
+      return `El campo '${campo}' no puede superar los ${max} caracteres`;
+    }
+  }
+  return null;
+};
+
 export const validateRegister = async (req, res, next) => {
   const { nombre, email, password, rol } = req.body;
 
@@ -7,6 +33,22 @@ export const validateRegister = async (req, res, next) => {
     return res
       .status(400)
       .json({ error: "Nombre, email y contraseña son obligatorios" });
+  }
+
+  const errorLongitud = validarLongitudes(req.body, [
+    "nombre",
+    "email",
+    "password",
+    "telefono",
+    "direccion",
+    "nombre_finca",
+    "zona_cultivo",
+    "capacidad_produccion",
+    "tipos_citricos",
+    "foto",
+  ]);
+  if (errorLongitud) {
+    return res.status(400).json({ error: errorLongitud });
   }
 
   // Verificación profunda y real del correo (sintaxis, no-desechable y existencia de servidor MX)
@@ -39,11 +81,29 @@ export const validateLogin = (req, res, next) => {
       .json({ error: "Email y contraseña son obligatorios" });
   }
 
+  const errorLongitud = validarLongitudes(req.body, ["email", "password"]);
+  if (errorLongitud) {
+    return res.status(400).json({ error: errorLongitud });
+  }
+
   next();
 };
 
 export const validateActualizarPerfil = async (req, res, next) => {
   const { nombre, email, password_actual, password_nuevo } = req.body;
+
+  const errorLongitud = validarLongitudes(req.body, [
+    "nombre",
+    "email",
+    "password_actual",
+    "password_nuevo",
+    "telefono",
+    "direccion",
+    "foto",
+  ]);
+  if (errorLongitud) {
+    return res.status(400).json({ error: errorLongitud });
+  }
 
   if (nombre !== undefined && (typeof nombre !== "string" || nombre.trim() === "")) {
     return res

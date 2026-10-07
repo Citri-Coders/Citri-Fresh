@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -88,7 +89,7 @@ export const register = async (req, res) => {
       user: nuevoUsuario,
     });
   } catch (error) {
-    console.error("Error en register:", error);
+    logger.error({ err: error }, "Error en register:");
     return res.status(500).json({ error: "Error interno del servidor" });
   }
 };
@@ -123,7 +124,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error en login:", error);
+    logger.error({ err: error }, "Error en login:");
     return res.status(500).json({ 
       error: "Error interno del servidor"
     });
@@ -143,7 +144,7 @@ export const getMe = async (req, res) => {
     }
     return res.status(200).json({ user: usuario });
   } catch (error) {
-    console.error("Error en getMe:", error);
+    logger.error({ err: error }, "Error en getMe:");
     return res.status(500).json({ error: "Error interno del servidor" });
   }
 };
@@ -201,7 +202,7 @@ export const actualizarPerfil = async (req, res) => {
       user: usuarioActualizado,
     });
   } catch (error) {
-    console.error("Error en actualizarPerfil:", error);
+    logger.error({ err: error }, "Error en actualizarPerfil:");
     return res
       .status(500)
       .json({ error: "Error interno al actualizar el perfil" });
@@ -240,7 +241,7 @@ export const googleAuth = async (req, res) => {
         nombre = googleData.name || nombre;
         foto = googleData.picture || foto;
       } catch (tokenErr) {
-        console.warn("Token de Google inválido:", tokenErr.message);
+        logger.warn({ err: tokenErr }, "Token de Google inválido");
         return res.status(401).json({ error: "El token de Google no es válido o ha expirado" });
       }
     }
@@ -295,7 +296,7 @@ export const googleAuth = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error en googleAuth:", error);
+    logger.error({ err: error }, "Error en googleAuth:");
     return res.status(500).json({ error: "Error interno al procesar inicio con Google" });
   }
 };
@@ -306,7 +307,7 @@ export const listarUsuarios = async (req, res) => {
     const usuarios = await UsuarioModel.obtenerTodos();
     return res.status(200).json(usuarios);
   } catch (error) {
-    console.error("Error al listar usuarios:", error);
+    logger.error({ err: error }, "Error al listar usuarios:");
     return res.status(500).json({ error: "Error interno al obtener usuarios" });
   }
 };
@@ -330,7 +331,7 @@ export const eliminarUsuario = async (req, res) => {
       cambios: result.cambios,
     });
   } catch (error) {
-    console.error("Error al eliminar usuario:", error);
+    logger.error({ err: error }, "Error al eliminar usuario:");
     return res.status(500).json({ error: "Error interno al eliminar usuario" });
   }
 };
@@ -364,7 +365,10 @@ export const recuperarPassword = async (req, res) => {
       codigo
     });
 
-    console.log(`[Citri-Fresh Seguridad - Enlace/Correo Enviado] Código para ${emailNorm}: [${codigo}]. Preview: ${resultadoEnvio.previewUrl || 'Buzón Local'}`);
+    logger.info(
+      { email: emailNorm, previewUrl: resultadoEnvio.previewUrl || null },
+      "Código de recuperación enviado",
+    );
 
     return res.status(200).json({
       message: `Hemos enviado un código de verificación de 6 dígitos a tu correo ${emailNorm}. Revisa tu bandeja de entrada o carpeta de spam.`,
@@ -373,7 +377,7 @@ export const recuperarPassword = async (req, res) => {
       previewUrl: resultadoEnvio.previewUrl || null
     });
   } catch (error) {
-    console.error("Error en recuperarPassword:", error);
+    logger.error({ err: error }, "Error en recuperarPassword:");
     return res.status(500).json({ error: "Error interno al procesar recuperación de contraseña" });
   }
 };
@@ -424,7 +428,7 @@ export const verificarCodigoRecuperacion = async (req, res) => {
       valido: true
     });
   } catch (error) {
-    console.error("Error en verificarCodigoRecuperacion:", error);
+    logger.error({ err: error }, "Error en verificarCodigoRecuperacion:");
     return res.status(500).json({ error: "Error interno al validar el código" });
   }
 };
@@ -469,7 +473,7 @@ export const restablecerPassword = async (req, res) => {
       message: "Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión de forma segura."
     });
   } catch (error) {
-    console.error("Error en restablecerPassword:", error);
+    logger.error({ err: error }, "Error en restablecerPassword:");
     return res.status(500).json({ error: "Error interno al restablecer la contraseña" });
   }
 };
