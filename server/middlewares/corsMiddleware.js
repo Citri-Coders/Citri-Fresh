@@ -36,13 +36,11 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    // En desarrollo, permitir orígenes locales y de red LAN (192.168.x.x, 10.x.x.x, etc.)
-    if (/^https?:\/\/(192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$/i.test(origin)) {
-      return callback(null, true);
-    }
-
-    // Permitir dominios de despliegue comunes (Vercel, Render, Railway, Netlify)
-    if (/\.(vercel\.app|onrender\.com|railway\.app|netlify\.app)$/i.test(origin)) {
+    // En desarrollo, permitir orígenes de red LAN (192.168.x.x, 10.x.x.x, etc.)
+    if (
+      process.env.NODE_ENV !== "production" &&
+      /^https?:\/\/(192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$/i.test(origin)
+    ) {
       return callback(null, true);
     }
 
@@ -51,7 +49,7 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    // En producción, rechazar orígenes no autorizados
+    // En producción solo se permiten los orígenes explícitos de ALLOWED_ORIGINS/CLIENT_URL
     return callback(new Error(`Origen no permitido por CORS: ${origin}`), false);
   },
   credentials: true,

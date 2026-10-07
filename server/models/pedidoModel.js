@@ -1,20 +1,18 @@
 import { getDB } from "../config/db.js";
 
 export const PedidoModel = {
-  // Crear un pedido y sus ítems de forma atómica (con transacción)
+  // Crear un pedido y sus ítems de forma atómica (con transacción portable)
   async crear({ usuario_id, items }) {
     const db = await getDB();
 
-    // Iniciar transacción
-    await db.run("BEGIN TRANSACTION");
-
-    try {
+    // db.transaction funciona tanto en SQLite local como en Turso (wrapper libsql)
+    return db.transaction(async (tx) => {
       let total = 0;
       const itemsProcesados = [];
 
       // 1. Validar existencia y stock de cada producto
       for (const item of items) {
-        const producto = await db.get(
+        const producto = await tx.get(
           "SELECT id, nombre, precio, stock, unidad FROM productos WHERE id = ?",
           [item.producto_id],
         );
@@ -43,7 +41,7 @@ export const PedidoModel = {
       }
 
       // 2. Insertar encabezado del pedido
-      const resultadoPedido = await db.run(
+      const resultadoPedido = await tx.run(
         `INSERT INTO pedidos (usuario_id, total, estado)
          VALUES (?, ?, 'pendiente')`,
         [usuario_id, total],
@@ -53,22 +51,19 @@ export const PedidoModel = {
 
       // 3. Insertar cada ítem y descontar stock del producto
       for (const item of itemsProcesados) {
-        await db.run(
+        await tx.run(
           `INSERT INTO pedidos_items (pedido_id, producto_id, cantidad, precio_unitario)
            VALUES (?, ?, ?, ?)`,
           [pedidoId, item.producto_id, item.cantidad, item.precio_unitario],
         );
 
-        await db.run(
+        await tx.run(
           `UPDATE productos
            SET stock = stock - ?
            WHERE id = ?`,
           [item.cantidad, item.producto_id],
         );
       }
-
-      // Confirmar transacción
-      await db.run("COMMIT");
 
       return {
         id: pedidoId,
@@ -77,11 +72,7 @@ export const PedidoModel = {
         estado: "pendiente",
         items: itemsProcesados,
       };
-    } catch (error) {
-      // Revertir cambios en caso de error
-      await db.run("ROLLBACK");
-      throw error;
-    }
+    });
   },
 
   // Obtener pedidos según el rol del usuario
