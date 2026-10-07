@@ -27,7 +27,7 @@ const router = Router();
 // Rutas públicas
 router.get("/config", (req, res) => {
   res.json({
-    googleClientId: process.env.GOOGLE_CLIENT_ID || "1096747808728-qs9egmbcrfuam09vvu3d36140f5mqr3c.apps.googleusercontent.com"
+    googleClientId: process.env.GOOGLE_CLIENT_ID || null
   });
 });
 router.post("/register", validateRegister, register);

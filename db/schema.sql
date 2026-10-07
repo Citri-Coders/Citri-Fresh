@@ -69,6 +69,15 @@ CREATE TABLE IF NOT EXISTS pedidos_items (
     FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+--Tabla codigos_recuperacion (OTP de recuperacion de contrasena)
+CREATE TABLE IF NOT EXISTS codigos_recuperacion (
+    email TEXT PRIMARY KEY,
+    codigo TEXT NOT NULL,
+    expira_en INTEGER NOT NULL,
+    intentos INTEGER NOT NULL DEFAULT 0,
+    verificado INTEGER NOT NULL DEFAULT 0
+);
+
 -- +++++++++++++++++++++++++++
 -- INDICES PARA OPTIMIZACION
 -- +++++++++++++++++++++++++++

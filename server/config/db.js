@@ -119,6 +119,13 @@ async function initSchema(db) {
         FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE RESTRICT ON UPDATE CASCADE
       );
+      CREATE TABLE IF NOT EXISTS codigos_recuperacion (
+        email TEXT PRIMARY KEY,
+        codigo TEXT NOT NULL,
+        expira_en INTEGER NOT NULL,
+        intentos INTEGER NOT NULL DEFAULT 0,
+        verificado INTEGER NOT NULL DEFAULT 0
+      );
       CREATE INDEX IF NOT EXISTS idx_productos_productor ON productos(productor_id);
       CREATE INDEX IF NOT EXISTS idx_productos_zona ON productos(zona);
       CREATE INDEX IF NOT EXISTS idx_pedidos_usuario ON pedidos(usuario_id);
