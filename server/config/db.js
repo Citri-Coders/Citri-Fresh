@@ -2,8 +2,6 @@ import logger from "./logger.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import sqlite3 from "sqlite3";
-import { open } from "sqlite";
 import bcrypt from "bcrypt";
 import { createClient } from "@libsql/client";
 import { USUARIOS_BASE, ZONAS_BASE, PRODUCTOS_BASE } from "../../db/seedData.js";
@@ -273,6 +271,10 @@ async function openAndInit() {
   if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
   }
+
+  const { open } = await import("sqlite");
+  const sqlite3Module = await import("sqlite3");
+  const sqlite3 = sqlite3Module.default || sqlite3Module;
 
   const db = await open({
     filename: dbPath,

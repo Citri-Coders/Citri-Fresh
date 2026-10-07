@@ -9,13 +9,10 @@ import crypto from "crypto";
 let JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-  if (process.env.NODE_ENV === "production") {
-    throw new Error("JWT_SECRET es obligatorio en producción");
-  }
-  // En desarrollo se genera una clave efímera (las sesiones se invalidan al reiniciar)
+  // En caso de no estar configurada (ej. en Vercel), se genera una clave efímera para evitar que el servidor falle al arrancar
   JWT_SECRET = crypto.randomBytes(64).toString("hex");
   logger.warn(
-    "⚠️ ADVERTENCIA: JWT_SECRET no está configurada. Se generó una clave efímera de desarrollo; configura JWT_SECRET en tu .env para sesiones persistentes.",
+    "⚠️ ADVERTENCIA: JWT_SECRET no está configurada. Se generó una clave efímera; configura JWT_SECRET en Vercel para sesiones persistentes.",
   );
 }
 
