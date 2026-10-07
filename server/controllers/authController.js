@@ -1,7 +1,9 @@
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 import { UsuarioModel } from "../models/usuarioModel.js";
+import { CodigoRecuperacionModel } from "../models/codigoRecuperacionModel.js";
 import { validarCorreoReal } from "../utils/emailValidator.js";
 import { enviarCorreoRecuperacion, getUltimoCorreoEnviado } from "../services/emailService.js";
 import {
@@ -14,6 +16,16 @@ import {
 } from "../config/auth.js";
 
 // COOKIE_OPTIONS y CLEAR_COOKIE_OPTIONS importadas desde config/auth.js
+
+// Cliente de Google Identity Services para verificación criptográfica real de tokens
+let googleOAuthClient = null;
+const getGoogleOAuthClient = () => {
+  if (!process.env.GOOGLE_CLIENT_ID) return null;
+  if (!googleOAuthClient) {
+    googleOAuthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  }
+  return googleOAuthClient;
+};
 
 export const register = async (req, res) => {
   try {
@@ -203,20 +215,33 @@ export const googleAuth = async (req, res) => {
 
     // 1. Si viene un token JWT 'credential' emitido por Google Identity Services (GSI)
     if (credential) {
+      const client = getGoogleOAuthClient();
+      if (!client) {
+        return res.status(500).json({
+          error: "La autenticación con Google no está configurada (falta GOOGLE_CLIENT_ID)",
+        });
+      }
       try {
-        // Los JWT de Google constan de 3 partes: header.payload.signature
-        const parts = credential.split('.');
-        if (parts.length === 3) {
-          const payloadJson = Buffer.from(parts[1], 'base64').toString('utf8');
-          const googleData = JSON.parse(payloadJson);
-          if (googleData.email) {
-            email = googleData.email;
-            nombre = googleData.name || nombre;
-            foto = googleData.picture || foto;
-          }
+        // Verificación criptográfica real de la firma del token de Google
+        const ticket = await client.verifyIdToken({
+          idToken: credential,
+          audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const googleData = ticket.getPayload();
+
+        if (!googleData || !googleData.email) {
+          return res.status(401).json({ error: "El token de Google no contiene un correo válido" });
         }
+        if (googleData.email_verified === false) {
+          return res.status(401).json({ error: "El correo de Google no está verificado" });
+        }
+
+        email = googleData.email;
+        nombre = googleData.name || nombre;
+        foto = googleData.picture || foto;
       } catch (tokenErr) {
-        console.warn('No se pudo decodificar Google credential:', tokenErr);
+        console.warn("Token de Google inválido:", tokenErr.message);
+        return res.status(401).json({ error: "El token de Google no es válido o ha expirado" });
       }
     }
 
@@ -304,9 +329,6 @@ export const eliminarUsuario = async (req, res) => {
   }
 };
 
-// Almacén en memoria de códigos temporales de recuperación (OTP) de 6 dígitos con expiración a 15 minutos
-const codigosRecuperacionCache = new Map();
-
 // Recuperar Contraseña - Generar y enviar código de seguridad al correo
 export const recuperarPassword = async (req, res) => {
   try {
@@ -325,11 +347,9 @@ export const recuperarPassword = async (req, res) => {
     const codigo = crypto.randomInt(100000, 999999).toString();
     const expiraEn = Date.now() + 15 * 60 * 1000; // 15 minutos de validez
 
-    codigosRecuperacionCache.set(emailNorm, {
-      codigo,
-      expiraEn,
-      intentos: 0
-    });
+    // Persistir el OTP en la base de datos (Turso/SQLite) para que sobreviva
+    // entre instancias serverless en producción
+    await CodigoRecuperacionModel.guardar(emailNorm, codigo, expiraEn);
 
     // Despachar correo electrónico real vía Nodemailer (SMTP o Ethereal con previsualización)
     const resultadoEnvio = await enviarCorreoRecuperacion({
@@ -370,27 +390,28 @@ export const verificarCodigoRecuperacion = async (req, res) => {
     }
 
     const emailNorm = email.trim().toLowerCase();
-    const registro = codigosRecuperacionCache.get(emailNorm);
+    const registro = await CodigoRecuperacionModel.obtener(emailNorm);
 
     if (!registro) {
       return res.status(400).json({ error: "No hay una solicitud de recuperación activa o el código ha expirado. Solicita uno nuevo." });
     }
 
-    if (Date.now() > registro.expiraEn) {
-      codigosRecuperacionCache.delete(emailNorm);
+    if (Date.now() > Number(registro.expira_en)) {
+      await CodigoRecuperacionModel.eliminar(emailNorm);
       return res.status(400).json({ error: "El código ha expirado por seguridad (límite 15 minutos). Solicita uno nuevo." });
     }
 
     if (registro.codigo !== codigo.trim()) {
-      registro.intentos += 1;
-      if (registro.intentos >= 5) {
-        codigosRecuperacionCache.delete(emailNorm);
+      await CodigoRecuperacionModel.incrementarIntentos(emailNorm);
+      const intentos = Number(registro.intentos) + 1;
+      if (intentos >= 5) {
+        await CodigoRecuperacionModel.eliminar(emailNorm);
         return res.status(429).json({ error: "Has excedido el número máximo de intentos. Solicita un nuevo código." });
       }
-      return res.status(400).json({ error: `Código de seguridad incorrecto. Intento ${registro.intentos} de 5.` });
+      return res.status(400).json({ error: `Código de seguridad incorrecto. Intento ${intentos} de 5.` });
     }
 
-    registro.verificado = true;
+    await CodigoRecuperacionModel.marcarVerificado(emailNorm);
 
     return res.status(200).json({
       message: "Código de seguridad validado con éxito. Ya puedes establecer tu nueva contraseña.",
@@ -415,11 +436,16 @@ export const restablecerPassword = async (req, res) => {
     }
 
     const emailNorm = email.trim().toLowerCase();
-    const registro = codigosRecuperacionCache.get(emailNorm);
+    const registro = await CodigoRecuperacionModel.obtener(emailNorm);
 
     // Verificar que haya superado el código de seguridad
-    if (!registro || (!registro.verificado && registro.codigo !== codigo?.trim())) {
+    if (!registro || (Number(registro.verificado) !== 1 && registro.codigo !== codigo?.trim())) {
       return res.status(403).json({ error: "Operación no autorizada. Debes validar tu código de seguridad primero." });
+    }
+
+    if (Date.now() > Number(registro.expira_en)) {
+      await CodigoRecuperacionModel.eliminar(emailNorm);
+      return res.status(403).json({ error: "El código ha expirado por seguridad. Solicita uno nuevo." });
     }
 
     const usuario = await UsuarioModel.findByEmail(emailNorm);
@@ -431,7 +457,7 @@ export const restablecerPassword = async (req, res) => {
     await UsuarioModel.update(usuario.id, { password_hash: nuevoPasswordHash });
 
     // Invalidar el código de seguridad tras su uso exitoso
-    codigosRecuperacionCache.delete(emailNorm);
+    await CodigoRecuperacionModel.eliminar(emailNorm);
 
     return res.status(200).json({
       message: "Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión de forma segura."
