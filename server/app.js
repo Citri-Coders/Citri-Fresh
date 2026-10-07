@@ -1,4 +1,5 @@
 import logger from "./config/logger.js";
+import { AppError } from "./utils/appError.js";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { corsMiddleware } from "./middlewares/corsMiddleware.js";
@@ -58,18 +59,36 @@ app.use("/api/zonas", zonaRoutes);
 // Middleware para manejo de errores de rate limiting
 app.use(rateLimitErrorHandler);
 
-// Middleware global de manejo de errores
+// Middleware global de manejo de errores — formato de error estandarizado
 app.use((err, req, res, next) => {
-  logger.error({ err }, "Error no controlado:");
-  const status = err.status || 500;
-  res.status(status).json({
-    error: err.message || "Error interno del servidor",
-  });
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  const esOperacional = err instanceof AppError;
+  const status = esOperacional ? err.statusCode : 500;
+
+  if (esOperacional) {
+    logger.warn({ err, path: req.originalUrl }, err.message);
+  } else {
+    logger.error({ err, path: req.originalUrl }, "Error no controlado");
+  }
+
+  const body = {
+    success: false,
+    error: esOperacional ? err.message : "Error interno del servidor",
+  };
+  if (esOperacional && err.details !== undefined) {
+    body.details = err.details;
+  }
+
+  return res.status(status).json(body);
 });
 
 // Middleware para rutas no encontradas (404) — debe ir al final
 app.use((req, res) => {
-  res.status(404).json({
+  return res.status(404).json({
+    success: false,
     error: "Ruta no encontrada",
     path: req.originalUrl,
   });

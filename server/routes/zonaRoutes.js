@@ -13,6 +13,7 @@ import {
   validateActualizarZona,
 } from "../middlewares/validateZona.js";
 import { validateIdParam } from "../middlewares/validateParams.js";
+import { ROLES } from "../config/constants.js";
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.get("/:id", validateIdParam, obtenerZonaPorId);
 router.post(
   "/",
   verifyToken,
-  requireRole("admin"),
+  requireRole(ROLES.ADMIN),
   validateCrearZona,
   crearZona,
 );
@@ -32,7 +33,7 @@ router.post(
 router.put(
   "/:id",
   verifyToken,
-  requireRole("admin"),
+  requireRole(ROLES.ADMIN),
   validateIdParam,
   validateActualizarZona,
   actualizarZona,
@@ -41,7 +42,7 @@ router.put(
 router.delete(
   "/:id",
   verifyToken,
-  requireRole("admin"),
+  requireRole(ROLES.ADMIN),
   validateIdParam,
   eliminarZona,
 );

@@ -13,6 +13,7 @@ import {
   validateActualizarProducto,
 } from "../middlewares/validateProducto.js";
 import { validateIdParam } from "../middlewares/validateParams.js";
+import { ROLES } from "../config/constants.js";
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.get("/:id", validateIdParam, obtenerProductoPorId);
 router.post(
   "/",
   verifyToken,
-  requireRole("productor", "admin"),
+  requireRole(ROLES.PRODUCTOR, ROLES.ADMIN),
   validateCrearProducto,
   crearProducto,
 );
@@ -32,7 +33,7 @@ router.post(
 router.put(
   "/:id",
   verifyToken,
-  requireRole("productor", "admin"),
+  requireRole(ROLES.PRODUCTOR, ROLES.ADMIN),
   validateIdParam,
   validateActualizarProducto,
   actualizarProducto,
@@ -41,7 +42,7 @@ router.put(
 router.delete(
   "/:id",
   verifyToken,
-  requireRole("productor", "admin"),
+  requireRole(ROLES.PRODUCTOR, ROLES.ADMIN),
   validateIdParam,
   eliminarProducto,
 );

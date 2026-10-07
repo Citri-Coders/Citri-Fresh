@@ -73,7 +73,7 @@ async function cargarPerfilUsuario() {
     try {
         const res = await fetch('/api/pedidos', { credentials: 'include' });
         if (res.ok) {
-            const pedidos = await res.json();
+            const pedidos = (await res.json()).data;
             window.clientePedidos = pedidos;
             if (typeof clientePedidos !== 'undefined') {
                 clientePedidos = pedidos;
@@ -158,7 +158,7 @@ async function cargarPanelProductor() {
         const resProd = await fetch(`/api/productos?productor_id=${user.id}`, { credentials: 'include' });
         let productos = [];
         if (resProd.ok) {
-            productos = await resProd.json();
+            productos = (await resProd.json()).data;
             window.productorProductos = productos;
 
             // Calcular Stock Crítico (< 50 unidades)
@@ -222,7 +222,7 @@ async function cargarPanelProductor() {
         // 2. Cargar pedidos del productor desde la BD (/api/pedidos)
         const resPed = await fetch('/api/pedidos', { credentials: 'include' });
         if (resPed.ok) {
-            const pedidos = await resPed.json();
+            const pedidos = (await resPed.json()).data;
             window.productorPedidos = pedidos;
 
             // Calcular Ventas Mensuales acumuladas y Pedidos Activos
@@ -445,7 +445,7 @@ async function cargarCatalogoDesdeBD() {
         const res = await fetch('/api/productos');
         if (!res.ok) return;
 
-        const productos = await res.json();
+        const productos = (await res.json()).data;
         if (productos.length === 0) return;
 
         // Renderizar productos reales de la base de datos

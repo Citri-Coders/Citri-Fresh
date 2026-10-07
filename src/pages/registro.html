@@ -356,11 +356,11 @@
                     return;
                 }
 
-                CitriAuth.setUser(data.user);
-                alert(`✅ ¡Bienvenido a Citri-Fresh, ${data.user.nombre}! Tu cuenta de ${data.user.rol.toUpperCase()} ha sido creada.`);
+                CitriAuth.setUser(data.data);
+                alert(`✅ ¡Bienvenido a Citri-Fresh, ${data.data.nombre}! Tu cuenta de ${data.data.rol.toUpperCase()} ha sido creada.`);
 
-                if (data.user.rol === 'admin') window.location.href = 'admin.html';
-                else if (data.user.rol === 'productor') window.location.href = 'panel_productor.html';
+                if (data.data.rol === 'admin') window.location.href = 'admin.html';
+                else if (data.data.rol === 'productor') window.location.href = 'panel_productor.html';
                 else window.location.href = 'perfil.html';
             } catch (err) {
                 console.error(err);

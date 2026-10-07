@@ -1,20 +1,22 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/auth.js";
+import { NOMBRE_COOKIE_TOKEN } from "../config/constants.js";
+import { UnauthorizedError, ForbiddenError } from "../utils/appError.js";
 
 export const verifyToken = (req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.cookies?.[NOMBRE_COOKIE_TOKEN];
 
   if (!token) {
-    return res
-      .status(401)
-      .json({ error: "Acceso no autorizado: No se encontró sesión activa" });
+    return next(
+      new UnauthorizedError("Acceso no autorizado: No se encontró sesión activa"),
+    );
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded; // { id, rol }
-    next();
+    return next();
   } catch (error) {
-    return res.status(403).json({ error: "Sesión inválida o expirada" });
+    return next(new ForbiddenError("Sesión inválida o expirada"));
   }
 };

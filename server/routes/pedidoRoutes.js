@@ -12,6 +12,7 @@ import {
   validateActualizarEstado,
 } from "../middlewares/validatePedido.js";
 import { validateIdParam } from "../middlewares/validateParams.js";
+import { ROLES } from "../config/constants.js";
 
 const router = Router();
 
@@ -31,7 +32,7 @@ router.get("/:id", validateIdParam, obtenerPedidoPorId);
 router.patch(
   "/:id/estado",
   validateIdParam,
-  requireRole("productor", "admin"),
+  requireRole(ROLES.PRODUCTOR, ROLES.ADMIN),
   validateActualizarEstado,
   actualizarEstadoPedido,
 );

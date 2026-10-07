@@ -1,4 +1,5 @@
 import { getDB } from "../config/db.js";
+import { ROLES } from "../config/constants.js";
 
 export const UsuarioModel = {
   async findByEmail(email) {
@@ -38,7 +39,7 @@ export const UsuarioModel = {
     nombre,
     email,
     password_hash,
-    rol = "cliente",
+    rol = ROLES.CLIENTE,
     foto = "",
     telefono = "",
     direccion = "",
