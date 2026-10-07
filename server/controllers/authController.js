@@ -53,7 +53,7 @@ export const register = async (req, res) => {
       }
     }
 
-    const existe = await UsuarioModel.findByEmail(email);
+    const existe = await UsuarioModel.existsByEmail(email);
     if (existe) {
       return res
         .status(409)
@@ -161,7 +161,7 @@ export const actualizarPerfil = async (req, res) => {
     // 1. Si cambia el email, verificar que no esté ocupado por otro usuario
     const nuevoEmail = email ? email.trim().toLowerCase() : usuarioActual.email;
     if (nuevoEmail !== usuarioActual.email) {
-      const emailEnUso = await UsuarioModel.findByEmail(nuevoEmail);
+      const emailEnUso = await UsuarioModel.existsByEmail(nuevoEmail);
       if (emailEnUso && emailEnUso.id !== usuarioId) {
         return res
           .status(409)
@@ -318,6 +318,12 @@ export const eliminarUsuario = async (req, res) => {
     if (Number(id) === req.user.id) {
       return res.status(400).json({ error: "No puedes eliminar tu propia cuenta de administrador" });
     }
+
+    const usuarioExistente = await UsuarioModel.findById(id);
+    if (!usuarioExistente) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
     const result = await UsuarioModel.eliminar(id);
     return res.status(200).json({
       message: "Usuario eliminado exitosamente",

@@ -30,17 +30,27 @@ if (!ADMIN_ACCESS_KEY) {
 
 const SALT_ROUNDS = 10;
 
+// Permite cookies cross-origin (frontend y backend en dominios distintos).
+// "lax" (por defecto) sirve cuando ambos están en el mismo sitio; para dominios
+// distintos debe usarse "none", que exige `secure` (HTTPS).
+const COOKIE_SAME_SITE = (process.env.COOKIE_SAME_SITE || "lax").toLowerCase();
+if (!["lax", "strict", "none"].includes(COOKIE_SAME_SITE)) {
+  throw new Error(`COOKIE_SAME_SITE inválido: ${COOKIE_SAME_SITE}`);
+}
+const COOKIE_SECURE =
+  process.env.NODE_ENV === "production" || COOKIE_SAME_SITE === "none";
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: COOKIE_SECURE,
+  sameSite: COOKIE_SAME_SITE,
   maxAge: 24 * 60 * 60 * 1000, // 1 día
 };
 
 const CLEAR_COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: COOKIE_SECURE,
+  sameSite: COOKIE_SAME_SITE,
 };
 
 export {
