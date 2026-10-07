@@ -1,4 +1,3 @@
-import logger from "../config/logger.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -15,8 +14,25 @@ import {
   COOKIE_OPTIONS,
   CLEAR_COOKIE_OPTIONS,
 } from "../config/auth.js";
-
-// COOKIE_OPTIONS y CLEAR_COOKIE_OPTIONS importadas desde config/auth.js
+import {
+  ROLES,
+  ROLES_AUTO_REGISTRO,
+  ROLES_PRIVILEGIADOS,
+  NOMBRE_COOKIE_TOKEN,
+  OTP_INTENTOS_MAX,
+  OTP_VIGENCIA_MS,
+} from "../config/constants.js";
+import {
+  AppError,
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+  TooManyRequestsError,
+} from "../utils/appError.js";
+import { sendSuccess } from "../utils/apiResponse.js";
+import logger from "../config/logger.js";
 
 // Cliente de Google Identity Services para verificación criptográfica real de tokens
 let googleOAuthClient = null;
@@ -28,7 +44,12 @@ const getGoogleOAuthClient = () => {
   return googleOAuthClient;
 };
 
-export const register = async (req, res) => {
+const emitirToken = (res, { id, rol }) => {
+  const token = jwt.sign({ id, rol }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  res.cookie(NOMBRE_COOKIE_TOKEN, token, COOKIE_OPTIONS);
+};
+
+export const register = async (req, res, next) => {
   try {
     const {
       nombre,
@@ -42,23 +63,21 @@ export const register = async (req, res) => {
       nombre_finca,
       zona_cultivo,
       capacidad_produccion,
-      tipos_citricos
+      tipos_citricos,
     } = req.body;
 
-    // Regla de seguridad para creación de Administradores y Auditores: Solo con Clave Maestra Única
-    if (rol === "admin" || rol === "auditor") {
+    // Regla de seguridad: la creación de Administradores y Auditores exige la clave maestra.
+    if (ROLES_PRIVILEGIADOS.includes(rol)) {
       if (!admin_key || admin_key.trim() !== ADMIN_ACCESS_KEY) {
-        return res.status(403).json({
-          error: "Clave Maestra de Autorización inválida o ausente. Acceso restringido.",
-        });
+        throw new ForbiddenError(
+          "Clave Maestra de Autorización inválida o ausente. Acceso restringido.",
+        );
       }
     }
 
     const existe = await UsuarioModel.existsByEmail(email);
     if (existe) {
-      return res
-        .status(409)
-        .json({ error: "El correo electrónico ya está registrado" });
+      throw new ConflictError("El correo electrónico ya está registrado");
     }
 
     const password_hash = await bcrypt.hash(password, SALT_ROUNDS);
@@ -66,97 +85,84 @@ export const register = async (req, res) => {
       nombre,
       email,
       password_hash,
-      rol: rol || "cliente",
+      rol: rol || ROLES.CLIENTE,
       telefono: telefono || "",
       direccion: direccion || "",
       foto: foto || "",
       nombre_finca: nombre_finca || "",
       zona_cultivo: zona_cultivo || "",
       capacidad_produccion: capacidad_produccion || "",
-      tipos_citricos: tipos_citricos || ""
+      tipos_citricos: tipos_citricos || "",
     });
 
-    const token = jwt.sign(
-      { id: nuevoUsuario.id, rol: nuevoUsuario.rol },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN },
-    );
+    emitirToken(res, nuevoUsuario);
 
-    res.cookie("token", token, COOKIE_OPTIONS);
-
-    return res.status(201).json({
+    return sendSuccess(res, nuevoUsuario, {
+      status: 201,
       message: "Usuario registrado exitosamente",
-      user: nuevoUsuario,
     });
   } catch (error) {
-    logger.error({ err: error }, "Error en register:");
-    return res.status(500).json({ error: "Error interno del servidor" });
+    return next(error);
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     const usuario = await UsuarioModel.findByEmail(email);
     if (!usuario) {
-      return res.status(401).json({ error: "Credenciales inválidas" });
+      throw new UnauthorizedError("Credenciales inválidas");
     }
 
     const esValida = await bcrypt.compare(password, usuario.password_hash);
     if (!esValida) {
-      return res.status(401).json({ error: "Credenciales inválidas" });
+      throw new UnauthorizedError("Credenciales inválidas");
     }
 
-    const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-    });
+    const usuarioPublico = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
+      rol: usuario.rol,
+    };
 
-    res.cookie("token", token, COOKIE_OPTIONS);
+    emitirToken(res, usuarioPublico);
 
-    return res.status(200).json({
+    return sendSuccess(res, usuarioPublico, {
       message: "Inicio de sesión exitoso",
-      user: {
-        id: usuario.id,
-        nombre: usuario.nombre,
-        email: usuario.email,
-        rol: usuario.rol,
-      },
     });
   } catch (error) {
-    logger.error({ err: error }, "Error en login:");
-    return res.status(500).json({ 
-      error: "Error interno del servidor"
-    });
+    return next(error);
   }
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token", CLEAR_COOKIE_OPTIONS);
-  return res.status(200).json({ message: "Sesión cerrada exitosamente" });
+  res.clearCookie(NOMBRE_COOKIE_TOKEN, CLEAR_COOKIE_OPTIONS);
+  return sendSuccess(res, null, { message: "Sesión cerrada exitosamente" });
 };
 
-export const getMe = async (req, res) => {
+export const getMe = async (req, res, next) => {
   try {
     const usuario = await UsuarioModel.findById(req.user.id);
     if (!usuario) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+      throw new NotFoundError("Usuario no encontrado");
     }
-    return res.status(200).json({ user: usuario });
+    return sendSuccess(res, usuario);
   } catch (error) {
-    logger.error({ err: error }, "Error en getMe:");
-    return res.status(500).json({ error: "Error interno del servidor" });
+    return next(error);
   }
 };
 
-export const actualizarPerfil = async (req, res) => {
+export const actualizarPerfil = async (req, res, next) => {
   try {
-    const { nombre, email, password_actual, password_nuevo, foto, telefono, direccion } = req.body;
+    const { nombre, email, password_actual, password_nuevo, foto, telefono, direccion } =
+      req.body;
     const usuarioId = req.user.id;
 
     const usuarioActual = await UsuarioModel.findByIdWithPassword(usuarioId);
     if (!usuarioActual) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+      throw new NotFoundError("Usuario no encontrado");
     }
 
     // 1. Si cambia el email, verificar que no esté ocupado por otro usuario
@@ -164,9 +170,9 @@ export const actualizarPerfil = async (req, res) => {
     if (nuevoEmail !== usuarioActual.email) {
       const emailEnUso = await UsuarioModel.existsByEmail(nuevoEmail);
       if (emailEnUso && emailEnUso.id !== usuarioId) {
-        return res
-          .status(409)
-          .json({ error: "El correo electrónico ya está en uso por otra cuenta" });
+        throw new ConflictError(
+          "El correo electrónico ya está en uso por otra cuenta",
+        );
       }
     }
 
@@ -177,13 +183,9 @@ export const actualizarPerfil = async (req, res) => {
         password_actual,
         usuarioActual.password_hash,
       );
-
       if (!passwordValido) {
-        return res
-          .status(400)
-          .json({ error: "La contraseña actual es incorrecta" });
+        throw new BadRequestError("La contraseña actual es incorrecta");
       }
-
       nuevoPasswordHash = await bcrypt.hash(password_nuevo, SALT_ROUNDS);
     }
 
@@ -197,20 +199,16 @@ export const actualizarPerfil = async (req, res) => {
       direccion: direccion !== undefined ? direccion.trim() : usuarioActual.direccion,
     });
 
-    return res.status(200).json({
+    return sendSuccess(res, usuarioActualizado, {
       message: "Perfil actualizado exitosamente",
-      user: usuarioActualizado,
     });
   } catch (error) {
-    logger.error({ err: error }, "Error en actualizarPerfil:");
-    return res
-      .status(500)
-      .json({ error: "Error interno al actualizar el perfil" });
+    return next(error);
   }
 };
 
 // Autenticación con Google (login o registro transparente con datos reales de Google)
-export const googleAuth = async (req, res) => {
+export const googleAuth = async (req, res, next) => {
   try {
     let { nombre, email, rol, foto, credential } = req.body;
 
@@ -218,49 +216,54 @@ export const googleAuth = async (req, res) => {
     if (credential) {
       const client = getGoogleOAuthClient();
       if (!client) {
-        return res.status(500).json({
-          error: "La autenticación con Google no está configurada (falta GOOGLE_CLIENT_ID)",
-        });
+        throw new AppError(
+          "La autenticación con Google no está configurada (falta GOOGLE_CLIENT_ID)",
+          500,
+        );
       }
+
+      let googleData;
       try {
-        // Verificación criptográfica real de la firma del token de Google
         const ticket = await client.verifyIdToken({
           idToken: credential,
           audience: process.env.GOOGLE_CLIENT_ID,
         });
-        const googleData = ticket.getPayload();
-
-        if (!googleData || !googleData.email) {
-          return res.status(401).json({ error: "El token de Google no contiene un correo válido" });
-        }
-        if (googleData.email_verified === false) {
-          return res.status(401).json({ error: "El correo de Google no está verificado" });
-        }
-
-        email = googleData.email;
-        nombre = googleData.name || nombre;
-        foto = googleData.picture || foto;
+        googleData = ticket.getPayload();
       } catch (tokenErr) {
         logger.warn({ err: tokenErr }, "Token de Google inválido");
-        return res.status(401).json({ error: "El token de Google no es válido o ha expirado" });
+        throw new UnauthorizedError(
+          "El token de Google no es válido o ha expirado",
+        );
       }
+
+      if (!googleData || !googleData.email) {
+        throw new UnauthorizedError(
+          "El token de Google no contiene un correo válido",
+        );
+      }
+      if (googleData.email_verified === false) {
+        throw new UnauthorizedError("El correo de Google no está verificado");
+      }
+
+      email = googleData.email;
+      nombre = googleData.name || nombre;
+      foto = googleData.picture || foto;
     }
 
     if (!email) {
-      return res.status(400).json({ error: "El correo de Google es obligatorio" });
+      throw new BadRequestError("El correo de Google es obligatorio");
     }
 
     // Validación estricta y real del correo
     const verificacion = await validarCorreoReal(email);
     if (!verificacion.valido) {
-      return res.status(400).json({ error: verificacion.error });
+      throw new BadRequestError(verificacion.error);
     }
 
     const emailNorm = verificacion.email;
     let usuario = await UsuarioModel.findByEmail(emailNorm);
 
     if (!usuario) {
-      // Registrar automáticamente con contraseña aleatoria segura y foto de Google si existe
       const dummyPassword = Math.random().toString(36).slice(-10) + "Aa1!";
       const password_hash = await bcrypt.hash(dummyPassword, SALT_ROUNDS);
 
@@ -268,101 +271,93 @@ export const googleAuth = async (req, res) => {
         nombre: nombre ? nombre.trim() : "Usuario Google",
         email: emailNorm,
         password_hash,
-        rol: rol && ["cliente", "productor"].includes(rol) ? rol : "cliente",
+        rol: ROLES_AUTO_REGISTRO.includes(rol) ? rol : ROLES.CLIENTE,
         foto: foto || "",
       });
     } else if (foto && !usuario.foto) {
-      // Si el usuario ya existía pero no tenía foto, le asignamos la foto de Google
       await UsuarioModel.update(usuario.id, { foto });
       usuario.foto = foto;
     }
 
-    const token = jwt.sign(
-      { id: usuario.id, rol: usuario.rol },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN },
-    );
+    const usuarioPublico = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
+      rol: usuario.rol,
+      foto: usuario.foto || foto || "",
+    };
 
-    res.cookie("token", token, COOKIE_OPTIONS);
+    emitirToken(res, usuarioPublico);
 
-    return res.status(200).json({
+    return sendSuccess(res, usuarioPublico, {
       message: "Autenticación con Google exitosa",
-      user: {
-        id: usuario.id,
-        nombre: usuario.nombre,
-        email: usuario.email,
-        rol: usuario.rol,
-        foto: usuario.foto || foto || "",
-      },
     });
   } catch (error) {
-    logger.error({ err: error }, "Error en googleAuth:");
-    return res.status(500).json({ error: "Error interno al procesar inicio con Google" });
+    return next(error);
   }
 };
 
 // Listar todos los usuarios para el Admin
-export const listarUsuarios = async (req, res) => {
+export const listarUsuarios = async (req, res, next) => {
   try {
     const usuarios = await UsuarioModel.obtenerTodos();
-    return res.status(200).json(usuarios);
+    return sendSuccess(res, usuarios);
   } catch (error) {
-    logger.error({ err: error }, "Error al listar usuarios:");
-    return res.status(500).json({ error: "Error interno al obtener usuarios" });
+    return next(error);
   }
 };
 
 // Eliminar usuario desde el Admin
-export const eliminarUsuario = async (req, res) => {
+export const eliminarUsuario = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (Number(id) === req.user.id) {
-      return res.status(400).json({ error: "No puedes eliminar tu propia cuenta de administrador" });
+      throw new BadRequestError(
+        "No puedes eliminar tu propia cuenta de administrador",
+      );
     }
 
     const usuarioExistente = await UsuarioModel.findById(id);
     if (!usuarioExistente) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+      throw new NotFoundError("Usuario no encontrado");
     }
 
     const result = await UsuarioModel.eliminar(id);
-    return res.status(200).json({
+    return sendSuccess(res, { cambios: result.cambios }, {
       message: "Usuario eliminado exitosamente",
-      cambios: result.cambios,
     });
   } catch (error) {
-    logger.error({ err: error }, "Error al eliminar usuario:");
-    return res.status(500).json({ error: "Error interno al eliminar usuario" });
+    return next(error);
   }
 };
 
 // Recuperar Contraseña - Generar y enviar código de seguridad al correo
-export const recuperarPassword = async (req, res) => {
+export const recuperarPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ error: "El correo electrónico es obligatorio" });
+      throw new BadRequestError("El correo electrónico es obligatorio");
     }
 
     const emailNorm = email.trim().toLowerCase();
     const usuario = await UsuarioModel.findByEmail(emailNorm);
     if (!usuario) {
-      return res.status(404).json({ error: "No existe ninguna cuenta registrada con este correo electrónico" });
+      throw new NotFoundError(
+        "No existe ninguna cuenta registrada con este correo electrónico",
+      );
     }
 
     // Generar un código criptográfico / aleatorio de seguridad de 6 dígitos
     const codigo = crypto.randomInt(100000, 999999).toString();
-    const expiraEn = Date.now() + 15 * 60 * 1000; // 15 minutos de validez
+    const expiraEn = Date.now() + OTP_VIGENCIA_MS;
 
-    // Persistir el OTP en la base de datos (Turso/SQLite) para que sobreviva
-    // entre instancias serverless en producción
+    // Persistir el OTP en la base de datos para que sobreviva entre instancias serverless
     await CodigoRecuperacionModel.guardar(emailNorm, codigo, expiraEn);
 
-    // Despachar correo electrónico real vía Nodemailer (SMTP o Ethereal con previsualización)
     const resultadoEnvio = await enviarCorreoRecuperacion({
       email: emailNorm,
       nombre: usuario.nombre,
-      codigo
+      codigo,
     });
 
     logger.info(
@@ -370,97 +365,123 @@ export const recuperarPassword = async (req, res) => {
       "Código de recuperación enviado",
     );
 
-    return res.status(200).json({
-      message: `Hemos enviado un código de verificación de 6 dígitos a tu correo ${emailNorm}. Revisa tu bandeja de entrada o carpeta de spam.`,
-      email: emailNorm,
-      nombre: usuario.nombre,
-      previewUrl: resultadoEnvio.previewUrl || null
-    });
+    return sendSuccess(
+      res,
+      {
+        email: emailNorm,
+        nombre: usuario.nombre,
+        previewUrl: resultadoEnvio.previewUrl || null,
+      },
+      {
+        message: `Hemos enviado un código de verificación de 6 dígitos a tu correo ${emailNorm}. Revisa tu bandeja de entrada o carpeta de spam.`,
+      },
+    );
   } catch (error) {
-    logger.error({ err: error }, "Error en recuperarPassword:");
-    return res.status(500).json({ error: "Error interno al procesar recuperación de contraseña" });
+    return next(error);
   }
 };
 
-// Endpoint para obtener el último correo enviado (útil para pruebas inmediatas en pantalla si el usuario no tiene correo real de prueba)
-export const obtenerUltimoCorreo = (req, res) => {
+// Endpoint para obtener el último correo enviado (utilidad de pruebas para admin/auditor)
+export const obtenerUltimoCorreo = (req, res, next) => {
   const ultimo = getUltimoCorreoEnviado();
   if (!ultimo) {
-    return res.status(404).json({ error: "No hay correos enviados recientemente" });
+    return next(new NotFoundError("No hay correos enviados recientemente"));
   }
-  return res.status(200).json(ultimo);
+  return sendSuccess(res, ultimo);
 };
 
 // Validar código OTP de 6 dígitos
-export const verificarCodigoRecuperacion = async (req, res) => {
+export const verificarCodigoRecuperacion = async (req, res, next) => {
   try {
     const { email, codigo } = req.body;
     if (!email || !codigo) {
-      return res.status(400).json({ error: "El correo y el código de seguridad son requeridos" });
+      throw new BadRequestError(
+        "El correo y el código de seguridad son requeridos",
+      );
     }
 
     const emailNorm = email.trim().toLowerCase();
     const registro = await CodigoRecuperacionModel.obtener(emailNorm);
 
     if (!registro) {
-      return res.status(400).json({ error: "No hay una solicitud de recuperación activa o el código ha expirado. Solicita uno nuevo." });
+      throw new BadRequestError(
+        "No hay una solicitud de recuperación activa o el código ha expirado. Solicita uno nuevo.",
+      );
     }
 
     if (Date.now() > Number(registro.expira_en)) {
       await CodigoRecuperacionModel.eliminar(emailNorm);
-      return res.status(400).json({ error: "El código ha expirado por seguridad (límite 15 minutos). Solicita uno nuevo." });
+      throw new BadRequestError(
+        "El código ha expirado por seguridad (límite 15 minutos). Solicita uno nuevo.",
+      );
     }
 
     if (registro.codigo !== codigo.trim()) {
       await CodigoRecuperacionModel.incrementarIntentos(emailNorm);
       const intentos = Number(registro.intentos) + 1;
-      if (intentos >= 5) {
+      if (intentos >= OTP_INTENTOS_MAX) {
         await CodigoRecuperacionModel.eliminar(emailNorm);
-        return res.status(429).json({ error: "Has excedido el número máximo de intentos. Solicita un nuevo código." });
+        throw new TooManyRequestsError(
+          "Has excedido el número máximo de intentos. Solicita un nuevo código.",
+        );
       }
-      return res.status(400).json({ error: `Código de seguridad incorrecto. Intento ${intentos} de 5.` });
+      throw new BadRequestError(
+        `Código de seguridad incorrecto. Intento ${intentos} de ${OTP_INTENTOS_MAX}.`,
+      );
     }
 
     await CodigoRecuperacionModel.marcarVerificado(emailNorm);
 
-    return res.status(200).json({
-      message: "Código de seguridad validado con éxito. Ya puedes establecer tu nueva contraseña.",
-      valido: true
+    return sendSuccess(res, { valido: true }, {
+      message:
+        "Código de seguridad validado con éxito. Ya puedes establecer tu nueva contraseña.",
     });
   } catch (error) {
-    logger.error({ err: error }, "Error en verificarCodigoRecuperacion:");
-    return res.status(500).json({ error: "Error interno al validar el código" });
+    return next(error);
   }
 };
 
 // Restablecer contraseña con nueva clave (exige validación previa del código de seguridad)
-export const restablecerPassword = async (req, res) => {
+export const restablecerPassword = async (req, res, next) => {
   try {
     const { email, codigo, password_nuevo } = req.body;
     if (!email || !password_nuevo) {
-      return res.status(400).json({ error: "El correo y la nueva contraseña son obligatorios" });
+      throw new BadRequestError(
+        "El correo y la nueva contraseña son obligatorios",
+      );
     }
 
     if (password_nuevo.length < 6) {
-      return res.status(400).json({ error: "La nueva contraseña debe tener al menos 6 caracteres" });
+      throw new BadRequestError(
+        "La nueva contraseña debe tener al menos 6 caracteres",
+      );
     }
 
     const emailNorm = email.trim().toLowerCase();
     const registro = await CodigoRecuperacionModel.obtener(emailNorm);
 
     // Verificar que haya superado el código de seguridad
-    if (!registro || (Number(registro.verificado) !== 1 && registro.codigo !== codigo?.trim())) {
-      return res.status(403).json({ error: "Operación no autorizada. Debes validar tu código de seguridad primero." });
+    if (
+      !registro ||
+      (Number(registro.verificado) !== 1 && registro.codigo !== codigo?.trim())
+    ) {
+      throw new ForbiddenError(
+        "Operación no autorizada. Debes validar tu código de seguridad primero.",
+      );
     }
 
     if (Date.now() > Number(registro.expira_en)) {
       await CodigoRecuperacionModel.eliminar(emailNorm);
-      return res.status(403).json({ error: "El código ha expirado por seguridad. Solicita uno nuevo." });
+      throw new ForbiddenError(
+        "El código ha expirado por seguridad. Solicita uno nuevo.",
+      );
     }
 
     const usuario = await UsuarioModel.findByEmail(emailNorm);
     if (!usuario) {
-      return res.status(404).json({ error: "No existe ninguna cuenta con ese correo electrónico" });
+      throw new NotFoundError(
+        "No existe ninguna cuenta con ese correo electrónico",
+      );
     }
 
     const nuevoPasswordHash = await bcrypt.hash(password_nuevo, SALT_ROUNDS);
@@ -469,11 +490,11 @@ export const restablecerPassword = async (req, res) => {
     // Invalidar el código de seguridad tras su uso exitoso
     await CodigoRecuperacionModel.eliminar(emailNorm);
 
-    return res.status(200).json({
-      message: "Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión de forma segura."
+    return sendSuccess(res, null, {
+      message:
+        "Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión de forma segura.",
     });
   } catch (error) {
-    logger.error({ err: error }, "Error en restablecerPassword:");
-    return res.status(500).json({ error: "Error interno al restablecer la contraseña" });
+    return next(error);
   }
 };

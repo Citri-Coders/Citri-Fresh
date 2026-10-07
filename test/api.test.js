@@ -60,17 +60,25 @@ test("GET /api/auth/config responde 200 con googleClientId", async () => {
   const res = await fetch(`${baseUrl}/api/auth/config`);
   assert.equal(res.status, 200);
   const body = await res.json();
-  assert.ok(Object.prototype.hasOwnProperty.call(body, "googleClientId"));
+  assert.equal(body.success, true);
+  assert.ok(
+    Object.prototype.hasOwnProperty.call(body.data, "googleClientId"),
+  );
 });
 
-test("GET /api/auth/me sin sesión responde 401", async () => {
+test("GET /api/auth/me sin sesión responde 401 con error estandarizado", async () => {
   const res = await fetch(`${baseUrl}/api/auth/me`);
   assert.equal(res.status, 401);
+  const body = await res.json();
+  assert.equal(body.success, false);
+  assert.ok(typeof body.error === "string");
 });
 
 test("POST /api/auth/register sin campos responde 400", async () => {
   const res = await postJson("/api/auth/register", { email: "x@y.com" });
   assert.equal(res.status, 400);
+  const body = await res.json();
+  assert.equal(body.success, false);
 });
 
 test("POST /api/auth/register con nombre demasiado largo responde 400 (H18)", async () => {
@@ -100,7 +108,8 @@ test("GET /api/auth/me con sesión válida responde 200", async () => {
   });
   assert.equal(res.status, 200);
   const body = await res.json();
-  assert.equal(body.user.email, "admin@citrifresh.com");
+  assert.equal(body.success, true);
+  assert.equal(body.data.email, "admin@citrifresh.com");
 });
 
 test("DELETE /api/auth/usuarios/:id inexistente responde 404 (H11)", async () => {

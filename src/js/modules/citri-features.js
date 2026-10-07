@@ -129,9 +129,9 @@ async function enviarCredencialGoogleAlBackend(datosGoogle, redirectPrefix) {
 
         const data = await res.json();
         if (res.ok) {
-            CitriAuth.setUser(data.user);
-            if (data.user.rol === 'admin') window.location.href = `${redirectPrefix}admin.html`;
-            else if (data.user.rol === 'productor') window.location.href = `${redirectPrefix}panel_productor.html`;
+            CitriAuth.setUser(data.data);
+            if (data.data.rol === 'admin') window.location.href = `${redirectPrefix}admin.html`;
+            else if (data.data.rol === 'productor') window.location.href = `${redirectPrefix}panel_productor.html`;
             else window.location.href = `${redirectPrefix}perfil.html`;
         } else {
             alert(data.error || 'Error al autenticar con Google');
@@ -220,17 +220,17 @@ function inicializarRecuperarPassword() {
                     return;
                 }
 
-                emailValidado = data.email;
-                const previewLinkHtml = data.previewUrl 
-                    ? `<div style="margin-top: 8px;"><a href="${data.previewUrl}" target="_blank" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; border-radius: 8px; color: #006837; border-color: #006837; text-decoration: none;"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span> Abrir Correo en Servidor de Pruebas (Ethereal)</a></div>`
-                    : `<div style="margin-top: 8px;"><button type="button" onclick="verBuzonSimulado('${data.email}')" style="background: none; border: none; padding: 0; color: #006837; font-size: 0.75rem; font-weight: 700; text-decoration: underline; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px;">mail</span> ¿No tienes acceso a este correo? Ver bandeja local de prueba</button></div>`;
+                emailValidado = data.data.email;
+                const previewLinkHtml = data.data.previewUrl 
+                    ? `<div style="margin-top: 8px;"><a href="${data.data.previewUrl}" target="_blank" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; border-radius: 8px; color: #006837; border-color: #006837; text-decoration: none;"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span> Abrir Correo en Servidor de Pruebas (Ethereal)</a></div>`
+                    : `<div style="margin-top: 8px;"><button type="button" onclick="verBuzonSimulado('${data.data.email}')" style="background: none; border: none; padding: 0; color: #006837; font-size: 0.75rem; font-weight: 700; text-decoration: underline; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px;">mail</span> ¿No tienes acceso a este correo? Ver bandeja local de prueba</button></div>`;
 
                 codigoInfo.innerHTML = `
                     <div style="display: flex; align-items: flex-start; gap: 8px;">
                         <span class="material-symbols-outlined" style="font-size: 20px; color: #006837; margin-top: 2px;">mark_email_read</span>
                         <div>
                             <strong>¡Correo electrónico enviado con éxito!</strong><br>
-                            Hemos despachado la clave de seguridad de 6 dígitos a <u>${data.email}</u>.<br>
+                            Hemos despachado la clave de seguridad de 6 dígitos a <u>${data.data.email}</u>.<br>
                             <span style="font-size: 0.8rem; color: #475569; display: block; margin-top: 4px;">Revisa tu bandeja de entrada o carpeta de no deseados (spam) y escribe el código abajo.</span>
                             ${previewLinkHtml}
                         </div>
@@ -412,14 +412,14 @@ window.verBuzonSimulado = async function(email) {
                         <strong style="color:#006837;font-size:1.1rem;display:flex;align-items:center;gap:6px;">
                             <span class="material-symbols-outlined">mark_email_read</span> Bandeja de Entrada Citri-Fresh
                         </strong>
-                        <span style="font-size:0.75rem;color:#64748b;">Para: ${correo.destinatario} • ${new Date(correo.fecha).toLocaleTimeString()}</span>
+                        <span style="font-size:0.75rem;color:#64748b;">Para: ${correo.data.destinatario} • ${new Date(correo.data.fecha).toLocaleTimeString()}</span>
                     </div>
                     <button onclick="document.getElementById('modal-buzon-simulado').style.display='none'" style="background:none;border:none;cursor:pointer;color:#64748b;padding:4px;">
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
                 <div style="border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;background:#f8fafc;">
-                    ${correo.htmlContent}
+                    ${correo.data.htmlContent}
                 </div>
                 <div style="margin-top:1rem;text-align:right;">
                     <button onclick="document.getElementById('modal-buzon-simulado').style.display='none'" class="btn btn-primary" style="padding:0.5rem 1.25rem;font-size:0.85rem;border-radius:10px;">

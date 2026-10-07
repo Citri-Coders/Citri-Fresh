@@ -21,13 +21,17 @@ import {
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { requireRole } from "../middlewares/roleMiddleware.js";
 import { validateIdParam } from "../middlewares/validateParams.js";
+import { ROLES } from "../config/constants.js";
 
 const router = Router();
 
 // Rutas públicas
 router.get("/config", (req, res) => {
-  res.json({
-    googleClientId: process.env.GOOGLE_CLIENT_ID || null
+  return res.json({
+    success: true,
+    data: {
+      googleClientId: process.env.GOOGLE_CLIENT_ID || null,
+    },
   });
 });
 router.post("/register", validateRegister, register);
@@ -82,8 +86,8 @@ router.get("/me", verifyToken, getMe);
 router.put("/perfil", verifyToken, validateActualizarPerfil, actualizarPerfil);
 
 // Rutas administrativas (solo rol admin, auditor para lectura)
-router.get("/usuarios", verifyToken, requireRole("admin", "auditor"), listarUsuarios);
-router.get("/ultimo-correo-enviado", verifyToken, requireRole("admin", "auditor"), obtenerUltimoCorreo);
-router.delete("/usuarios/:id", verifyToken, requireRole("admin"), validateIdParam, eliminarUsuario);
+router.get("/usuarios", verifyToken, requireRole(ROLES.ADMIN, ROLES.AUDITOR), listarUsuarios);
+router.get("/ultimo-correo-enviado", verifyToken, requireRole(ROLES.ADMIN, ROLES.AUDITOR), obtenerUltimoCorreo);
+router.delete("/usuarios/:id", verifyToken, requireRole(ROLES.ADMIN), validateIdParam, eliminarUsuario);
 
 export default router;

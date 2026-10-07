@@ -1,85 +1,12 @@
 import { getDB } from "../config/db.js";
+import { ROLES } from "../config/constants.js";
 
 export const PedidoModel = {
-  // Crear un pedido y sus ítems de forma atómica (con transacción portable)
-  async crear({ usuario_id, items }) {
-    const db = await getDB();
-
-    // db.transaction funciona tanto en SQLite local como en Turso (wrapper libsql)
-    return db.transaction(async (tx) => {
-      let total = 0;
-      const itemsProcesados = [];
-
-      // 1. Validar existencia y stock de cada producto
-      for (const item of items) {
-        const producto = await tx.get(
-          "SELECT id, nombre, precio, stock, unidad FROM productos WHERE id = ? AND activo = 1",
-          [item.producto_id],
-        );
-
-        if (!producto) {
-          throw new Error(`Producto con ID ${item.producto_id} no encontrado`);
-        }
-
-        if (producto.stock < item.cantidad) {
-          throw new Error(
-            `Stock insuficiente para "${producto.nombre}". Disponible: ${producto.stock}, Solicitado: ${item.cantidad}`,
-          );
-        }
-
-        const subtotal = producto.precio * item.cantidad;
-        total += subtotal;
-
-        itemsProcesados.push({
-          producto_id: producto.id,
-          nombre: producto.nombre,
-          unidad: producto.unidad,
-          cantidad: item.cantidad,
-          precio_unitario: producto.precio,
-          subtotal,
-        });
-      }
-
-      // 2. Insertar encabezado del pedido
-      const resultadoPedido = await tx.run(
-        `INSERT INTO pedidos (usuario_id, total, estado)
-         VALUES (?, ?, 'pendiente')`,
-        [usuario_id, total],
-      );
-
-      const pedidoId = resultadoPedido.lastID;
-
-      // 3. Insertar cada ítem y descontar stock del producto
-      for (const item of itemsProcesados) {
-        await tx.run(
-          `INSERT INTO pedidos_items (pedido_id, producto_id, cantidad, precio_unitario)
-           VALUES (?, ?, ?, ?)`,
-          [pedidoId, item.producto_id, item.cantidad, item.precio_unitario],
-        );
-
-        await tx.run(
-          `UPDATE productos
-           SET stock = stock - ?
-           WHERE id = ?`,
-          [item.cantidad, item.producto_id],
-        );
-      }
-
-      return {
-        id: pedidoId,
-        usuario_id,
-        total,
-        estado: "pendiente",
-        items: itemsProcesados,
-      };
-    });
-  },
-
   // Obtener pedidos según el rol del usuario
   async obtenerTodos({ usuario_id, rol }) {
     const db = await getDB();
 
-    if (rol === "cliente") {
+    if (rol === ROLES.CLIENTE) {
       // Clientes solo ven sus propias compras
       const query = `
         SELECT 
@@ -98,7 +25,7 @@ export const PedidoModel = {
       return db.all(query, [usuario_id]);
     }
 
-    if (rol === "productor") {
+    if (rol === ROLES.PRODUCTOR) {
       // Productores ven pedidos que contienen al menos uno de sus productos
       const query = `
         SELECT DISTINCT

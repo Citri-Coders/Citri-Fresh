@@ -769,7 +769,7 @@
             try {
                 const res = await fetch('/api/productos');
                 if (res.ok) {
-                    productosData = await res.json();
+                    productosData = (await res.json()).data;
                     renderTablaProductos();
                 }
             } catch (e) {
@@ -781,7 +781,7 @@
             try {
                 const res = await fetch('/api/pedidos', { credentials: 'include' });
                 if (res.ok) {
-                    pedidosData = await res.json();
+                    pedidosData = (await res.json()).data;
                     renderTablaPedidos();
                 }
             } catch (e) {
@@ -793,7 +793,7 @@
             try {
                 const res = await fetch('/api/auth/usuarios', { credentials: 'include' });
                 if (res.ok) {
-                    usuariosData = await res.json();
+                    usuariosData = (await res.json()).data;
                     renderTablaUsuarios();
                 }
             } catch (e) {

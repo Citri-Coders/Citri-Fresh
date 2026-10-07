@@ -492,7 +492,7 @@
                 // Pedido exitoso
                 CitriCart.clear();
                 cerrarModalCheckout();
-                alert(`✅ ¡Pedido #CF-${data.pedido.id} registrado con éxito con método de pago "${metodoPagoSeleccionado.toUpperCase()}"! Puedes ver su estado en tu panel.`);
+                alert(`✅ ¡Pedido #CF-${data.data.id} registrado con éxito con método de pago "${metodoPagoSeleccionado.toUpperCase()}"! Puedes ver su estado en tu panel.`);
                 window.location.href = 'perfil.html';
             } catch (err) {
                 console.warn('Conexión perdida. Guardando pedido en cola offline:', err);

@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 // Guardar usuario real de la BD
-                CitriAuth.setUser(data.user);
+                CitriAuth.setUser(data.data);
 
                 // Redirigir según el rol retornado por la base de datos
-                if (data.user.rol === 'admin' || data.user.rol === 'auditor') {
+                if (data.data.rol === 'admin' || data.data.rol === 'auditor') {
                     window.location.href = '../admin.html';
-                } else if (data.user.rol === 'productor') {
+                } else if (data.data.rol === 'productor') {
                     window.location.href = '../panel_productor.html';
                 } else {
                     window.location.href = '../perfil.html';
@@ -123,11 +123,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 // Iniciar sesión automáticamente tras registro
-                CitriAuth.setUser(data.user);
+                CitriAuth.setUser(data.data);
 
-                if (data.user.rol === 'admin') {
+                if (data.data.rol === 'admin') {
                     window.location.href = 'admin.html';
-                } else if (data.user.rol === 'productor') {
+                } else if (data.data.rol === 'productor') {
                     window.location.href = 'panel_productor.html';
                 } else {
                     window.location.href = 'perfil.html';

@@ -63,14 +63,13 @@ const authLimiter = rateLimit({
 // Middleware para manejo de errores de rate limiting
 const rateLimitErrorHandler = (err, req, res, next) => {
   if (err.statusCode === 429) {
-    res.status(429).json({
-      error: "Rate limit excedido",
-      message: err.message || "Has realizado demasiadas peticiones. Por favor, espera.",
+    return res.status(429).json({
+      success: false,
+      error: err.message || "Has realizado demasiadas peticiones. Por favor, espera.",
       retryAfter: err.retryAfter || 60,
     });
-  } else {
-    next(err);
   }
+  next(err);
 };
 
 export { generalLimiter, authLimiter, rateLimitErrorHandler };

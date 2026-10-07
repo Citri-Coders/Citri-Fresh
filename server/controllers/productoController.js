@@ -1,96 +1,77 @@
-import logger from "../config/logger.js";
 import { ProductoModel } from "../models/productoModel.js";
+import { ROLES, UNIDAD_PRODUCTO_DEFAULT } from "../config/constants.js";
+import { ForbiddenError, NotFoundError } from "../utils/appError.js";
+import { sendSuccess } from "../utils/apiResponse.js";
 
 // GET /api/productos
-export const obtenerProductos = async (req, res) => {
+export const obtenerProductos = async (req, res, next) => {
   try {
     const { productor_id, zona } = req.query;
-    const productos = await ProductoModel.obtenerTodos({
-      productor_id,
-      zona,
-    });
-
-    return res.status(200).json(productos);
+    const productos = await ProductoModel.obtenerTodos({ productor_id, zona });
+    return sendSuccess(res, productos);
   } catch (error) {
-    logger.error({ err: error }, "Error al obtener productos:");
-    return res
-      .status(500)
-      .json({ error: "Error interno al obtener los productos" });
+    return next(error);
   }
 };
 
 // GET /api/productos/:id
-export const obtenerProductoPorId = async (req, res) => {
+export const obtenerProductoPorId = async (req, res, next) => {
   try {
     const { id } = req.params;
     const producto = await ProductoModel.obtenerPorId(id);
-
     if (!producto) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+      throw new NotFoundError("Producto no encontrado");
     }
-
-    return res.status(200).json(producto);
+    return sendSuccess(res, producto);
   } catch (error) {
-    logger.error({ err: error }, "Error al obtener producto por ID:");
-    return res
-      .status(500)
-      .json({ error: "Error interno al buscar el producto" });
+    return next(error);
   }
 };
 
 // POST /api/productos
-export const crearProducto = async (req, res) => {
+export const crearProducto = async (req, res, next) => {
   try {
-    const { nombre, descripcion, precio, unidad, stock, zona, imagen } =
-      req.body;
+    const { nombre, descripcion, precio, unidad, stock, zona, imagen } = req.body;
 
     const nuevoProducto = await ProductoModel.crear({
       nombre: nombre.trim(),
       descripcion: descripcion ? descripcion.trim() : "",
       precio: Number(precio),
-      unidad: unidad || "unidad",
+      unidad: unidad || UNIDAD_PRODUCTO_DEFAULT,
       stock: Number(stock),
       zona: zona ? Number(zona) : null,
       imagen: imagen || "",
       productor_id: req.user.id,
     });
 
-    return res.status(201).json({
+    return sendSuccess(res, nuevoProducto, {
+      status: 201,
       message: "Producto creado exitosamente",
-      producto: nuevoProducto,
     });
   } catch (error) {
-    logger.error({ err: error }, "Error al crear producto:");
-    return res
-      .status(500)
-      .json({
-        error: "Error interno al crear el producto",
-        detalles: error.message || String(error),
-      });
+    return next(error);
   }
 };
 
 // PUT /api/productos/:id
-export const actualizarProducto = async (req, res) => {
+export const actualizarProducto = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, precio, unidad, stock, zona, imagen } =
-      req.body;
+    const { nombre, descripcion, precio, unidad, stock, zona, imagen } = req.body;
 
     const productoExistente = await ProductoModel.obtenerPorId(id);
-
     if (!productoExistente) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+      throw new NotFoundError("Producto no encontrado");
     }
 
     // Regla de autorización: Solo el dueño del producto o un admin pueden modificarlo
     if (
-      req.user.rol !== "admin" &&
+      req.user.rol !== ROLES.ADMIN &&
       productoExistente.productor_id !== req.user.id
     ) {
-      return res.status(403).json({
-        error: "Acceso denegado: No tienes permiso para editar este producto",
-      });
+      throw new ForbiddenError(
+        "Acceso denegado: No tienes permiso para editar este producto",
+      );
     }
 
     await ProductoModel.actualizar(id, {
@@ -107,54 +88,46 @@ export const actualizarProducto = async (req, res) => {
           ? zona
             ? Number(zona)
             : null
-          : productoExistente.zona_id,  // alias correcto del model (p.zona AS zona_id)
+          : productoExistente.zona_id, // alias correcto del model (p.zona AS zona_id)
       imagen: imagen !== undefined ? imagen : productoExistente.imagen,
     });
 
     const productoActualizado = await ProductoModel.obtenerPorId(id);
 
-    return res.status(200).json({
+    return sendSuccess(res, productoActualizado, {
       message: "Producto actualizado exitosamente",
-      producto: productoActualizado,
     });
   } catch (error) {
-    logger.error({ err: error }, "Error al actualizar producto:");
-    return res
-      .status(500)
-      .json({ error: "Error interno al actualizar el producto" });
+    return next(error);
   }
 };
 
 // DELETE /api/productos/:id
-export const eliminarProducto = async (req, res) => {
+export const eliminarProducto = async (req, res, next) => {
   try {
     const { id } = req.params;
 
     const productoExistente = await ProductoModel.obtenerPorId(id);
-
     if (!productoExistente) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+      throw new NotFoundError("Producto no encontrado");
     }
 
     // Regla de autorización: Solo el dueño del producto o un admin pueden eliminarlo
     if (
-      req.user.rol !== "admin" &&
+      req.user.rol !== ROLES.ADMIN &&
       productoExistente.productor_id !== req.user.id
     ) {
-      return res.status(403).json({
-        error: "Acceso denegado: No tienes permiso para eliminar este producto",
-      });
+      throw new ForbiddenError(
+        "Acceso denegado: No tienes permiso para eliminar este producto",
+      );
     }
 
     await ProductoModel.eliminar(id);
 
-    return res.status(200).json({
+    return sendSuccess(res, null, {
       message: "Producto eliminado exitosamente",
     });
   } catch (error) {
-    logger.error({ err: error }, "Error al eliminar producto:");
-    return res
-      .status(500)
-      .json({ error: "Error interno al eliminar el producto" });
+    return next(error);
   }
 };
