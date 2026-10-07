@@ -35,6 +35,15 @@ router.post("/login", validateLogin, login);
 router.post("/logout", logout);
 router.post("/google", googleAuth);
 router.get("/google-callback", (req, res) => {
+  // Origen exacto al que se enviará el mensaje (evita targetOrigin '*').
+  // Si no hay dominio configurado, se restringe al mismo origen de la ventana.
+  const configuredOrigin =
+    process.env.CLIENT_URL ||
+    (process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",")[0].trim() : null);
+  const targetOriginLiteral = configuredOrigin
+    ? JSON.stringify(configuredOrigin)
+    : "window.location.origin";
+
   res.send(`<!DOCTYPE html>
 <html>
 <head><title>Autenticación con Google</title></head>
@@ -46,13 +55,14 @@ router.get("/google-callback", (req, res) => {
     const params = new URLSearchParams(hash || window.location.search);
     const accessToken = params.get('access_token');
     const idToken = params.get('id_token');
-    
+    const targetOrigin = ${targetOriginLiteral};
+
     if (window.opener) {
       window.opener.postMessage({
         type: 'GOOGLE_AUTH_SUCCESS',
         access_token: accessToken,
         id_token: idToken
-      }, '*');
+      }, targetOrigin);
       window.close();
     } else {
       window.location.href = '/pages/inicio.html';
@@ -66,7 +76,6 @@ router.get("/google-callback", (req, res) => {
 router.post("/recuperar-password", recuperarPassword);
 router.post("/verificar-codigo-recuperacion", verificarCodigoRecuperacion);
 router.post("/restablecer-password", restablecerPassword);
-router.get("/ultimo-correo-enviado", obtenerUltimoCorreo);
 
 // Rutas protegidas (requieren cookie con token válido)
 router.get("/me", verifyToken, getMe);
@@ -74,6 +83,7 @@ router.put("/perfil", verifyToken, validateActualizarPerfil, actualizarPerfil);
 
 // Rutas administrativas (solo rol admin, auditor para lectura)
 router.get("/usuarios", verifyToken, requireRole("admin", "auditor"), listarUsuarios);
+router.get("/ultimo-correo-enviado", verifyToken, requireRole("admin", "auditor"), obtenerUltimoCorreo);
 router.delete("/usuarios/:id", verifyToken, requireRole("admin"), validateIdParam, eliminarUsuario);
 
 export default router;

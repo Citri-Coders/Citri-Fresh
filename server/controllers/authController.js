@@ -78,7 +78,7 @@ export const register = async (req, res) => {
     const token = jwt.sign(
       { id: nuevoUsuario.id, rol: nuevoUsuario.rol },
       JWT_SECRET,
-      { expiresIn: "1d" },
+      { expiresIn: JWT_EXPIRES_IN },
     );
 
     res.cookie("token", token, COOKIE_OPTIONS);
@@ -108,7 +108,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: JWT_EXPIRES_IN,
     });
 
     res.cookie("token", token, COOKIE_OPTIONS);
@@ -279,7 +279,7 @@ export const googleAuth = async (req, res) => {
     const token = jwt.sign(
       { id: usuario.id, rol: usuario.rol },
       JWT_SECRET,
-      { expiresIn: "1d" },
+      { expiresIn: JWT_EXPIRES_IN },
     );
 
     res.cookie("token", token, COOKIE_OPTIONS);

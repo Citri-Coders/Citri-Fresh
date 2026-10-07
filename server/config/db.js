@@ -12,40 +12,85 @@ const __dirname = path.dirname(__filename);
 let dbInstance = null;
 let dbPromise = null;
 
-function wrapLibsqlClient(client) {
+function mapRows(res) {
+  return res.rows.map((row) => {
+    const obj = {};
+    for (const col of res.columns) {
+      obj[col] = row[col];
+    }
+    return obj;
+  });
+}
+
+function mapSingleRow(res) {
+  if (!res.rows || res.rows.length === 0) return undefined;
+  const row = res.rows[0];
+  const obj = {};
+  for (const col of res.columns) {
+    obj[col] = row[col];
+  }
+  return obj;
+}
+
+// Crea un ejecutor ({ all, get, run }) a partir de una función execute de libsql.
+// Se reutiliza tanto para el cliente principal como para transacciones interactivas.
+function createLibsqlExecutor(execute) {
+  const normalize = (params) => (Array.isArray(params) ? params : [params]);
   return {
     async all(sql, params = []) {
-      const res = await client.execute({ sql, args: Array.isArray(params) ? params : [params] });
-      return res.rows.map(row => {
-        const obj = {};
-        for (const col of res.columns) {
-          obj[col] = row[col];
-        }
-        return obj;
-      });
+      return mapRows(await execute({ sql, args: normalize(params) }));
     },
     async get(sql, params = []) {
-      const res = await client.execute({ sql, args: Array.isArray(params) ? params : [params] });
-      if (!res.rows || res.rows.length === 0) return undefined;
-      const row = res.rows[0];
-      const obj = {};
-      for (const col of res.columns) {
-        obj[col] = row[col];
-      }
-      return obj;
+      return mapSingleRow(await execute({ sql, args: normalize(params) }));
     },
     async run(sql, params = []) {
-      const res = await client.execute({ sql, args: Array.isArray(params) ? params : [params] });
+      const res = await execute({ sql, args: normalize(params) });
       return {
-        lastID: res.lastInsertRowid !== undefined && res.lastInsertRowid !== null ? Number(res.lastInsertRowid) : undefined,
+        lastID:
+          res.lastInsertRowid !== undefined && res.lastInsertRowid !== null
+            ? Number(res.lastInsertRowid)
+            : undefined,
         changes: res.rowsAffected !== undefined ? Number(res.rowsAffected) : 0,
       };
     },
-    async exec(sql) {
-      await client.executeMultiple(sql);
-    }
   };
 }
+
+function wrapLibsqlClient(client) {
+  const executor = createLibsqlExecutor((stmt) => client.execute(stmt));
+
+  return {
+    ...executor,
+    async exec(sql) {
+      await client.executeMultiple(sql);
+    },
+    // Transacción interactiva real de Turso: agrupa las operaciones y confirma
+    // o revierte de forma atómica (BEGIN/COMMIT/ROLLBACK no funcionan por HTTP).
+    async transaction(fn) {
+      const tx = await client.transaction("write");
+      const txExecutor = createLibsqlExecutor((stmt) => tx.execute(stmt));
+      try {
+        const result = await fn(txExecutor);
+        await tx.commit();
+        return result;
+      } catch (error) {
+        try {
+          await tx.rollback();
+        } catch (rollbackErr) {
+          // La transacción puede haberse cerrado ya; se ignora el error de rollback
+        }
+        throw error;
+      } finally {
+        try {
+          await tx.close();
+        } catch (closeErr) {
+          // Ignorar errores al cerrar una transacción ya finalizada
+        }
+      }
+    },
+  };
+}
+
 
 // En Vercel (producción serverless) el FS es solo-lectura excepto /tmp
 function resolveDbPath() {
@@ -261,6 +306,19 @@ async function openAndInit() {
     filename: dbPath,
     driver: sqlite3.Database,
   });
+
+  // Transacción portable sobre sqlite3 local (misma API que el wrapper de Turso)
+  db.transaction = async (fn) => {
+    await db.run("BEGIN TRANSACTION");
+    try {
+      const result = await fn(db);
+      await db.run("COMMIT");
+      return result;
+    } catch (error) {
+      await db.run("ROLLBACK");
+      throw error;
+    }
+  };
 
   await db.run("PRAGMA foreign_keys = ON");
   await initSchema(db);
