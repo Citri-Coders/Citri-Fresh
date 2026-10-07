@@ -36,6 +36,11 @@ const corsOptions = {
       return callback(null, true);
     }
 
+    // Permitir automáticamente orígenes de Vercel (*.vercel.app)
+    if (/\.vercel\.app$/i.test(origin)) {
+      return callback(null, true);
+    }
+
     // En desarrollo, permitir orígenes de red LAN (192.168.x.x, 10.x.x.x, etc.)
     if (
       process.env.NODE_ENV !== "production" &&
