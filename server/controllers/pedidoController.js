@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import { PedidoModel } from "../models/pedidoModel.js";
 
 // POST /api/pedidos
@@ -15,7 +16,7 @@ export const crearPedido = async (req, res) => {
       pedido: nuevoPedido,
     });
   } catch (error) {
-    console.error("Error al crear pedido:", error.message || error);
+    logger.error({ err: error }, "Error al crear pedido:");
 
     // Errores de negocio (stock insuficiente o producto no encontrado)
     if (
@@ -41,7 +42,7 @@ export const obtenerPedidos = async (req, res) => {
 
     return res.status(200).json(pedidos);
   } catch (error) {
-    console.error("Error al obtener pedidos:", error);
+    logger.error({ err: error }, "Error al obtener pedidos:");
     return res
       .status(500)
       .json({ error: "Error interno al obtener los pedidos" });
@@ -76,7 +77,7 @@ export const obtenerPedidoPorId = async (req, res) => {
 
     return res.status(200).json(pedido);
   } catch (error) {
-    console.error("Error al obtener detalle del pedido:", error);
+    logger.error({ err: error }, "Error al obtener detalle del pedido:");
     return res
       .status(500)
       .json({ error: "Error interno al buscar el pedido" });
@@ -116,7 +117,7 @@ export const actualizarEstadoPedido = async (req, res) => {
       nuevo_estado: estado,
     });
   } catch (error) {
-    console.error("Error al actualizar estado del pedido:", error);
+    logger.error({ err: error }, "Error al actualizar estado del pedido:");
     return res
       .status(500)
       .json({ error: "Error interno al actualizar el estado del pedido" });

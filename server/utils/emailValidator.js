@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import dns from "dns/promises";
 
 // Dominios desechables o temporales conocidos comunmente usados para spam o bots
@@ -126,7 +127,7 @@ export async function validarCorreoReal(email) {
 
     // En caso de timeout o error de red temporal de DNS, permitimos si el dominio tiene estructura TLD válida
     if (err.message === "DNS_TIMEOUT" || err.code === "ECONNREFUSED" || err.code === "ETIMEOUT") {
-      console.warn(`[DNS Verification Timeout] Dominio ${dominio} verificado sólo por sintaxis.`);
+      logger.warn(`[DNS Verification Timeout] Dominio ${dominio} verificado sólo por sintaxis.`);
       return { valido: true, email: emailTrim };
     }
 

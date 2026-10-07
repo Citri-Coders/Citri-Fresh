@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import nodemailer from "nodemailer";
 
 // Variable en memoria para retener el último correo enviado y permitir previsualización inmediata en local
@@ -22,7 +23,7 @@ async function getTransporter() {
         pass: process.env.SMTP_PASS,
       },
     });
-    console.log(`[Citri-Fresh Email] Conectado a servidor SMTP: ${process.env.SMTP_HOST}`);
+    logger.info(`[Citri-Fresh Email] Conectado a servidor SMTP: ${process.env.SMTP_HOST}`);
   } else {
     // Modo de desarrollo: Crear cuenta Ethereal en tiempo real para generar previsualizaciones oficiales
     try {
@@ -36,10 +37,10 @@ async function getTransporter() {
           pass: testAccount.pass,
         },
       });
-      console.log(`[Citri-Fresh Email] Canal de envío activo vía Ethereal (${testAccount.user})`);
+      logger.info(`[Citri-Fresh Email] Canal de envío activo vía Ethereal (${testAccount.user})`);
     } catch (err) {
       // Fallback a transporte JSON directo si hay problemas de red con Ethereal
-      console.warn("[Citri-Fresh Email] Usando transporte simulado seguro en memoria.");
+      logger.warn("[Citri-Fresh Email] Usando transporte simulado seguro en memoria.");
       transporterInstance = nodemailer.createTransport({
         jsonTransport: true,
       });
@@ -131,14 +132,14 @@ export async function enviarCorreoRecuperacion({ email, nombre, codigo }) {
       htmlContent,
     };
 
-    console.log(`[Citri-Fresh Email] Despachado correo a ${email}. ID: ${info.messageId}`);
+    logger.info(`[Citri-Fresh Email] Despachado correo a ${email}. ID: ${info.messageId}`);
     if (previewUrl) {
-      console.log(`[Citri-Fresh Email] Ver mensaje en Ethereal: ${previewUrl}`);
+      logger.info(`[Citri-Fresh Email] Ver mensaje en Ethereal: ${previewUrl}`);
     }
 
     return { exito: true, previewUrl };
   } catch (error) {
-    console.error("[Citri-Fresh Email Error]:", error);
+    logger.error({ err: error }, "[Citri-Fresh Email Error]:");
     // Guardar para fallback
     ultimoCorreoEnviado = {
       destinatario: email,

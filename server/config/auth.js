@@ -1,3 +1,4 @@
+import logger from "./logger.js";
 import "dotenv/config";
 import crypto from "crypto";
 
@@ -13,7 +14,7 @@ if (!JWT_SECRET) {
   }
   // En desarrollo se genera una clave efímera (las sesiones se invalidan al reiniciar)
   JWT_SECRET = crypto.randomBytes(64).toString("hex");
-  console.warn(
+  logger.warn(
     "⚠️ ADVERTENCIA: JWT_SECRET no está configurada. Se generó una clave efímera de desarrollo; configura JWT_SECRET en tu .env para sesiones persistentes.",
   );
 }
@@ -23,7 +24,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1d";
 const ADMIN_ACCESS_KEY = process.env.ADMIN_ACCESS_KEY || null;
 
 if (!ADMIN_ACCESS_KEY) {
-  console.warn(
+  logger.warn(
     "⚠️ ADVERTENCIA: ADMIN_ACCESS_KEY no está configurada. El registro de administradores/auditores queda deshabilitado.",
   );
 }

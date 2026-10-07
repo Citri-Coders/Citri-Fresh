@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import { ProductoModel } from "../models/productoModel.js";
 
 // GET /api/productos
@@ -11,7 +12,7 @@ export const obtenerProductos = async (req, res) => {
 
     return res.status(200).json(productos);
   } catch (error) {
-    console.error("Error al obtener productos:", error);
+    logger.error({ err: error }, "Error al obtener productos:");
     return res
       .status(500)
       .json({ error: "Error interno al obtener los productos" });
@@ -30,7 +31,7 @@ export const obtenerProductoPorId = async (req, res) => {
 
     return res.status(200).json(producto);
   } catch (error) {
-    console.error("Error al obtener producto por ID:", error);
+    logger.error({ err: error }, "Error al obtener producto por ID:");
     return res
       .status(500)
       .json({ error: "Error interno al buscar el producto" });
@@ -59,7 +60,7 @@ export const crearProducto = async (req, res) => {
       producto: nuevoProducto,
     });
   } catch (error) {
-    console.error("Error al crear producto:", error);
+    logger.error({ err: error }, "Error al crear producto:");
     return res
       .status(500)
       .json({
@@ -117,7 +118,7 @@ export const actualizarProducto = async (req, res) => {
       producto: productoActualizado,
     });
   } catch (error) {
-    console.error("Error al actualizar producto:", error);
+    logger.error({ err: error }, "Error al actualizar producto:");
     return res
       .status(500)
       .json({ error: "Error interno al actualizar el producto" });
@@ -151,7 +152,7 @@ export const eliminarProducto = async (req, res) => {
       message: "Producto eliminado exitosamente",
     });
   } catch (error) {
-    console.error("Error al eliminar producto:", error);
+    logger.error({ err: error }, "Error al eliminar producto:");
     return res
       .status(500)
       .json({ error: "Error interno al eliminar el producto" });

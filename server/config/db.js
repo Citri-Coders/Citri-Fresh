@@ -1,3 +1,4 @@
+import logger from "./logger.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -219,7 +220,7 @@ async function seedDefaultUsers(db) {
   const count = await db.get("SELECT COUNT(*) AS total FROM usuarios");
   if (count && count.total > 0) return;
 
-  console.log("[CitriFresh DB] Sembrando usuarios por defecto...");
+  logger.info("[CitriFresh DB] Sembrando usuarios por defecto...");
   const SALT = 10;
 
   for (const u of USUARIOS_BASE) {
@@ -250,12 +251,12 @@ async function seedDefaultUsers(db) {
     }
   }
 
-  console.log("[CitriFresh DB] Usuarios, zonas y catálogo base inicializados correctamente.");
+  logger.info("[CitriFresh DB] Usuarios, zonas y catálogo base inicializados correctamente.");
 }
 
 async function openAndInit() {
   if (process.env.TURSO_DATABASE_URL) {
-    console.log("[CitriFresh DB] Conectando a Turso (SQLite Cloud)...");
+    logger.info("[CitriFresh DB] Conectando a Turso (SQLite Cloud)...");
     const client = createClient({
       url: process.env.TURSO_DATABASE_URL,
       authToken: process.env.TURSO_AUTH_TOKEN || "",

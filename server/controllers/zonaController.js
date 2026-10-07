@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import { ZonaModel } from "../models/zonaModel.js";
 
 // GET /api/zonas
@@ -6,7 +7,7 @@ export const obtenerZonas = async (req, res) => {
     const zonas = await ZonaModel.obtenerTodas();
     return res.status(200).json(zonas);
   } catch (error) {
-    console.error("Error al obtener zonas:", error);
+    logger.error({ err: error }, "Error al obtener zonas:");
     return res
       .status(500)
       .json({ error: "Error interno al obtener las zonas" });
@@ -25,7 +26,7 @@ export const obtenerZonaPorId = async (req, res) => {
 
     return res.status(200).json(zona);
   } catch (error) {
-    console.error("Error al obtener zona por ID:", error);
+    logger.error({ err: error }, "Error al obtener zona por ID:");
     return res
       .status(500)
       .json({ error: "Error interno al buscar la zona" });
@@ -44,7 +45,7 @@ export const crearZona = async (req, res) => {
       zona: nuevaZona,
     });
   } catch (error) {
-    console.error("Error al crear zona:", error);
+    logger.error({ err: error }, "Error al crear zona:");
 
     if (error.message && error.message.includes("UNIQUE constraint failed")) {
       return res
@@ -79,7 +80,7 @@ export const actualizarZona = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error al actualizar zona:", error);
+    logger.error({ err: error }, "Error al actualizar zona:");
 
     if (error.message && error.message.includes("UNIQUE constraint failed")) {
       return res
@@ -109,7 +110,7 @@ export const eliminarZona = async (req, res) => {
       message: "Zona eliminada exitosamente",
     });
   } catch (error) {
-    console.error("Error al eliminar zona:", error);
+    logger.error({ err: error }, "Error al eliminar zona:");
     return res
       .status(500)
       .json({ error: "Error interno al eliminar la zona" });
