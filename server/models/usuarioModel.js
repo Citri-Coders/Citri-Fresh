@@ -9,6 +9,15 @@ export const UsuarioModel = {
     );
   },
 
+  // Verificación ligera de existencia sin exponer password_hash
+  async existsByEmail(email) {
+    const db = await getDB();
+    return db.get(
+      "SELECT id, email FROM usuarios WHERE email = ?",
+      [email],
+    );
+  },
+
   async findById(id) {
     const db = await getDB();
     return db.get(

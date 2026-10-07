@@ -26,6 +26,9 @@ export const ProductoModel = {
     const conditions = [];
     const params = [];
 
+    // Solo productos activos (borrado lógico)
+    conditions.push("p.activo = 1");
+
     if (filtros.productor_id) {
       conditions.push("p.productor_id = ?");
       params.push(filtros.productor_id);
@@ -136,12 +139,14 @@ export const ProductoModel = {
     return { cambios: result.changes };
   },
 
-  // Eliminar un producto (eliminando primero referencias en pedidos_items para evitar violación de FK)
+  // Eliminar un producto con borrado lógico (soft-delete): se marca como
+  // inactivo en lugar de borrarlo, preservando la trazabilidad de los pedidos.
   async eliminar(id) {
     const db = await getDB();
-    await db.run("DELETE FROM pedidos_items WHERE producto_id = ?", [id]);
-    const query = "DELETE FROM productos WHERE id = ?";
-    const result = await db.run(query, [id]);
+    const result = await db.run(
+      "UPDATE productos SET activo = 0 WHERE id = ? AND activo = 1",
+      [id],
+    );
     return { cambios: result.changes };
   },
 };

@@ -13,7 +13,7 @@ export const PedidoModel = {
       // 1. Validar existencia y stock de cada producto
       for (const item of items) {
         const producto = await tx.get(
-          "SELECT id, nombre, precio, stock, unidad FROM productos WHERE id = ?",
+          "SELECT id, nombre, precio, stock, unidad FROM productos WHERE id = ? AND activo = 1",
           [item.producto_id],
         );
 

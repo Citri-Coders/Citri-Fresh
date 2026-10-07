@@ -5,6 +5,7 @@ import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import bcrypt from "bcrypt";
 import { createClient } from "@libsql/client";
+import { USUARIOS_BASE, ZONAS_BASE, PRODUCTOS_BASE } from "../../db/seedData.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -105,14 +106,11 @@ function resolveDbPath() {
 }
 
 async function initSchema(db) {
-  // Aplicar schema completo (todas las sentencias usan CREATE TABLE IF NOT EXISTS)
-  const schemaPath = path.resolve(__dirname, "../../db/schema.sql");
-  if (fs.existsSync(schemaPath)) {
-    const schemaSQL = fs.readFileSync(schemaPath, "utf-8");
-    await db.exec(schemaSQL);
-  } else {
-    // Schema embebido como fallback
-    await db.exec(`
+  // Schema embebido como única fuente de verdad en runtime.
+  // No se lee db/schema.sql del disco porque el sistema de archivos no está
+  // garantizado dentro del bundle serverless (Vercel), lo que causaba que el
+  // fallback embebido se aplicara de forma inconsistente.
+  await db.exec(`
       PRAGMA foreign_keys = ON;
       CREATE TABLE IF NOT EXISTS zonas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -143,6 +141,7 @@ async function initSchema(db) {
         zona INTEGER,
         productor_id INTEGER NOT NULL,
         imagen TEXT,
+        activo INTEGER NOT NULL DEFAULT 1,
         creado_en TEXT NOT NULL DEFAULT (DATETIME('now')),
         FOREIGN KEY (zona) REFERENCES zonas(id) ON DELETE SET NULL ON UPDATE CASCADE,
         FOREIGN KEY (productor_id) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -175,10 +174,10 @@ async function initSchema(db) {
       CREATE INDEX IF NOT EXISTS idx_productos_zona ON productos(zona);
       CREATE INDEX IF NOT EXISTS idx_pedidos_usuario ON pedidos(usuario_id);
       CREATE INDEX IF NOT EXISTS idx_pedidos_estado ON pedidos(estado);
+      CREATE INDEX IF NOT EXISTS idx_pedidos_fecha ON pedidos(fecha);
       CREATE INDEX IF NOT EXISTS idx_pedidos_items_pedido ON pedidos_items(pedido_id);
       CREATE INDEX IF NOT EXISTS idx_pedidos_items_producto ON pedidos_items(producto_id);
     `);
-  }
 
   // Asegurar que si la tabla usuarios ya existía con esquema viejo, tenga las columnas requeridas
   const columns = await db.all("PRAGMA table_info(usuarios)");
@@ -202,6 +201,17 @@ async function initSchema(db) {
       }
     }
   }
+
+  // Asegurar la columna de borrado lógico en productos para instalaciones existentes
+  const prodColumns = await db.all("PRAGMA table_info(productos)");
+  const prodColNames = prodColumns.map(c => c.name);
+  if (!prodColNames.includes("activo")) {
+    try {
+      await db.run("ALTER TABLE productos ADD COLUMN activo INTEGER NOT NULL DEFAULT 1");
+    } catch (err) {
+      // Ignorar si ya existe
+    }
+  }
 }
 
 async function seedDefaultUsers(db) {
@@ -211,14 +221,8 @@ async function seedDefaultUsers(db) {
 
   console.log("[CitriFresh DB] Sembrando usuarios por defecto...");
   const SALT = 10;
-  const usuarios = [
-    { nombre: "Administrador Citri-Fresh",    email: "admin@citrifresh.com",     pass: "admin123",     rol: "admin" },
-    { nombre: "Auditor General de Calidad",   email: "auditor@citrifresh.com",   pass: "auditor123",   rol: "auditor" },
-    { nombre: "Finca Cítricos San Carlos",    email: "productor@citrifresh.com", pass: "productor123", rol: "productor" },
-    { nombre: "Comprador Demo",               email: "cliente@citrifresh.com",   pass: "cliente123",   rol: "cliente" },
-  ];
 
-  for (const u of usuarios) {
+  for (const u of USUARIOS_BASE) {
     const hash = await bcrypt.hash(u.pass, SALT);
     await db.run(
       `INSERT OR IGNORE INTO usuarios (nombre, email, password_hash, rol) VALUES (?, ?, ?, ?)`,
@@ -227,7 +231,7 @@ async function seedDefaultUsers(db) {
   }
 
   // Zonas base de Nicaragua
-  for (const zona of ["León", "Chinandega", "Carazo", "Rivas", "Masaya"]) {
+  for (const zona of ZONAS_BASE) {
     await db.run("INSERT OR IGNORE INTO zonas (nombre) VALUES (?)", [zona]);
   }
 
@@ -236,44 +240,11 @@ async function seedDefaultUsers(db) {
   if (!prodCount || prodCount.total === 0) {
     const productor = await db.get("SELECT id FROM usuarios WHERE email = ?", ["productor@citrifresh.com"]);
     if (productor) {
-      const productosBase = [
-        {
-          nombre: "Naranja Valencia (Cien)",
-          descripcion: "Naranja jugosa y dulce, ideal para consumo fresco o jugos.",
-          precio: 350.0,
-          unidad: "cien",
-          stock: 45,
-          zona: 1, // León
-          productor_id: productor.id,
-          imagen: "/public/images/n-comer.jpg"
-        },
-        {
-          nombre: "Limón Criollo (Docena)",
-          descripcion: "Limón agrio criollo de excelente calidad y alto contenido de jugo.",
-          precio: 40.0,
-          unidad: "docena",
-          stock: 120,
-          zona: 1, // León
-          productor_id: productor.id,
-          imagen: "/public/images/l-criollo.jpg"
-        },
-        {
-          nombre: "Mandarina Reina (Docena)",
-          descripcion: "Mandarina dulce de fácil pelado, cosecha fresca de temporada.",
-          precio: 60.0,
-          unidad: "docena",
-          stock: 30,
-          zona: 3, // Carazo
-          productor_id: productor.id,
-          imagen: "/public/images/mandarina.jpeg"
-        }
-      ];
-
-      for (const p of productosBase) {
+      for (const p of PRODUCTOS_BASE) {
         await db.run(
           `INSERT OR IGNORE INTO productos (nombre, descripcion, precio, unidad, stock, zona, productor_id, imagen)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-          [p.nombre, p.descripcion, p.precio, p.unidad, p.stock, p.zona, p.productor_id, p.imagen]
+          [p.nombre, p.descripcion, p.precio, p.unidad, p.stock, p.zona, productor.id, p.imagen]
         );
       }
     }
