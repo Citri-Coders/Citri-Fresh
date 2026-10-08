@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
@@ -11,6 +11,60 @@
     <link rel="stylesheet" href="../css/fonts.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/pages/auth.css">
+    <!-- Inicializador inmediato de selección de roles -->
+    <script>
+        function seleccionarRolRegistro(rol) {
+            var inputRol = document.getElementById('reg-rol');
+            if (inputRol) inputRol.value = rol;
+            
+            var cardCliente = document.getElementById('card-rol-cliente');
+            var cardProductor = document.getElementById('card-rol-productor');
+            var seccionProductor = document.getElementById('seccion-productor-fields');
+            var labelFoto = document.getElementById('label-foto-registro');
+            var btnSubmit = document.getElementById('btn-submit-registro');
+
+            if (rol === 'cliente') {
+                if (cardCliente) {
+                    cardCliente.style.borderColor = '#006837';
+                    cardCliente.style.backgroundColor = '#f0fdf4';
+                    var iconCli = cardCliente.querySelector('.icon-selected');
+                    if (iconCli) iconCli.style.display = 'inline-block';
+                }
+                if (cardProductor) {
+                    cardProductor.style.borderColor = '#cbd5e1';
+                    cardProductor.style.backgroundColor = '#ffffff';
+                    var iconProd = cardProductor.querySelector('.icon-selected');
+                    if (iconProd) iconProd.style.display = 'none';
+                }
+                if (seccionProductor) seccionProductor.style.display = 'none';
+                if (labelFoto) labelFoto.textContent = 'Foto de Perfil (Opcional)';
+                if (btnSubmit) {
+                    btnSubmit.innerHTML = '<span>Crear Cuenta de Comprador</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
+                }
+            } else {
+                if (cardProductor) {
+                    cardProductor.style.borderColor = '#ea580c';
+                    cardProductor.style.backgroundColor = '#fff7ed';
+                    var iconProd2 = cardProductor.querySelector('.icon-selected');
+                    if (iconProd2) iconProd2.style.display = 'inline-block';
+                }
+                if (cardCliente) {
+                    cardCliente.style.borderColor = '#cbd5e1';
+                    cardCliente.style.backgroundColor = '#ffffff';
+                    var iconCli2 = cardCliente.querySelector('.icon-selected');
+                    if (iconCli2) iconCli2.style.display = 'none';
+                }
+                if (seccionProductor) {
+                    seccionProductor.style.display = 'block';
+                }
+                if (labelFoto) labelFoto.textContent = 'Foto del Productor o Cultivo (Opcional)';
+                if (btnSubmit) {
+                    btnSubmit.innerHTML = '<span>Crear Cuenta de Productor</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
+                }
+            }
+        }
+        window.seleccionarRolRegistro = seleccionarRolRegistro;
+    </script>
 </head>
 <body>
     <div class="auth-page">
@@ -32,12 +86,12 @@
                     <p class="auth-subtitle">Selecciona el tipo de cuenta adecuado para personalizar tu experiencia.</p>
                 </div>
                 
-                <!-- Selector de Roles con Diseño Visual Premium -->
+                <!-- Selector de Roles con Botones Semánticos Accesibles -->
                 <div style="margin-bottom: 1.75rem;">
                     <p style="font-size: 0.8125rem; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Selecciona tu Perfil</p>
                     <div class="auth-role-grid">
                         <!-- Opción Comprador -->
-                        <div id="card-rol-cliente" class="role-selector-card active" onclick="seleccionarRolRegistro('cliente')" style="border: 2px solid #006837; background: #f0fdf4; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease;">
+                        <button type="button" id="card-rol-cliente" class="role-selector-card active" onclick="seleccionarRolRegistro('cliente')" style="border: 2px solid #006837; background: #f0fdf4; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; width: 100%; text-align: left;">
                             <div style="width: 40px; height: 40px; border-radius: 12px; background: #006837; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <span class="material-symbols-outlined" style="font-size: 22px;">shopping_cart</span>
                             </div>
@@ -46,19 +100,19 @@
                                 <span style="font-size: 0.75rem; color: #64748b;">Comercial / Distribuidor</span>
                             </div>
                             <span class="material-symbols-outlined icon-selected" style="color: #006837; font-size: 22px;">check_circle</span>
-                        </div>
+                        </button>
 
                         <!-- Opción Productor -->
-                        <div id="card-rol-productor" class="role-selector-card" onclick="seleccionarRolRegistro('productor')" style="border: 2px solid #cbd5e1; background: #ffffff; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease;">
+                        <button type="button" id="card-rol-productor" class="role-selector-card" onclick="seleccionarRolRegistro('productor')" style="border: 2px solid #cbd5e1; background: #ffffff; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; width: 100%; text-align: left;">
                             <div style="width: 40px; height: 40px; border-radius: 12px; background: #ea580c; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <span class="material-symbols-outlined" style="font-size: 22px;">agriculture</span>
                             </div>
                             <div style="flex-grow: 1;">
                                 <strong style="display: block; font-size: 0.95rem; color: #0f172a;">Productor</strong>
-                                <span style="font-size: 0.75rem; color: #64748b;">Finca / Cooperativa</span>
+                                <span style="font-size: 0.75rem; color: #64748b;">Cultivo / Productor Citrícola</span>
                             </div>
                             <span class="material-symbols-outlined icon-selected" style="display: none; color: #ea580c; font-size: 22px;">check_circle</span>
-                        </div>
+                        </button>
                     </div>
                 </div>
 
@@ -112,14 +166,14 @@
                     <div id="seccion-productor-fields" style="display: none; background: #fff7ed; border: 1.5px dashed #ea580c; border-radius: 18px; padding: 1.25rem; margin-bottom: 1.25rem; animation: fadeIn 0.3s ease;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
                             <span class="material-symbols-outlined" style="color: #ea580c; font-size: 22px;">nature_people</span>
-                            <strong style="color: #9a3412; font-size: 0.95rem;">Datos de la Unidad de Producción Citrícola</strong>
+                            <strong style="color: #9a3412; font-size: 0.95rem;">Datos del Productor y Cultivo Citrícola</strong>
                         </div>
 
                         <div class="auth-form-grid-finca" style="margin-bottom: 1rem;">
                             <div class="form-field-group" style="margin-bottom: 0;">
-                                <label class="form-field-label">Nombre de la Finca o Huerta *</label>
+                                <label class="form-field-label">Nombre del Productor / Unidad Productiva (Demostración)</label>
                                 <div class="input-icon-wrapper">
-                                    <input type="text" id="reg-finca" class="auth-input-modern" placeholder="Ej: Finca Cítricos Santa Rosa">
+                                    <input type="text" id="reg-finca" class="auth-input-modern" placeholder="Ej: Cítricos del Sol (Demostración)">
                                     <span class="material-symbols-outlined field-icon">storefront</span>
                                 </div>
                             </div>
@@ -179,14 +233,14 @@
                         <div class="form-field-group" style="margin-bottom: 0;">
                             <label class="form-field-label">Contraseña *</label>
                             <div class="input-icon-wrapper">
-                                <input type="password" id="reg-password" class="auth-input-modern" placeholder="Mínimo 6 caracteres" required minlength="6">
+                                <input type="password" id="reg-password" class="auth-input-modern" placeholder="Mínimo 8 caracteres (mayúscula + número)" required minlength="8">
                                 <span class="material-symbols-outlined field-icon">lock</span>
                             </div>
                         </div>
                         <div class="form-field-group" style="margin-bottom: 0;">
                             <label class="form-field-label">Confirmar Contraseña *</label>
                             <div class="input-icon-wrapper">
-                                <input type="password" id="reg-confirm" class="auth-input-modern" placeholder="Repite la clave" required minlength="6">
+                                <input type="password" id="reg-confirm" class="auth-input-modern" placeholder="Repite la clave" required minlength="8">
                                 <span class="material-symbols-outlined field-icon">lock_reset</span>
                             </div>
                         </div>
@@ -214,14 +268,7 @@
                     </button>
                 </form>
 
-                <div class="auth-divider-modern">
-                    <span>o continúa con</span>
-                </div>
-
-                <button type="button" class="btn-social-google" onclick="iniciarLoginConGoogle('')">
-                    <img src="/public/images/google-logo.svg" alt="Google">
-                    <span>Continuar con Google</span>
-                </button>
+                <!-- Google Auth temporalmente deshabilitado -->
                 
                 <div class="auth-bottom-text" style="margin-top: 1.25rem;">
                     ¿Ya tienes una cuenta? <a href="auth/login.html" class="auth-link-highlight">Inicia sesión</a>
@@ -309,15 +356,10 @@
             const foto = document.getElementById('reg-foto-base64').value;
             const adminKey = document.getElementById('reg-admin-key')?.value || '';
 
-            const nombreFinca = document.getElementById('reg-finca')?.value.trim() || '';
-            const zonaCultivo = document.getElementById('reg-zona')?.value || '';
+            const nombreFinca = document.getElementById('reg-finca')?.value.trim() || (rol === 'productor' ? `${nombres} ${apellidos}`.trim() : '');
+            const zonaCultivo = document.getElementById('reg-zona')?.value || 'León';
             const capacidad = document.getElementById('reg-capacidad')?.value.trim() || '';
             const tiposCitricos = document.getElementById('reg-tipos')?.value.trim() || '';
-
-            if (rol === 'productor' && !nombreFinca) {
-                alert('Por favor indica el nombre de tu finca o huerta.');
-                return;
-            }
 
             const btn = document.getElementById('btn-submit-registro');
             btn.disabled = true;
@@ -367,6 +409,18 @@
                 btn.innerHTML = '<span>Crear Cuenta Registrada</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
             }
         }
+
+        // Asegurar vinculación de eventos al cargar el documento
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnCli = document.getElementById('card-rol-cliente');
+            var btnProd = document.getElementById('card-rol-productor');
+            if (btnCli) {
+                btnCli.addEventListener('click', function() { seleccionarRolRegistro('cliente'); });
+            }
+            if (btnProd) {
+                btnProd.addEventListener('click', function() { seleccionarRolRegistro('productor'); });
+            }
+        });
     </script>
 </body>
 </html>
