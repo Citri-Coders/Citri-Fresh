@@ -236,6 +236,25 @@ const CitriAuth = {
         localStorage.setItem('citrifresh_user', JSON.stringify(user));
         this.updateNavUI();
     },
+    syncWithServer: async function() {
+        try {
+            const res = await fetch('/api/auth/me', { credentials: 'include' });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.data) {
+                    this.setUser(data.data);
+                    return data.data;
+                }
+            } else if (res.status === 401) {
+                // Si el servidor indica que la cookie/sesión expiró o no existe
+                localStorage.removeItem('citrifresh_user');
+                this.updateNavUI();
+            }
+        } catch (err) {
+            // Sin conexión o fallo de red: mantener caché de localStorage
+        }
+        return this.getUser();
+    },
     logout: async function() {
         try {
             await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
