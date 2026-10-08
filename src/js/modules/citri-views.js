@@ -1,5 +1,29 @@
 // ==================== FUNCIONES DINÁMICAS DE VISTAS ====================
 
+// --- Función de seguridad: escape HTML para prevenir XSS ---
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    if (typeof str !== 'string') str = String(str);
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// Escapar para atributos HTML
+function escapeAttr(str) {
+    if (str === null || str === undefined) return '';
+    if (typeof str !== 'string') str = String(str);
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
 // 1. Cálculo Automático de Temporada y Cosecha Agrícola en Nicaragua
 function calcularCosechaAutomatica() {
     const badge = document.getElementById('badge-cosecha-disponible');
@@ -71,6 +95,21 @@ async function cargarPerfilUsuario() {
 
     // Cargar pedidos reales del usuario desde el Backend
     try {
+        // Mostrar skeleton en tabla de pedidos del cliente
+        const skelTbody = document.getElementById('pedidos-tbody');
+        if (skelTbody) {
+            skelTbody.innerHTML = Array.from({ length: 3 }).map(() => `
+                <tr class="skeleton-row">
+                    <td><div class="skeleton" style="width: 60px;"></div></td>
+                    <td><div class="skeleton" style="width: 90px;"></div></td>
+                    <td><div class="skeleton" style="width: 140px;"></div></td>
+                    <td><div class="skeleton" style="width: 70px;"></div></td>
+                    <td><div class="skeleton" style="width: 70px;"></div></td>
+                    <td><div class="skeleton" style="width: 40px;"></div></td>
+                </tr>
+            `).join('');
+        }
+
         const res = await fetch('/api/pedidos', { credentials: 'include' });
         if (res.ok) {
             const pedidos = (await res.json()).data;
@@ -108,26 +147,26 @@ async function cargarPerfilUsuario() {
                 } else {
                     tbody.innerHTML = pedidos.map(p => {
                         const fecha = p.creado_en || p.fecha ? new Date(p.creado_en || p.fecha).toLocaleDateString('es-NI', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Reciente';
-                        const itemsText = p.items && p.items.length > 0 
-                            ? p.items.map(i => `${i.producto_nombre} (x${i.cantidad})`).join(', ')
+                        const itemsText = p.items && p.items.length > 0
+                            ? p.items.map(i => `${escapeHtml(i.producto_nombre)} (x${escapeHtml(String(i.cantidad))})`).join(', ')
                             : (p.total_items ? `${p.total_items} producto(s) cítricos` : 'Cítricos seleccionados');
                         const estadoBadge = (p.estado === 'entregado' || p.estado === 'completado')
                             ? '<span class="badge badge-success">Entregado</span>'
-                            : (p.estado === 'enviado' 
+                            : (p.estado === 'enviado'
                                 ? '<span class="badge" style="background-color: var(--color-surface-container); color: var(--color-primary);">Enviado</span>'
                                 : '<span class="badge" style="background-color: rgba(255,199,59,0.2); color: var(--color-text-dark);">Pendiente</span>');
 
                         return `
                             <tr>
-                                <td style="font-weight: 700;">#CF-${p.id}</td>
-                                <td class="text-muted">${fecha}</td>
-                                <td class="text-muted" style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${itemsText}">
+                                <td style="font-weight: 700;">#CF-${escapeHtml(String(p.id))}</td>
+                                <td class="text-muted">${escapeHtml(fecha)}</td>
+                                <td class="text-muted" style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeAttr(itemsText)}">
                                     ${itemsText}
                                 </td>
                                 <td class="text-primary" style="font-weight: 700;">C$ ${Number(p.total).toFixed(2)}</td>
                                 <td>${estadoBadge}</td>
                                 <td style="text-align: center;">
-                                    <button onclick="verDetallePedidoCliente(${p.id})" class="btn btn-icon text-muted hover:text-primary" title="Ver Detalle">
+                                    <button onclick="verDetallePedidoCliente(${parseInt(p.id, 10)})" class="btn btn-icon text-muted hover:text-primary" title="Ver Detalle">
                                         <span class="material-symbols-outlined">visibility</span>
                                     </button>
                                 </td>
@@ -155,6 +194,35 @@ async function cargarPanelProductor() {
 
     try {
         // 1. Cargar productos del productor desde la BD
+        // Mostrar skeleton loaders en inventario
+        const invContainer = document.getElementById('productor-inventario-list');
+        if (invContainer) {
+            invContainer.innerHTML = Array.from({ length: 3 }).map(() => `
+                <div class="skeleton-inventory-item">
+                    <div class="skeleton skeleton-thumb"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton skeleton-line skeleton-line-medium" style="height: 0.875rem;"></div>
+                        <div class="skeleton skeleton-line skeleton-line-short" style="height: 0.75rem;"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Mostrar skeleton en tabla de pedidos
+        const pedTbody = document.getElementById('productor-pedidos-tbody');
+        if (pedTbody) {
+            pedTbody.innerHTML = Array.from({ length: 3 }).map(() => `
+                <tr class="skeleton-row">
+                    <td><div class="skeleton" style="width: 60px;"></div></td>
+                    <td><div class="skeleton" style="width: 120px;"></div></td>
+                    <td><div class="skeleton" style="width: 80px;"></div></td>
+                    <td><div class="skeleton" style="width: 70px;"></div></td>
+                    <td><div class="skeleton" style="width: 60px;"></div></td>
+                    <td><div class="skeleton" style="width: 80px;"></div></td>
+                </tr>
+            `).join('');
+        }
+
         const resProd = await fetch(`/api/productos?productor_id=${user.id}`, { credentials: 'include' });
         let productos = [];
         if (resProd.ok) {
@@ -193,23 +261,23 @@ async function cargarPanelProductor() {
                     invContainer.innerHTML = productos.map(p => `
                         <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-lg); background-color: white;">
                             <div class="flex items-center gap-md" style="flex: 1; min-width: 0;">
-                                <img alt="${p.nombre}" src="${p.imagen || '/public/images/l-criollo.jpg'}" style="width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover; flex-shrink: 0;">
+                                <img alt="${escapeAttr(p.nombre)}" src="${escapeAttr(p.imagen || '/public/images/l-criollo.jpg')}" style="width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover; flex-shrink: 0;">
                                 <div style="min-width: 0;">
-                                    <h3 style="margin: 0; font-size: var(--text-label); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.nombre}</h3>
-                                    <p class="text-muted" style="margin: 0; font-size: var(--text-caption);">C$ ${Number(p.precio).toFixed(2)} / ${p.unidad} • Zona: ${p.zona_nombre || 'Nicaragua'}</p>
+                                    <h3 style="margin: 0; font-size: var(--text-label); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(p.nombre)}</h3>
+                                    <p class="text-muted" style="margin: 0; font-size: var(--text-caption);">C$ ${Number(p.precio).toFixed(2)} / ${escapeHtml(p.unidad)} • Zona: ${escapeHtml(p.zona_nombre || 'Nicaragua')}</p>
                                 </div>
                             </div>
                             <div style="text-align: right; margin: 0 1rem; flex-shrink: 0;">
-                                <div class="text-primary" style="font-weight: 700; font-size: var(--text-label);">${p.stock} ${p.unidad}s</div>
+                                <div class="text-primary" style="font-weight: 700; font-size: var(--text-label);">${escapeHtml(String(p.stock))} ${escapeHtml(p.unidad)}s</div>
                                 <div class="badge ${Number(p.stock) < 50 ? 'badge-error' : 'badge-success'}" style="margin-top: 4px;">
                                     ${Number(p.stock) < 50 ? 'Stock Bajo' : 'En Stock'}
                                 </div>
                             </div>
                             <div class="flex items-center gap-xs" style="flex-shrink: 0;">
-                                <button onclick="abrirModalEditarProducto(${p.id})" class="btn btn-icon text-muted hover:text-primary" title="Editar Lote">
+                                <button onclick="abrirModalEditarProducto(${parseInt(p.id, 10)})" class="btn btn-icon text-muted hover:text-primary" title="Editar Lote">
                                     <span class="material-symbols-outlined">edit</span>
                                 </button>
-                                <button onclick="eliminarProductoProductor(${p.id})" class="btn btn-icon text-muted hover:text-error" title="Eliminar Lote">
+                                <button onclick="eliminarProductoProductor(${parseInt(p.id, 10)})" class="btn btn-icon text-muted hover:text-error" title="Eliminar Lote">
                                     <span class="material-symbols-outlined" style="color: var(--color-error);">delete</span>
                                 </button>
                             </div>
@@ -277,17 +345,17 @@ async function cargarPanelProductor() {
                         if (p.estado === 'pendiente') {
                             accionesHtml = `
                                 <div class="flex items-center justify-center gap-xs">
-                                    <button onclick="cambiarEstadoPedidoProductor(${p.id}, 'enviado')" class="btn btn-sm btn-primary" title="Aceptar y Despachar" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">
+                                    <button onclick="cambiarEstadoPedidoProductor(${parseInt(p.id, 10)}, 'enviado')" class="btn btn-sm btn-primary" title="Aceptar y Despachar" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">
                                         <span class="material-symbols-outlined" style="font-size: 15px;">local_shipping</span> Despachar
                                     </button>
-                                    <button onclick="cambiarEstadoPedidoProductor(${p.id}, 'cancelado')" class="btn btn-sm" title="Rechazar Pedido" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: rgba(186,26,26,0.1); color: var(--color-error); border: none;">
+                                    <button onclick="cambiarEstadoPedidoProductor(${parseInt(p.id, 10)}, 'cancelado')" class="btn btn-sm" title="Rechazar Pedido" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: rgba(186,26,26,0.1); color: var(--color-error); border: none;">
                                         <span class="material-symbols-outlined" style="font-size: 15px;">close</span>
                                     </button>
                                 </div>
                             `;
                         } else if (p.estado === 'enviado') {
                             accionesHtml = `
-                                <button onclick="cambiarEstadoPedidoProductor(${p.id}, 'completado')" class="btn btn-sm btn-accent" title="Marcar como Entregado" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">
+                                <button onclick="cambiarEstadoPedidoProductor(${parseInt(p.id, 10)}, 'completado')" class="btn btn-sm btn-accent" title="Marcar como Entregado" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">
                                     <span class="material-symbols-outlined" style="font-size: 15px;">done_all</span> Marcar Entregado
                                 </button>
                             `;
@@ -297,12 +365,12 @@ async function cargarPanelProductor() {
 
                         return `
                             <tr>
-                                <td style="font-weight: 700;">#CF-${p.id}</td>
+                                <td style="font-weight: 700;">#CF-${escapeHtml(String(p.id))}</td>
                                 <td>
-                                    <div style="font-weight: 600;">${p.cliente_nombre || 'Cliente Registrado'}</div>
-                                    <div class="text-muted" style="font-size: var(--text-caption);">${p.cliente_email || ''}</div>
+                                    <div style="font-weight: 600;">${escapeHtml(p.cliente_nombre || 'Cliente Registrado')}</div>
+                                    <div class="text-muted" style="font-size: var(--text-caption);">${escapeHtml(p.cliente_email || '')}</div>
                                 </td>
-                                <td class="text-muted">${fecha}</td>
+                                <td class="text-muted">${escapeHtml(fecha)}</td>
                                 <td>${estadoBadge}</td>
                                 <td class="text-primary" style="font-weight: 700; text-align: right;">C$ ${Number(p.total).toFixed(2)}</td>
                                 <td style="text-align: center;">${accionesHtml}</td>
@@ -441,12 +509,32 @@ async function cargarCatalogoDesdeBD() {
     const grid = document.getElementById('catalog-products-grid');
     if (!grid) return;
 
+    // Mostrar skeleton loaders mientras se cargan los datos
+    const skeletonCount = 8;
+    grid.innerHTML = Array.from({ length: skeletonCount }).map(() => `
+        <div class="product-card skeleton-card">
+            <div class="skeleton skeleton-image"></div>
+            <div class="skeleton-body">
+                <div class="skeleton skeleton-line skeleton-line-short"></div>
+                <div class="skeleton skeleton-line skeleton-line-medium"></div>
+                <div class="skeleton skeleton-line"></div>
+                <div class="skeleton skeleton-line skeleton-line-short"></div>
+            </div>
+        </div>
+    `).join('');
+
     try {
         const res = await fetch('/api/productos');
-        if (!res.ok) return;
+        if (!res.ok) {
+            grid.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No se pudieron cargar los productos en este momento.</p>';
+            return;
+        }
 
         const productos = (await res.json()).data;
-        if (productos.length === 0) return;
+        if (productos.length === 0) {
+            grid.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No hay productos disponibles aún.</p>';
+            return;
+        }
 
         // Renderizar productos reales de la base de datos
         grid.innerHTML = productos.map(p => {
@@ -457,30 +545,30 @@ async function cargarCatalogoDesdeBD() {
             const imagen = p.imagen || fallbackImg;
 
             return `
-                <div class="product-card" data-category="${categoria}">
+                <div class="product-card" data-category="${escapeAttr(categoria)}">
                     <div class="product-image-container">
-                        <img src="${imagen}" alt="${p.nombre}" class="product-image" style="object-position: center;">
+                        <img src="${escapeAttr(imagen)}" alt="${escapeAttr(p.nombre)}" class="product-image" style="object-position: center;">
                         <div class="product-badges">
-                            <span class="badge badge-success">${p.zona_nombre || 'Nicaragua'}</span>
+                            <span class="badge badge-success">${escapeHtml(p.zona_nombre || 'Nicaragua')}</span>
                         </div>
                     </div>
                     <div class="product-info">
-                        <span class="product-category">${categoria.toUpperCase()}</span>
-                        <h2 class="product-name">${p.nombre}</h2>
+                        <span class="product-category">${escapeHtml(categoria.toUpperCase())}</span>
+                        <h2 class="product-name">${escapeHtml(p.nombre)}</h2>
                         <div class="product-seller">
                             <span class="material-symbols-outlined" style="font-size: 16px;">storefront</span>
-                            ${p.productor_nombre || 'Finca Productora'}
+                            ${escapeHtml(p.productor_nombre || 'Finca Productora')}
                         </div>
                         
                         <div class="product-price-row">
-                            <div class="product-price">C$ ${Number(p.precio).toFixed(0)} <span class="product-unit">/ ${p.unidad}</span></div>
+                            <div class="product-price">C$ ${Number(p.precio).toFixed(0)} <span class="product-unit">/ ${escapeHtml(p.unidad)}</span></div>
                         </div>
                         
                         <div class="product-actions">
-                            <a href="detalle_producto.html?id=${p.id}" class="btn-details" title="Ver Detalles">
+                            <a href="detalle_producto.html?id=${parseInt(p.id, 10)}" class="btn-details" title="Ver Detalles">
                                 <span class="material-symbols-outlined">visibility</span>
                             </a>
-                            <button class="btn-cart" data-id="${p.id}" data-name="${p.nombre}" data-price="${p.precio}">
+                            <button class="btn-cart" data-id="${escapeAttr(String(p.id))}" data-name="${escapeAttr(p.nombre)}" data-price="${escapeAttr(String(p.precio))}">
                                 <span class="material-symbols-outlined">shopping_cart</span> Agregar
                             </button>
                         </div>
@@ -503,6 +591,7 @@ async function cargarCatalogoDesdeBD() {
 
     } catch (err) {
         console.warn('No se pudo cargar productos del servidor:', err);
+        grid.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--color-text-muted);">Error de conexión. No se pudieron cargar los productos.</p>';
     }
 }
 
