@@ -186,10 +186,10 @@ async function cargarPanelProductor() {
     const user = CitriAuth.getUser();
     if (!user) return;
 
-    // Actualizar nombre y finca en el encabezado
+    // Actualizar nombre en el encabezado
     const fincaEl = document.getElementById('productor-finca-nombre');
     if (fincaEl) {
-        fincaEl.textContent = `Bienvenido ${user.nombre || 'Productor'} • Finca Cítricos San Carlos (Rivas / Masaya)`;
+        fincaEl.textContent = `Bienvenido ${user.nombre || 'Productor'} • Productor Demostrativo (Rivas / Masaya)`;
     }
 
     try {
@@ -547,7 +547,7 @@ async function cargarCatalogoDesdeBD() {
             return `
                 <div class="product-card" data-category="${escapeAttr(categoria)}">
                     <div class="product-image-container">
-                        <img src="${escapeAttr(imagen)}" alt="${escapeAttr(p.nombre)}" class="product-image" style="object-position: center;">
+                        <img src="${escapeAttr(imagen)}" alt="${escapeAttr(p.nombre)}" class="product-image" style="object-position: center;" onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src='${escapeAttr(fallbackImg)}';}else{this.src='/public/images/Citri_Fresh_V1.0.png';}">
                         <div class="product-badges">
                             <span class="badge badge-success">${escapeHtml(p.zona_nombre || 'Nicaragua')}</span>
                         </div>
@@ -557,7 +557,7 @@ async function cargarCatalogoDesdeBD() {
                         <h2 class="product-name">${escapeHtml(p.nombre)}</h2>
                         <div class="product-seller">
                             <span class="material-symbols-outlined" style="font-size: 16px;">storefront</span>
-                            ${escapeHtml(p.productor_nombre || 'Finca Productora')}
+                            ${escapeHtml(p.productor_nombre ? p.productor_nombre.replace(/Finca/gi, 'Productor') : 'Lote Demostrativo')}
                         </div>
                         
                         <div class="product-price-row">

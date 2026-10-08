@@ -24,7 +24,7 @@ export const USUARIOS_BASE = [
     rol: "auditor",
   },
   {
-    nombre: "Finca Cítricos San Carlos",
+    nombre: "Productor Demostrativo",
     email: "productor@citrifresh.com",
     pass: "productor123",
     rol: "productor",
