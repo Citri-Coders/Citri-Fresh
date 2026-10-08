@@ -27,16 +27,17 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com", "https://apis.google.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
-      imgSrc: ["'self'", "data:", "https:", "https://lh3.googleusercontent.com"],
-      connectSrc: ["'self'", "https://accounts.google.com", "https://www.googleapis.com"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://accounts.google.com", "https://www.googleapis.com", "https://oauth2.googleapis.com"],
       frameSrc: ["'self'", "https://accounts.google.com"],
     },
   },
   crossOriginEmbedderPolicy: false,
 }));
+
 
 app.use(corsMiddleware);
 app.use(express.json({ limit: "10mb" }));
