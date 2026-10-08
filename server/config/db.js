@@ -2,7 +2,7 @@ import logger from "./logger.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { createClient } from "@libsql/client";
 import { USUARIOS_BASE, ZONAS_BASE, PRODUCTOS_BASE } from "../../db/seedData.js";
 
