@@ -1,4 +1,4 @@
-// ==================== GOOGLE SIGN-IN / REGISTER CON INTERFAZ AUTÉNTICA DE GOOGLE ====================
+﻿// ==================== GOOGLE SIGN-IN CON GOOGLE IDENTITY SERVICES (GIS) ====================
 
 // --- Función de seguridad: escape HTML para prevenir XSS ---
 function escapeHtml(str) {
@@ -35,154 +35,140 @@ async function obtenerGoogleClientId() {
             _googleClientId = data.data?.googleClientId || null;
         }
     } catch (err) {
-        console.warn('No se pudo obtener configuracion de Google:', err);
+        console.warn('[CitriFresh] No se pudo obtener configuracion de Google:', err);
     }
     return _googleClientId;
 }
 
+/**
+ * Inicializa el boton "Continuar con Google" usando Google Identity Services (GIS).
+ * Usa google.accounts.id.renderButton — popup oficial de Google, sin redirect_uri.
+ */
 function inicializarBotonGoogle() {
-    // 1. Inyectar la biblioteca oficial de Google Identity Services si no está presente
-    if (!document.getElementById('google-gsi-client')) {
+    const googleBtns = document.querySelectorAll('.btn-social-google');
+    if (!googleBtns.length) return;
+
+    const isInsideAuth = window.location.pathname.includes('/auth/');
+    const redirectPrefix = isInsideAuth ? '../' : '';
+
+    function cargarGSI(callback) {
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+            callback();
+            return;
+        }
+        if (document.getElementById('google-gsi-client')) {
+            const interval = setInterval(() => {
+                if (window.google && window.google.accounts && window.google.accounts.id) {
+                    clearInterval(interval);
+                    callback();
+                }
+            }, 150);
+            return;
+        }
         const script = document.createElement('script');
         script.id = 'google-gsi-client';
         script.src = 'https://accounts.google.com/gsi/client';
         script.async = true;
         script.defer = true;
+        script.onload = callback;
+        script.onerror = () => console.warn('[CitriFresh] No se pudo cargar el script de Google GSI.');
         document.head.appendChild(script);
     }
 
-    const googleBtns = document.querySelectorAll('.btn-social-google');
-    if (!googleBtns.length) return;
+    async function inicializar() {
+        const GOOGLE_CLIENT_ID = await obtenerGoogleClientId();
+        if (!GOOGLE_CLIENT_ID) {
+            console.warn('[CitriFresh] Google Client ID no disponible.');
+            googleBtns.forEach(btn => btn.style.display = 'none');
+            return;
+        }
 
-    googleBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            abrirInterfazAutenticaGoogle();
+        cargarGSI(() => {
+            if (!window.google || !window.google.accounts || !window.google.accounts.id) {
+                console.warn('[CitriFresh] Google GSI no cargo correctamente.');
+                return;
+            }
+
+            // Inicializar con el callback que recibe el credential JWT de Google
+            window.google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: (response) => manejarCredencialGoogle(response, redirectPrefix),
+                ux_mode: 'popup',
+                cancel_on_tap_outside: true,
+            });
+
+            // Reemplazar cada boton .btn-social-google con el boton oficial renderizado por Google
+            googleBtns.forEach((btn, idx) => {
+                const container = document.createElement('div');
+                container.id = 'google-btn-container-' + idx;
+                // Copiar clases de ancho del boton original para que encaje visualmente
+                container.style.cssText = 'display:flex;justify-content:center;width:100%;';
+                btn.parentNode.insertBefore(container, btn);
+                btn.style.display = 'none';
+
+                // Calcular ancho disponible para el boton de Google
+                const ancho = Math.min(btn.offsetWidth || 320, 400);
+
+                window.google.accounts.id.renderButton(container, {
+                    type: 'standard',
+                    shape: 'rectangular',
+                    theme: 'outline',
+                    text: 'continue_with',
+                    size: 'large',
+                    locale: 'es',
+                    width: ancho,
+                });
+            });
         });
-    });
+    }
+
+    inicializar();
 }
 
 /**
- * Abre la interfaz real y oficial de autenticación de cuentas de Google (Google Accounts OAuth 2.0).
- * Si la librería GSI de Google está cargada, inicia el flujo nativo TokenClient de Google Identity.
- * De forma paralela y robusta, abre la ventana emergente estándar de Google OAuth 2.0.
+ * Callback que Google llama tras autenticacion exitosa.
+ * Recibe el credential JWT firmado por Google.
  */
-async function abrirInterfazAutenticaGoogle() {
-    const isInsideAuth = window.location.pathname.includes('/auth/');
-    const redirectPrefix = isInsideAuth ? '../' : '';
-
-    const GOOGLE_CLIENT_ID = await obtenerGoogleClientId();
-    if (!GOOGLE_CLIENT_ID) {
-        alert('La autenticación con Google no está disponible en este momento.');
+async function manejarCredencialGoogle(response, redirectPrefix) {
+    if (!response || !response.credential) {
+        alert('No se recibio respuesta valida de Google. Intenta de nuevo.');
         return;
     }
-
-    // Intentar con Google Identity Services token client si está disponible
-    if (window.google && window.google.accounts && window.google.accounts.oauth2) {
-        try {
-            const tokenClient = window.google.accounts.oauth2.initTokenClient({
-                client_id: GOOGLE_CLIENT_ID,
-                scope: 'email profile openid',
-                prompt: 'select_account',
-                callback: async (tokenResponse) => {
-                    if (tokenResponse && tokenResponse.access_token) {
-                        await procesarTokenGoogle(tokenResponse.access_token, redirectPrefix);
-                    }
-                }
-            });
-            tokenClient.requestAccessToken();
-            return;
-        } catch (e) {
-            console.warn('GSI initTokenClient fallback:', e);
-        }
-    }
-
-    // Flujo oficial directo de Google Accounts OAuth Popup
-    const width = 500;
-    const height = 620;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
-
-    const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-        `client_id=${encodeURIComponent(GOOGLE_CLIENT_ID)}` +
-        `&redirect_uri=${encodeURIComponent(window.location.origin + '/api/auth/google-callback')}` +
-        `&response_type=token%20id_token` +
-        `&scope=${encodeURIComponent('openid email profile')}` +
-        `&prompt=select_account` +
-        `&nonce=${Date.now()}`;
-
-    const googlePopup = window.open(
-        googleOAuthUrl,
-        'GoogleSignInWindow',
-        `width=${width},height=${height},left=${left},top=${top},status=0,toolbar=0,menubar=0,location=1`
-    );
-
-    const onGoogleMessage = async (event) => {
-        if (event.data && event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-            window.removeEventListener('message', onGoogleMessage);
-            if (event.data.access_token) {
-                await procesarTokenGoogle(event.data.access_token, redirectPrefix);
-            } else if (event.data.id_token) {
-                await enviarCredencialGoogleAlBackend({ credential: event.data.id_token }, redirectPrefix);
-            }
-        }
-    };
-    window.addEventListener('message', onGoogleMessage);
-
-    // Escuchar respuesta o manejar cierre de ventana
-    const timer = setInterval(function() {
-        if (!googlePopup || googlePopup.closed) {
-            clearInterval(timer);
-            window.removeEventListener('message', onGoogleMessage);
-        }
-    }, 1000);
+    await enviarCredencialGoogleAlBackend({ credential: response.credential }, redirectPrefix || '');
 }
 
-// Procesar token recibido de la interfaz de Google
-async function procesarTokenGoogle(accessToken, redirectPrefix) {
-    try {
-        // Consultar el perfil real a la API oficial de Google
-        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        });
-        const googleProfile = await userInfoRes.json();
-
-        if (googleProfile.email) {
-            await enviarCredencialGoogleAlBackend({
-                email: googleProfile.email,
-                nombre: googleProfile.name,
-                foto: googleProfile.picture
-            }, redirectPrefix);
-        }
-    } catch (err) {
-        console.error('Error al obtener perfil de Google:', err);
-    }
-}
-
-// Enviar datos autenticados por Google al backend
+// Enviar el credential JWT de Google al backend para verificacion criptografica y login/registro
 async function enviarCredencialGoogleAlBackend(datosGoogle, redirectPrefix) {
     try {
+        const submitBtns = document.querySelectorAll('.btn-auth-submit');
+        submitBtns.forEach(b => { b.disabled = true; b.textContent = 'Verificando...'; });
+
         const res = await fetch('/api/auth/google', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({
-                ...datosGoogle,
-                rol: 'cliente'
-            })
+            body: JSON.stringify({ ...datosGoogle, rol: 'cliente' })
         });
 
         const data = await res.json();
+
+        submitBtns.forEach(b => { b.disabled = false; });
+
         if (res.ok) {
             CitriAuth.setUser(data.data);
-            if (data.data.rol === 'admin') window.location.href = `${redirectPrefix}admin.html`;
-            else if (data.data.rol === 'productor') window.location.href = `${redirectPrefix}panel_productor.html`;
-            else window.location.href = `${redirectPrefix}perfil.html`;
+            if (data.data.rol === 'admin' || data.data.rol === 'auditor') {
+                window.location.href = redirectPrefix + 'admin.html';
+            } else if (data.data.rol === 'productor') {
+                window.location.href = redirectPrefix + 'panel_productor.html';
+            } else {
+                window.location.href = redirectPrefix + 'perfil.html';
+            }
         } else {
-            alert(data.error || 'Error al autenticar con Google');
+            alert(data.error || 'Error al autenticar con Google. Intenta de nuevo.');
         }
     } catch (err) {
-        console.error('Error al contactar servidor:', err);
+        console.error('[CitriFresh] Error Google Auth:', err);
+        alert('No se pudo conectar con el servidor. Verifica tu conexion e intenta de nuevo.');
     }
 }
 
@@ -487,6 +473,7 @@ window.verBuzonSimulado = async function(email) {
         alert('No se pudo cargar la vista previa del correo.');
     }
 };
+
 
 
 
