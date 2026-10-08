@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="../css/fonts.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/pages/auth.css">
-    <!-- Inicializador inmediato de selección de roles -->
+    <!-- Funciones de registro (definidas aquí para estar disponibles desde onclick en HTML) -->
     <script>
+        // Seleccionar el rol (Cliente / Productor) en la tarjeta de selección
         function seleccionarRolRegistro(rol) {
             var inputRol = document.getElementById('reg-rol');
             if (inputRol) inputRol.value = rol;
-            
+
             var cardCliente = document.getElementById('card-rol-cliente');
             var cardProductor = document.getElementById('card-rol-productor');
             var seccionProductor = document.getElementById('seccion-productor-fields');
@@ -24,46 +25,157 @@
             var btnSubmit = document.getElementById('btn-submit-registro');
 
             if (rol === 'cliente') {
-                if (cardCliente) {
-                    cardCliente.style.borderColor = '#006837';
-                    cardCliente.style.backgroundColor = '#f0fdf4';
-                    var iconCli = cardCliente.querySelector('.icon-selected');
-                    if (iconCli) iconCli.style.display = 'inline-block';
-                }
-                if (cardProductor) {
-                    cardProductor.style.borderColor = '#cbd5e1';
-                    cardProductor.style.backgroundColor = '#ffffff';
-                    var iconProd = cardProductor.querySelector('.icon-selected');
-                    if (iconProd) iconProd.style.display = 'none';
-                }
+                if (cardCliente) { cardCliente.style.borderColor = '#006837'; cardCliente.style.backgroundColor = '#f0fdf4'; }
+                if (cardCliente && cardCliente.querySelector('.icon-selected')) cardCliente.querySelector('.icon-selected').style.display = 'inline-block';
+                if (cardProductor) { cardProductor.style.borderColor = '#cbd5e1'; cardProductor.style.backgroundColor = '#ffffff'; }
+                if (cardProductor && cardProductor.querySelector('.icon-selected')) cardProductor.querySelector('.icon-selected').style.display = 'none';
                 if (seccionProductor) seccionProductor.style.display = 'none';
                 if (labelFoto) labelFoto.textContent = 'Foto de Perfil (Opcional)';
-                if (btnSubmit) {
-                    btnSubmit.innerHTML = '<span>Crear Cuenta de Comprador</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
-                }
+                if (btnSubmit) btnSubmit.innerHTML = '<span>Crear Cuenta de Comprador</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
             } else {
-                if (cardProductor) {
-                    cardProductor.style.borderColor = '#ea580c';
-                    cardProductor.style.backgroundColor = '#fff7ed';
-                    var iconProd2 = cardProductor.querySelector('.icon-selected');
-                    if (iconProd2) iconProd2.style.display = 'inline-block';
-                }
-                if (cardCliente) {
-                    cardCliente.style.borderColor = '#cbd5e1';
-                    cardCliente.style.backgroundColor = '#ffffff';
-                    var iconCli2 = cardCliente.querySelector('.icon-selected');
-                    if (iconCli2) iconCli2.style.display = 'none';
-                }
-                if (seccionProductor) {
-                    seccionProductor.style.display = 'block';
-                }
+                if (cardProductor) { cardProductor.style.borderColor = '#ea580c'; cardProductor.style.backgroundColor = '#fff7ed'; }
+                if (cardProductor && cardProductor.querySelector('.icon-selected')) cardProductor.querySelector('.icon-selected').style.display = 'inline-block';
+                if (cardCliente) { cardCliente.style.borderColor = '#cbd5e1'; cardCliente.style.backgroundColor = '#ffffff'; }
+                if (cardCliente && cardCliente.querySelector('.icon-selected')) cardCliente.querySelector('.icon-selected').style.display = 'none';
+                if (seccionProductor) seccionProductor.style.display = 'block';
                 if (labelFoto) labelFoto.textContent = 'Foto del Productor o Cultivo (Opcional)';
-                if (btnSubmit) {
-                    btnSubmit.innerHTML = '<span>Crear Cuenta de Productor</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
-                }
+                if (btnSubmit) btnSubmit.innerHTML = '<span>Crear Cuenta de Productor</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
             }
         }
-        window.seleccionarRolRegistro = seleccionarRolRegistro;
+
+        // Mostrar/ocultar la sección de clave maestra de administrador
+        function toggleAdminKeyInput() {
+            var sec = document.getElementById('seccion-admin-key');
+            if (!sec) return;
+            var isVisible = sec.style.display === 'block';
+            sec.style.display = isVisible ? 'none' : 'block';
+            var inputRol = document.getElementById('reg-rol');
+            if (inputRol) inputRol.value = isVisible ? 'cliente' : 'admin';
+        }
+
+        // Previsualizar la foto seleccionada (con redimensionado automático para reducir payload)
+        function previewRegistroFoto(event) {
+            var input = event.target;
+            if (!input.files || !input.files[0]) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var maxDim = 400;
+                    var w = img.width, h = img.height;
+                    if (w > h) { if (w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; } }
+                    else { if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; } }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    var base64 = canvas.toDataURL('image/jpeg', 0.8);
+                    var fotoInput = document.getElementById('reg-foto-base64');
+                    var preview = document.getElementById('reg-foto-preview');
+                    var previewWrap = document.getElementById('reg-foto-preview-wrap');
+                    var prompt = document.getElementById('reg-foto-prompt');
+                    if (fotoInput) fotoInput.value = base64;
+                    if (preview) preview.src = base64;
+                    if (previewWrap) previewWrap.style.display = 'block';
+                    if (prompt) prompt.style.display = 'none';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // Procesar el envío del formulario de registro
+        async function procesarRegistroDinamico(e) {
+            if (e && e.preventDefault) e.preventDefault();
+
+            var pass = (document.getElementById('reg-password') ? document.getElementById('reg-password').value : '').trim();
+            var confirm = (document.getElementById('reg-confirm') ? document.getElementById('reg-confirm').value : '').trim();
+
+            if (pass !== confirm) { alert('Las contraseñas ingresadas no coinciden. Por favor verifícalas.'); return false; }
+            if (pass.length < 8) { alert('La contraseña debe tener al menos 8 caracteres.'); return false; }
+            if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(pass)) {
+                alert('La contraseña debe incluir al menos una letra mayúscula, una minúscula y un número.');
+                return false;
+            }
+
+            var rol = document.getElementById('reg-rol') ? document.getElementById('reg-rol').value : 'cliente';
+            var nombres = (document.getElementById('reg-nombres') ? document.getElementById('reg-nombres').value : '').trim();
+            var apellidos = (document.getElementById('reg-apellidos') ? document.getElementById('reg-apellidos').value : '').trim();
+            var email = (document.getElementById('reg-email') ? document.getElementById('reg-email').value : '').trim();
+            var telefono = (document.getElementById('reg-telefono') ? document.getElementById('reg-telefono').value : '').trim();
+            var direccion = (document.getElementById('reg-direccion') ? document.getElementById('reg-direccion').value : '').trim();
+            var foto = document.getElementById('reg-foto-base64') ? document.getElementById('reg-foto-base64').value : '';
+            var adminKey = document.getElementById('reg-admin-key') ? document.getElementById('reg-admin-key').value : '';
+
+            if (!nombres || !apellidos || !email || !telefono || !direccion) {
+                alert('Por favor completa todos los campos obligatorios (*).'); return false;
+            }
+
+            var nombreFinca = (document.getElementById('reg-finca') ? document.getElementById('reg-finca').value.trim() : '') || (rol === 'productor' ? (nombres + ' ' + apellidos).trim() : '');
+            var zonaCultivo = document.getElementById('reg-zona') ? document.getElementById('reg-zona').value : 'León';
+            var capacidad = document.getElementById('reg-capacidad') ? document.getElementById('reg-capacidad').value.trim() : '';
+            var tiposCitricos = document.getElementById('reg-tipos') ? document.getElementById('reg-tipos').value.trim() : '';
+
+            var btn = document.getElementById('btn-submit-registro');
+            if (btn) { btn.disabled = true; btn.innerHTML = '<span>Registrando cuenta...</span>'; }
+
+            var payload = {
+                nombre: (nombres + ' ' + apellidos).trim(),
+                email: email,
+                password: pass,
+                rol: rol,
+                admin_key: adminKey,
+                telefono: telefono,
+                direccion: direccion,
+                foto: foto,
+                nombre_finca: nombreFinca,
+                zona_cultivo: zonaCultivo,
+                capacidad_produccion: capacidad,
+                tipos_citricos: tiposCitricos
+            };
+
+            try {
+                var res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(payload)
+                });
+
+                var data;
+                try { data = await res.json(); }
+                catch(pErr) { data = { error: 'Respuesta inválida del servidor (' + res.status + ')' }; }
+
+                if (!res.ok) {
+                    alert(data.error || 'Error al procesar el registro.');
+                    if (btn) {
+                        btn.disabled = false;
+                        var rolActual = document.getElementById('reg-rol') ? document.getElementById('reg-rol').value : 'cliente';
+                        btn.innerHTML = '<span>Crear Cuenta de ' + (rolActual === 'productor' ? 'Productor' : 'Comprador') + '</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
+                    }
+                    return false;
+                }
+
+                if (typeof CitriAuth !== 'undefined') CitriAuth.setUser(data.data);
+                alert('\u2705 \u00a1Bienvenido a Citri-Fresh, ' + data.data.nombre + '! Tu cuenta de ' + data.data.rol.toUpperCase() + ' ha sido creada.');
+
+                if (data.data.rol === 'admin' || data.data.rol === 'auditor') {
+                    window.location.href = 'admin.html';
+                } else if (data.data.rol === 'productor') {
+                    window.location.href = 'panel_productor.html';
+                } else {
+                    window.location.href = 'perfil.html';
+                }
+            } catch (err) {
+                console.error('Error en registro:', err);
+                alert('No se pudo conectar con el servidor: ' + (err.message || 'Verifica tu conexión'));
+                if (btn) {
+                    btn.disabled = false;
+                    var rolActual2 = document.getElementById('reg-rol') ? document.getElementById('reg-rol').value : 'cliente';
+                    btn.innerHTML = '<span>Crear Cuenta de ' + (rolActual2 === 'productor' ? 'Productor' : 'Comprador') + '</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
+                }
+            }
+            return false;
+        }
     </script>
 </head>
 <body>
@@ -116,7 +228,7 @@
                     </div>
                 </div>
 
-                <form id="form-registro-dinamico" class="auth-form" onsubmit="procesarRegistroDinamico(event)">
+                <form id="form-registro-dinamico" class="auth-form-registro" action="javascript:void(0);" method="POST" onsubmit="event.preventDefault(); return procesarRegistroDinamico(event);">
                     <input type="hidden" id="reg-rol" value="cliente">
 
                     <!-- ==================== CAMPOS COMUNES ==================== -->
@@ -281,144 +393,14 @@
     <script src="../js/modules/citri-features.js"></script>
     <script src="../js/app.js"></script>
     <script>
-        function seleccionarRolRegistro(rol) {
-            document.getElementById('reg-rol').value = rol;
-            const cardCliente = document.getElementById('card-rol-cliente');
-            const cardProductor = document.getElementById('card-rol-productor');
-            const seccionProductor = document.getElementById('seccion-productor-fields');
-            const labelFoto = document.getElementById('label-foto-registro');
-
-            if (rol === 'cliente') {
-                cardCliente.style.borderColor = '#006837';
-                cardCliente.style.backgroundColor = '#f0fdf4';
-                cardCliente.querySelector('.icon-selected').style.display = 'inline-block';
-
-                cardProductor.style.borderColor = '#cbd5e1';
-                cardProductor.style.backgroundColor = '#ffffff';
-                cardProductor.querySelector('.icon-selected').style.display = 'none';
-
-                seccionProductor.style.display = 'none';
-                labelFoto.textContent = 'Foto de Perfil (Opcional)';
-            } else {
-                cardProductor.style.borderColor = '#ea580c';
-                cardProductor.style.backgroundColor = '#fff7ed';
-                cardProductor.querySelector('.icon-selected').style.display = 'inline-block';
-
-                cardCliente.style.borderColor = '#cbd5e1';
-                cardCliente.style.backgroundColor = '#ffffff';
-                cardCliente.querySelector('.icon-selected').style.display = 'none';
-
-                seccionProductor.style.display = 'block';
-                labelFoto.textContent = 'Foto de la Finca o del Productor (Opcional)';
-            }
-        }
-
-        function toggleAdminKeyInput() {
-            const sec = document.getElementById('seccion-admin-key');
-            sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
-            if (sec.style.display === 'block') {
-                document.getElementById('reg-rol').value = 'admin';
-            } else {
-                document.getElementById('reg-rol').value = 'cliente';
-            }
-        }
-
-        function previewRegistroFoto(event) {
-            const input = event.target;
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('reg-foto-base64').value = e.target.result;
-                    document.getElementById('reg-foto-preview').src = e.target.result;
-                    document.getElementById('reg-foto-preview-wrap').style.display = 'block';
-                    document.getElementById('reg-foto-prompt').style.display = 'none';
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        async function procesarRegistroDinamico(e) {
-            e.preventDefault();
-            const pass = document.getElementById('reg-password').value;
-            const confirm = document.getElementById('reg-confirm').value;
-
-            if (pass !== confirm) {
-                alert('Las contraseñas ingresadas no coinciden.');
-                return;
-            }
-
-            const rol = document.getElementById('reg-rol').value;
-            const nombres = document.getElementById('reg-nombres').value.trim();
-            const apellidos = document.getElementById('reg-apellidos').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const telefono = document.getElementById('reg-telefono').value.trim();
-            const direccion = document.getElementById('reg-direccion').value.trim();
-            const foto = document.getElementById('reg-foto-base64').value;
-            const adminKey = document.getElementById('reg-admin-key')?.value || '';
-
-            const nombreFinca = document.getElementById('reg-finca')?.value.trim() || (rol === 'productor' ? `${nombres} ${apellidos}`.trim() : '');
-            const zonaCultivo = document.getElementById('reg-zona')?.value || 'León';
-            const capacidad = document.getElementById('reg-capacidad')?.value.trim() || '';
-            const tiposCitricos = document.getElementById('reg-tipos')?.value.trim() || '';
-
-            const btn = document.getElementById('btn-submit-registro');
-            btn.disabled = true;
-            btn.innerHTML = '<span>Registrando cuenta...</span>';
-
-            const payload = {
-                nombre: `${nombres} ${apellidos}`.trim(),
-                email,
-                password: pass,
-                rol,
-                admin_key: adminKey,
-                telefono,
-                direccion,
-                foto,
-                nombre_finca: nombreFinca,
-                zona_cultivo: zonaCultivo,
-                capacidad_produccion: capacidad,
-                tipos_citricos: tiposCitricos
-            };
-
-            try {
-                const res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await res.json();
-                if (!res.ok) {
-                    alert(data.error || 'Error al procesar el registro.');
-                    btn.disabled = false;
-                    btn.innerHTML = '<span>Crear Cuenta Registrada</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
-                    return;
-                }
-
-                CitriAuth.setUser(data.data);
-                alert(`✅ ¡Bienvenido a Citri-Fresh, ${data.data.nombre}! Tu cuenta de ${data.data.rol.toUpperCase()} ha sido creada.`);
-
-                if (data.data.rol === 'admin') window.location.href = 'admin.html';
-                else if (data.data.rol === 'productor') window.location.href = 'panel_productor.html';
-                else window.location.href = 'perfil.html';
-            } catch (err) {
-                console.error(err);
-                alert('No se pudo conectar con el servidor.');
-                btn.disabled = false;
-                btn.innerHTML = '<span>Crear Cuenta Registrada</span><span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>';
-            }
-        }
-
-        // Asegurar vinculación de eventos al cargar el documento
+        // Vincular event listeners al cargar el documento (las funciones ya están definidas en el head)
         document.addEventListener('DOMContentLoaded', function() {
-            var btnCli = document.getElementById('card-rol-cliente');
-            var btnProd = document.getElementById('card-rol-productor');
-            if (btnCli) {
-                btnCli.addEventListener('click', function() { seleccionarRolRegistro('cliente'); });
-            }
-            if (btnProd) {
-                btnProd.addEventListener('click', function() { seleccionarRolRegistro('productor'); });
+            var formReg = document.getElementById('form-registro-dinamico');
+            if (formReg) {
+                formReg.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    procesarRegistroDinamico(e);
+                });
             }
         });
     </script>
