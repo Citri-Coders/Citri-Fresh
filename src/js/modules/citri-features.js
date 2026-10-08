@@ -1,4 +1,45 @@
 // ==================== GOOGLE SIGN-IN / REGISTER CON INTERFAZ AUTÉNTICA DE GOOGLE ====================
+
+// --- Función de seguridad: escape HTML para prevenir XSS ---
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    if (typeof str !== 'string') str = String(str);
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function escapeAttr(str) {
+    if (str === null || str === undefined) return '';
+    if (typeof str !== 'string') str = String(str);
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+// Cache del Google Client ID cargado desde el backend
+let _googleClientId = null;
+
+async function obtenerGoogleClientId() {
+    if (_googleClientId) return _googleClientId;
+    try {
+        const res = await fetch('/api/auth/config');
+        if (res.ok) {
+            const data = await res.json();
+            _googleClientId = data.data?.googleClientId || null;
+        }
+    } catch (err) {
+        console.warn('No se pudo obtener configuracion de Google:', err);
+    }
+    return _googleClientId;
+}
+
 function inicializarBotonGoogle() {
     // 1. Inyectar la biblioteca oficial de Google Identity Services si no está presente
     if (!document.getElementById('google-gsi-client')) {
@@ -26,11 +67,15 @@ function inicializarBotonGoogle() {
  * Si la librería GSI de Google está cargada, inicia el flujo nativo TokenClient de Google Identity.
  * De forma paralela y robusta, abre la ventana emergente estándar de Google OAuth 2.0.
  */
-function abrirInterfazAutenticaGoogle() {
+async function abrirInterfazAutenticaGoogle() {
     const isInsideAuth = window.location.pathname.includes('/auth/');
     const redirectPrefix = isInsideAuth ? '../' : '';
 
-    const GOOGLE_CLIENT_ID = '1096747808728-qs9egmbcrfuam09vvu3d36140f5mqr3c.apps.googleusercontent.com';
+    const GOOGLE_CLIENT_ID = await obtenerGoogleClientId();
+    if (!GOOGLE_CLIENT_ID) {
+        alert('La autenticación con Google no está disponible en este momento.');
+        return;
+    }
 
     // Intentar con Google Identity Services token client si está disponible
     if (window.google && window.google.accounts && window.google.accounts.oauth2) {
@@ -221,16 +266,18 @@ function inicializarRecuperarPassword() {
                 }
 
                 emailValidado = data.data.email;
+                const safeEmail = escapeHtml(data.data.email);
+                const safePreviewUrl = escapeAttr(data.data.previewUrl || '');
                 const previewLinkHtml = data.data.previewUrl 
-                    ? `<div style="margin-top: 8px;"><a href="${data.data.previewUrl}" target="_blank" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; border-radius: 8px; color: #006837; border-color: #006837; text-decoration: none;"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span> Abrir Correo en Servidor de Pruebas (Ethereal)</a></div>`
-                    : `<div style="margin-top: 8px;"><button type="button" onclick="verBuzonSimulado('${data.data.email}')" style="background: none; border: none; padding: 0; color: #006837; font-size: 0.75rem; font-weight: 700; text-decoration: underline; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px;">mail</span> ¿No tienes acceso a este correo? Ver bandeja local de prueba</button></div>`;
+                    ? `<div style="margin-top: 8px;"><a href="${safePreviewUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; border-radius: 8px; color: #006837; border-color: #006837; text-decoration: none;"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span> Abrir Correo en Servidor de Pruebas (Ethereal)</a></div>`
+                    : `<div style="margin-top: 8px;"><button type="button" onclick="verBuzonSimulado('${safeEmail}')" style="background: none; border: none; padding: 0; color: #006837; font-size: 0.75rem; font-weight: 700; text-decoration: underline; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px;">mail</span> ¿No tienes acceso a este correo? Ver bandeja local de prueba</button></div>`;
 
                 codigoInfo.innerHTML = `
                     <div style="display: flex; align-items: flex-start; gap: 8px;">
                         <span class="material-symbols-outlined" style="font-size: 20px; color: #006837; margin-top: 2px;">mark_email_read</span>
                         <div>
                             <strong>¡Correo electrónico enviado con éxito!</strong><br>
-                            Hemos despachado la clave de seguridad de 6 dígitos a <u>${data.data.email}</u>.<br>
+                            Hemos despachado la clave de seguridad de 6 dígitos a <u>${safeEmail}</u>.<br>
                             <span style="font-size: 0.8rem; color: #475569; display: block; margin-top: 4px;">Revisa tu bandeja de entrada o carpeta de no deseados (spam) y escribe el código abajo.</span>
                             ${previewLinkHtml}
                         </div>
@@ -299,7 +346,7 @@ function inicializarRecuperarPassword() {
                 }
 
                 codigoValidado = codigo;
-                exitoInfo.innerHTML = `✓ Código validado correctamente para <b>${emailValidado}</b>. Establece tu nueva contraseña segura.`;
+                exitoInfo.innerHTML = `✓ Código validado correctamente para <b>${escapeHtml(emailValidado)}</b>. Establece tu nueva contraseña segura.`;
 
                 formPaso2.style.display = 'none';
                 if (formPaso3) formPaso3.style.display = 'block';
@@ -327,8 +374,14 @@ function inicializarRecuperarPassword() {
             const confirm = passConfirm.value;
             error3.style.display = 'none';
 
-            if (nueva.length < 6) {
-                error3.textContent = 'La nueva contraseña debe tener al menos 6 caracteres.';
+            if (nueva.length < 8) {
+                error3.textContent = 'La nueva contraseña debe tener al menos 8 caracteres.';
+                error3.style.display = 'block';
+                return;
+            }
+
+            if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(nueva)) {
+                error3.textContent = 'La contraseña debe incluir al menos una mayúscula, una minúscula y un número.';
                 error3.style.display = 'block';
                 return;
             }
@@ -412,14 +465,14 @@ window.verBuzonSimulado = async function(email) {
                         <strong style="color:#006837;font-size:1.1rem;display:flex;align-items:center;gap:6px;">
                             <span class="material-symbols-outlined">mark_email_read</span> Bandeja de Entrada Citri-Fresh
                         </strong>
-                        <span style="font-size:0.75rem;color:#64748b;">Para: ${correo.data.destinatario} • ${new Date(correo.data.fecha).toLocaleTimeString()}</span>
+                        <span style="font-size:0.75rem;color:#64748b;">Para: ${escapeHtml(correo.data.destinatario)} • ${escapeHtml(new Date(correo.data.fecha).toLocaleTimeString())}</span>
                     </div>
                     <button onclick="document.getElementById('modal-buzon-simulado').style.display='none'" style="background:none;border:none;cursor:pointer;color:#64748b;padding:4px;">
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
                 <div style="border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;background:#f8fafc;">
-                    ${correo.data.htmlContent}
+                    <iframe srcdoc="${escapeAttr(correo.data.htmlContent)}" sandbox="allow-same-origin" style="width:100%;min-height:300px;border:none;display:block;" title="Vista previa del correo"></iframe>
                 </div>
                 <div style="margin-top:1rem;text-align:right;">
                     <button onclick="document.getElementById('modal-buzon-simulado').style.display='none'" class="btn btn-primary" style="padding:0.5rem 1.25rem;font-size:0.85rem;border-radius:10px;">
