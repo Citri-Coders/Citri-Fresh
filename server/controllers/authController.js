@@ -254,13 +254,20 @@ export const googleAuth = async (req, res, next) => {
       throw new BadRequestError("El correo de Google es obligatorio");
     }
 
-    // Validación estricta y real del correo
-    const verificacion = await validarCorreoReal(email);
-    if (!verificacion.valido) {
-      throw new BadRequestError(verificacion.error);
+    // Si el email vino verificado por el JWT de Google, confiamos en él directamente
+    // (evita DNS lookups que pueden fallar en entornos serverless como Vercel)
+    let emailNorm;
+    if (credential) {
+      // Ya verificado criptográficamente por Google — solo normalizamos
+      emailNorm = email.trim().toLowerCase();
+    } else {
+      // Validación DNS para el flujo de access_token / perfil manual
+      const verificacion = await validarCorreoReal(email);
+      if (!verificacion.valido) {
+        throw new BadRequestError(verificacion.error);
+      }
+      emailNorm = verificacion.email;
     }
-
-    const emailNorm = verificacion.email;
     let usuario = await UsuarioModel.findByEmail(emailNorm);
 
     if (!usuario) {
