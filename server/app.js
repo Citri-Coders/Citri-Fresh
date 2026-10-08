@@ -1,9 +1,10 @@
 import logger from "./config/logger.js";
 import { AppError } from "./utils/appError.js";
 import express from "express";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import { corsMiddleware } from "./middlewares/corsMiddleware.js";
-import { generalLimiter, authLimiter, rateLimitErrorHandler } from "./middlewares/rateLimitMiddleware.js";
+import { generalLimiter, authLimiter, passwordResetLimiter, googleAuthLimiter, rateLimitErrorHandler } from "./middlewares/rateLimitMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import productoRoutes from "./routes/productoRoutes.js";
 import pedidoRoutes from "./routes/pedidoRoutes.js";
@@ -21,6 +22,22 @@ const app = express();
 // Confianza en proxies inversos (necesario para Vercel / serverless y rate-limiters)
 app.set("trust proxy", 1);
 
+// Seguridad: headers HTTP de proteccion (clickjacking, MIME sniffing, HSTS, etc.)
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://accounts.google.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      imgSrc: ["'self'", "data:", "https:", "https://lh3.googleusercontent.com"],
+      connectSrc: ["'self'", "https://accounts.google.com", "https://www.googleapis.com"],
+      frameSrc: ["'self'", "https://accounts.google.com"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
+
 app.use(corsMiddleware);
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
@@ -36,6 +53,8 @@ app.use("/api", generalLimiter);
 // Aplicar rate limiting más estricto a rutas de autenticación
 app.use("/api/auth/login", authLimiter);
 app.use("/api/auth/register", authLimiter);
+app.use("/api/auth/google", googleAuthLimiter);
+app.use("/api/auth/recuperar-password", passwordResetLimiter);
 
 // Rutas de favicon oficiales del sistema
 app.get("/favicon.ico", (req, res) => {
