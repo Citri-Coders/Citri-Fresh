@@ -4,179 +4,13 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Registro | Citri-Fresh</title>
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="alternate icon" href="/favicon.ico">    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="alternate icon" href="/favicon.ico">
+    <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/fonts.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/pages/auth.css">
-    <!-- Funciones de registro (definidas aquí para estar disponibles desde onclick en HTML) -->
-    <script>
-        // Seleccionar el rol (Cliente / Productor) en la tarjeta de selección
-        function seleccionarRolRegistro(rol) {
-            var inputRol = document.getElementById('reg-rol');
-            if (inputRol) inputRol.value = rol;
-
-            var cardCliente = document.getElementById('card-rol-cliente');
-            var cardProductor = document.getElementById('card-rol-productor');
-            var seccionProductor = document.getElementById('seccion-productor-fields');
-            var labelFoto = document.getElementById('label-foto-registro');
-            var btnSubmit = document.getElementById('btn-submit-registro');
-
-            if (rol === 'cliente') {
-                if (cardCliente) { cardCliente.style.borderColor = '#006837'; cardCliente.style.backgroundColor = '#f0fdf4'; }
-                if (cardCliente && cardCliente.querySelector('.icon-selected')) cardCliente.querySelector('.icon-selected').style.display = 'inline-block';
-                if (cardProductor) { cardProductor.style.borderColor = '#cbd5e1'; cardProductor.style.backgroundColor = '#ffffff'; }
-                if (cardProductor && cardProductor.querySelector('.icon-selected')) cardProductor.querySelector('.icon-selected').style.display = 'none';
-                if (seccionProductor) seccionProductor.style.display = 'none';
-                if (labelFoto) labelFoto.textContent = 'Foto de Perfil (Opcional)';
-                if (btnSubmit) btnSubmit.innerHTML = '<span>Crear Cuenta de Comprador</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
-            } else {
-                if (cardProductor) { cardProductor.style.borderColor = '#ea580c'; cardProductor.style.backgroundColor = '#fff7ed'; }
-                if (cardProductor && cardProductor.querySelector('.icon-selected')) cardProductor.querySelector('.icon-selected').style.display = 'inline-block';
-                if (cardCliente) { cardCliente.style.borderColor = '#cbd5e1'; cardCliente.style.backgroundColor = '#ffffff'; }
-                if (cardCliente && cardCliente.querySelector('.icon-selected')) cardCliente.querySelector('.icon-selected').style.display = 'none';
-                if (seccionProductor) seccionProductor.style.display = 'block';
-                if (labelFoto) labelFoto.textContent = 'Foto del Productor o Cultivo (Opcional)';
-                if (btnSubmit) btnSubmit.innerHTML = '<span>Crear Cuenta de Productor</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
-            }
-        }
-
-        // Mostrar/ocultar la sección de clave maestra de administrador
-        function toggleAdminKeyInput() {
-            var sec = document.getElementById('seccion-admin-key');
-            if (!sec) return;
-            var isVisible = sec.style.display === 'block';
-            sec.style.display = isVisible ? 'none' : 'block';
-            var inputRol = document.getElementById('reg-rol');
-            if (inputRol) inputRol.value = isVisible ? 'cliente' : 'admin';
-        }
-
-        // Previsualizar la foto seleccionada (con redimensionado automático para reducir payload)
-        function previewRegistroFoto(event) {
-            var input = event.target;
-            if (!input.files || !input.files[0]) return;
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var maxDim = 400;
-                    var w = img.width, h = img.height;
-                    if (w > h) { if (w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; } }
-                    else { if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; } }
-                    canvas.width = w; canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    var base64 = canvas.toDataURL('image/jpeg', 0.8);
-                    var fotoInput = document.getElementById('reg-foto-base64');
-                    var preview = document.getElementById('reg-foto-preview');
-                    var previewWrap = document.getElementById('reg-foto-preview-wrap');
-                    var prompt = document.getElementById('reg-foto-prompt');
-                    if (fotoInput) fotoInput.value = base64;
-                    if (preview) preview.src = base64;
-                    if (previewWrap) previewWrap.style.display = 'block';
-                    if (prompt) prompt.style.display = 'none';
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-
-        // Procesar el envío del formulario de registro
-        async function procesarRegistroDinamico(e) {
-            if (e && e.preventDefault) e.preventDefault();
-
-            var pass = (document.getElementById('reg-password') ? document.getElementById('reg-password').value : '').trim();
-            var confirm = (document.getElementById('reg-confirm') ? document.getElementById('reg-confirm').value : '').trim();
-
-            if (pass !== confirm) { alert('Las contraseñas ingresadas no coinciden. Por favor verifícalas.'); return false; }
-            if (pass.length < 8) { alert('La contraseña debe tener al menos 8 caracteres.'); return false; }
-            if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(pass)) {
-                alert('La contraseña debe incluir al menos una letra mayúscula, una minúscula y un número.');
-                return false;
-            }
-
-            var rol = document.getElementById('reg-rol') ? document.getElementById('reg-rol').value : 'cliente';
-            var nombres = (document.getElementById('reg-nombres') ? document.getElementById('reg-nombres').value : '').trim();
-            var apellidos = (document.getElementById('reg-apellidos') ? document.getElementById('reg-apellidos').value : '').trim();
-            var email = (document.getElementById('reg-email') ? document.getElementById('reg-email').value : '').trim();
-            var telefono = (document.getElementById('reg-telefono') ? document.getElementById('reg-telefono').value : '').trim();
-            var direccion = (document.getElementById('reg-direccion') ? document.getElementById('reg-direccion').value : '').trim();
-            var foto = document.getElementById('reg-foto-base64') ? document.getElementById('reg-foto-base64').value : '';
-            var adminKey = document.getElementById('reg-admin-key') ? document.getElementById('reg-admin-key').value : '';
-
-            if (!nombres || !apellidos || !email || !telefono || !direccion) {
-                alert('Por favor completa todos los campos obligatorios (*).'); return false;
-            }
-
-            var nombreFinca = (document.getElementById('reg-finca') ? document.getElementById('reg-finca').value.trim() : '') || (rol === 'productor' ? (nombres + ' ' + apellidos).trim() : '');
-            var zonaCultivo = document.getElementById('reg-zona') ? document.getElementById('reg-zona').value : 'León';
-            var capacidad = document.getElementById('reg-capacidad') ? document.getElementById('reg-capacidad').value.trim() : '';
-            var tiposCitricos = document.getElementById('reg-tipos') ? document.getElementById('reg-tipos').value.trim() : '';
-
-            var btn = document.getElementById('btn-submit-registro');
-            if (btn) { btn.disabled = true; btn.innerHTML = '<span>Registrando cuenta...</span>'; }
-
-            var payload = {
-                nombre: (nombres + ' ' + apellidos).trim(),
-                email: email,
-                password: pass,
-                rol: rol,
-                admin_key: adminKey,
-                telefono: telefono,
-                direccion: direccion,
-                foto: foto,
-                nombre_finca: nombreFinca,
-                zona_cultivo: zonaCultivo,
-                capacidad_produccion: capacidad,
-                tipos_citricos: tiposCitricos
-            };
-
-            try {
-                var res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify(payload)
-                });
-
-                var data;
-                try { data = await res.json(); }
-                catch(pErr) { data = { error: 'Respuesta inválida del servidor (' + res.status + ')' }; }
-
-                if (!res.ok) {
-                    alert(data.error || 'Error al procesar el registro.');
-                    if (btn) {
-                        btn.disabled = false;
-                        var rolActual = document.getElementById('reg-rol') ? document.getElementById('reg-rol').value : 'cliente';
-                        btn.innerHTML = '<span>Crear Cuenta de ' + (rolActual === 'productor' ? 'Productor' : 'Comprador') + '</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
-                    }
-                    return false;
-                }
-
-                if (typeof CitriAuth !== 'undefined') CitriAuth.setUser(data.data);
-                alert('\u2705 \u00a1Bienvenido a Citri-Fresh, ' + data.data.nombre + '! Tu cuenta de ' + data.data.rol.toUpperCase() + ' ha sido creada.');
-
-                if (data.data.rol === 'admin' || data.data.rol === 'auditor') {
-                    window.location.href = 'admin.html';
-                } else if (data.data.rol === 'productor') {
-                    window.location.href = 'panel_productor.html';
-                } else {
-                    window.location.href = 'perfil.html';
-                }
-            } catch (err) {
-                console.error('Error en registro:', err);
-                alert('No se pudo conectar con el servidor: ' + (err.message || 'Verifica tu conexión'));
-                if (btn) {
-                    btn.disabled = false;
-                    var rolActual2 = document.getElementById('reg-rol') ? document.getElementById('reg-rol').value : 'cliente';
-                    btn.innerHTML = '<span>Crear Cuenta de ' + (rolActual2 === 'productor' ? 'Productor' : 'Comprador') + '</span><span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';
-                }
-            }
-            return false;
-        }
-    </script>
 </head>
 <body>
     <div class="auth-page">
@@ -185,7 +19,7 @@
             <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
             <span>Volver al Inicio</span>
         </a>
-        
+
         <div class="auth-card-split auth-card-registro">
             <div class="auth-form-side auth-form-side-registro">
                 <div class="auth-brand-badge" style="justify-content: center; margin-bottom: 1rem;">
@@ -197,13 +31,15 @@
                     <h1 class="auth-title" style="font-size: 1.75rem; letter-spacing: -0.5px;">Crea tu Cuenta en Citri-Fresh</h1>
                     <p class="auth-subtitle">Selecciona el tipo de cuenta adecuado para personalizar tu experiencia.</p>
                 </div>
-                
-                <!-- Selector de Roles con Botones Semánticos Accesibles -->
+
+                <!-- Selector de Roles -->
                 <div style="margin-bottom: 1.75rem;">
                     <p style="font-size: 0.8125rem; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Selecciona tu Perfil</p>
                     <div class="auth-role-grid">
+
                         <!-- Opción Comprador -->
-                        <button type="button" id="card-rol-cliente" class="role-selector-card active" onclick="seleccionarRolRegistro('cliente')" style="border: 2px solid #006837; background: #f0fdf4; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; width: 100%; text-align: left;">
+                        <div id="card-rol-cliente"
+                             style="border: 2px solid #006837; background: #f0fdf4; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; width: 100%; box-sizing: border-box;">
                             <div style="width: 40px; height: 40px; border-radius: 12px; background: #006837; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <span class="material-symbols-outlined" style="font-size: 22px;">shopping_cart</span>
                             </div>
@@ -211,11 +47,12 @@
                                 <strong style="display: block; font-size: 0.95rem; color: #0f172a;">Comprador</strong>
                                 <span style="font-size: 0.75rem; color: #64748b;">Comercial / Distribuidor</span>
                             </div>
-                            <span class="material-symbols-outlined icon-selected" style="color: #006837; font-size: 22px;">check_circle</span>
-                        </button>
+                            <span id="icon-check-cliente" class="material-symbols-outlined" style="color: #006837; font-size: 22px;">check_circle</span>
+                        </div>
 
                         <!-- Opción Productor -->
-                        <button type="button" id="card-rol-productor" class="role-selector-card" onclick="seleccionarRolRegistro('productor')" style="border: 2px solid #cbd5e1; background: #ffffff; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; width: 100%; text-align: left;">
+                        <div id="card-rol-productor"
+                             style="border: 2px solid #cbd5e1; background: #ffffff; padding: 1rem 1.15rem; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.25s ease; width: 100%; box-sizing: border-box;">
                             <div style="width: 40px; height: 40px; border-radius: 12px; background: #ea580c; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <span class="material-symbols-outlined" style="font-size: 22px;">agriculture</span>
                             </div>
@@ -223,15 +60,16 @@
                                 <strong style="display: block; font-size: 0.95rem; color: #0f172a;">Productor</strong>
                                 <span style="font-size: 0.75rem; color: #64748b;">Cultivo / Productor Citrícola</span>
                             </div>
-                            <span class="material-symbols-outlined icon-selected" style="display: none; color: #ea580c; font-size: 22px;">check_circle</span>
-                        </button>
+                            <span id="icon-check-productor" class="material-symbols-outlined" style="display: none; color: #ea580c; font-size: 22px;">check_circle</span>
+                        </div>
+
                     </div>
                 </div>
 
-                <form id="form-registro-dinamico" class="auth-form-registro" action="javascript:void(0);" method="POST" onsubmit="event.preventDefault(); return procesarRegistroDinamico(event);">
+                <form id="form-registro-dinamico" class="auth-form-registro">
                     <input type="hidden" id="reg-rol" value="cliente">
 
-                    <!-- ==================== CAMPOS COMUNES ==================== -->
+                    <!-- CAMPOS COMUNES -->
                     <div class="auth-form-grid-2" style="margin-bottom: 1rem;">
                         <div class="form-field-group" style="margin-bottom: 0;">
                             <label class="form-field-label">Nombres *</label>
@@ -248,9 +86,9 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-field-group">
-                        <label class="form-field-label">Correo Electrónico Verificado *</label>
+                        <label class="form-field-label">Correo Electrónico *</label>
                         <div class="input-icon-wrapper">
                             <input type="email" id="reg-email" class="auth-input-modern" placeholder="tu-correo@gmail.com" required>
                             <span class="material-symbols-outlined field-icon">mail</span>
@@ -274,8 +112,8 @@
                         </div>
                     </div>
 
-                    <!-- ==================== CAMPOS EXCLUSIVOS PRODUCTOR ==================== -->
-                    <div id="seccion-productor-fields" style="display: none; background: #fff7ed; border: 1.5px dashed #ea580c; border-radius: 18px; padding: 1.25rem; margin-bottom: 1.25rem; animation: fadeIn 0.3s ease;">
+                    <!-- CAMPOS EXCLUSIVOS PRODUCTOR -->
+                    <div id="seccion-productor-fields" style="display: none; background: #fff7ed; border: 1.5px dashed #ea580c; border-radius: 18px; padding: 1.25rem; margin-bottom: 1.25rem;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
                             <span class="material-symbols-outlined" style="color: #ea580c; font-size: 22px;">nature_people</span>
                             <strong style="color: #9a3412; font-size: 0.95rem;">Datos del Productor y Cultivo Citrícola</strong>
@@ -283,14 +121,14 @@
 
                         <div class="auth-form-grid-finca" style="margin-bottom: 1rem;">
                             <div class="form-field-group" style="margin-bottom: 0;">
-                                <label class="form-field-label">Nombre del Productor / Unidad Productiva (Demostración)</label>
+                                <label class="form-field-label">Nombre del Productor / Unidad Productiva</label>
                                 <div class="input-icon-wrapper">
-                                    <input type="text" id="reg-finca" class="auth-input-modern" placeholder="Ej: Cítricos del Sol (Demostración)">
+                                    <input type="text" id="reg-finca" class="auth-input-modern" placeholder="Ej: Cítricos del Sol">
                                     <span class="material-symbols-outlined field-icon">storefront</span>
                                 </div>
                             </div>
                             <div class="form-field-group" style="margin-bottom: 0;">
-                                <label class="form-field-label">Zona Citrícola Oficial *</label>
+                                <label class="form-field-label">Zona Citrícola *</label>
                                 <div class="input-icon-wrapper">
                                     <select id="reg-zona" class="auth-input-modern" style="cursor: pointer;">
                                         <option value="León">León (Occidente)</option>
@@ -322,13 +160,12 @@
                         </div>
                     </div>
 
-                    <!-- ==================== FOTO DE PERFIL / FINCA ==================== -->
+                    <!-- FOTO DE PERFIL -->
                     <div class="form-field-group" style="margin-bottom: 1rem;">
                         <label class="form-field-label" id="label-foto-registro">Foto de Perfil (Opcional)</label>
-                        <div style="border: 1.5px dashed #cbd5e1; border-radius: 14px; padding: 0.85rem; text-align: center; background: #f8fafc; cursor: pointer;" onclick="document.getElementById('reg-file').click()">
-                            <input type="file" id="reg-file" accept="image/*" style="display: none;" onchange="previewRegistroFoto(event)">
+                        <div style="border: 1.5px dashed #cbd5e1; border-radius: 14px; padding: 0.85rem; text-align: center; background: #f8fafc; cursor: pointer;" id="foto-upload-area">
+                            <input type="file" id="reg-file" accept="image/*" style="display: none;">
                             <input type="hidden" id="reg-foto-base64" value="">
-                            
                             <div id="reg-foto-prompt" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                                 <span class="material-symbols-outlined" style="color: #64748b; font-size: 24px;">add_a_photo</span>
                                 <span style="font-size: 0.85rem; color: #475569; font-weight: 600;">Haz clic para cargar imagen</span>
@@ -340,12 +177,12 @@
                         </div>
                     </div>
 
-                    <!-- ==================== CONTRASEÑA ==================== -->
+                    <!-- CONTRASEÑA -->
                     <div class="auth-form-grid-2" style="margin-bottom: 1.25rem;">
                         <div class="form-field-group" style="margin-bottom: 0;">
                             <label class="form-field-label">Contraseña *</label>
                             <div class="input-icon-wrapper">
-                                <input type="password" id="reg-password" class="auth-input-modern" placeholder="Mínimo 8 caracteres (mayúscula + número)" required minlength="8">
+                                <input type="password" id="reg-password" class="auth-input-modern" placeholder="Mín. 8 caracteres (Mayúscula + número)" required minlength="8">
                                 <span class="material-symbols-outlined field-icon">lock</span>
                             </div>
                         </div>
@@ -358,13 +195,12 @@
                         </div>
                     </div>
 
-                    <!-- Enlace discreto para Administrador Autorizado -->
+                    <!-- ADMIN KEY -->
                     <div style="text-align: right; margin-bottom: 1rem;">
-                        <button type="button" onclick="toggleAdminKeyInput()" style="background: none; border: none; font-size: 0.75rem; color: #94a3b8; cursor: pointer; text-decoration: underline;">
+                        <button type="button" id="btn-toggle-admin" style="background: none; border: none; font-size: 0.75rem; color: #94a3b8; cursor: pointer; text-decoration: underline;">
                             ¿Eres Administrador con Clave Maestra?
                         </button>
                     </div>
-
                     <div id="seccion-admin-key" style="display: none; background: #f1f5f9; border: 1.5px solid #0f172a; border-radius: 14px; padding: 1rem; margin-bottom: 1.25rem;">
                         <label class="form-field-label" style="color: #0f172a;">Clave Maestra Única de Administrador</label>
                         <div class="input-icon-wrapper">
@@ -373,39 +209,214 @@
                         </div>
                         <span style="font-size: 0.725rem; color: #64748b; margin-top: 4px; display: block;">Solo personal autorizado con llave corporativa del marketplace.</span>
                     </div>
-                    
+
                     <button type="submit" id="btn-submit-registro" class="btn-auth-submit" style="margin-top: 0.5rem; height: 50px;">
-                        <span>Crear Cuenta Registrada</span>
+                        <span id="btn-submit-texto">Crear Cuenta de Comprador</span>
                         <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
                     </button>
                 </form>
 
-                <!-- Google Auth temporalmente deshabilitado -->
-                
                 <div class="auth-bottom-text" style="margin-top: 1.25rem;">
                     ¿Ya tienes una cuenta? <a href="auth/login.html" class="auth-link-highlight">Inicia sesión</a>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="../js/modules/citri-core.js"></script>
     <script src="../js/modules/citri-views.js"></script>
     <script src="../js/modules/citri-features.js"></script>
     <script src="../js/app.js"></script>
+
     <script>
-        // Vincular event listeners al cargar el documento (las funciones ya están definidas en el head)
-        document.addEventListener('DOMContentLoaded', function() {
-            var formReg = document.getElementById('form-registro-dinamico');
-            if (formReg) {
-                formReg.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    procesarRegistroDinamico(e);
+    // =====================================================================
+    // LÓGICA DE REGISTRO — archivo registro.html
+    // Una sola definición, sin duplicados, sin dependencias externas para UI
+    // =====================================================================
+
+    (function() {
+        // --- Referencias a elementos del DOM ---
+        var cardCliente     = document.getElementById('card-rol-cliente');
+        var cardProductor   = document.getElementById('card-rol-productor');
+        var iconCliente     = document.getElementById('icon-check-cliente');
+        var iconProductor   = document.getElementById('icon-check-productor');
+        var seccionProd     = document.getElementById('seccion-productor-fields');
+        var inputRol        = document.getElementById('reg-rol');
+        var labelFoto       = document.getElementById('label-foto-registro');
+        var btnTexto        = document.getElementById('btn-submit-texto');
+        var fotoUploadArea  = document.getElementById('foto-upload-area');
+        var regFile         = document.getElementById('reg-file');
+        var btnToggleAdmin  = document.getElementById('btn-toggle-admin');
+        var seccionAdmin    = document.getElementById('seccion-admin-key');
+        var form            = document.getElementById('form-registro-dinamico');
+
+        // --- Función: seleccionar rol ---
+        function seleccionarRol(rol) {
+            inputRol.value = rol;
+
+            if (rol === 'productor') {
+                // Activar tarjeta Productor
+                cardProductor.style.borderColor = '#ea580c';
+                cardProductor.style.backgroundColor = '#fff7ed';
+                iconProductor.style.display = 'inline-block';
+                // Desactivar tarjeta Cliente
+                cardCliente.style.borderColor = '#cbd5e1';
+                cardCliente.style.backgroundColor = '#ffffff';
+                iconCliente.style.display = 'none';
+                // Mostrar campos de productor
+                seccionProd.style.display = 'block';
+                labelFoto.textContent = 'Foto del Productor o Cultivo (Opcional)';
+                btnTexto.textContent = 'Crear Cuenta de Productor';
+            } else {
+                // Activar tarjeta Cliente
+                cardCliente.style.borderColor = '#006837';
+                cardCliente.style.backgroundColor = '#f0fdf4';
+                iconCliente.style.display = 'inline-block';
+                // Desactivar tarjeta Productor
+                cardProductor.style.borderColor = '#cbd5e1';
+                cardProductor.style.backgroundColor = '#ffffff';
+                iconProductor.style.display = 'none';
+                // Ocultar campos de productor
+                seccionProd.style.display = 'none';
+                labelFoto.textContent = 'Foto de Perfil (Opcional)';
+                btnTexto.textContent = 'Crear Cuenta de Comprador';
+                // Restaurar rol si venía de admin
+                if (inputRol.value === 'admin') inputRol.value = 'cliente';
+            }
+        }
+
+        // --- Vincular clics en tarjetas de rol ---
+        cardCliente.addEventListener('click', function() { seleccionarRol('cliente'); });
+        cardProductor.addEventListener('click', function() { seleccionarRol('productor'); });
+
+        // --- Toggle admin key ---
+        btnToggleAdmin.addEventListener('click', function() {
+            var visible = seccionAdmin.style.display === 'block';
+            seccionAdmin.style.display = visible ? 'none' : 'block';
+            inputRol.value = visible ? 'cliente' : 'admin';
+        });
+
+        // --- Preview de foto ---
+        fotoUploadArea.addEventListener('click', function() { regFile.click(); });
+        regFile.addEventListener('change', function() {
+            if (!regFile.files || !regFile.files[0]) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var maxDim = 400;
+                    var w = img.width, h = img.height;
+                    if (w > h) { if (w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; } }
+                    else       { if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; } }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    var base64 = canvas.toDataURL('image/jpeg', 0.8);
+                    document.getElementById('reg-foto-base64').value = base64;
+                    document.getElementById('reg-foto-preview').src = base64;
+                    document.getElementById('reg-foto-preview-wrap').style.display = 'block';
+                    document.getElementById('reg-foto-prompt').style.display = 'none';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(regFile.files[0]);
+        });
+
+        // --- Envío del formulario ---
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            var pass    = document.getElementById('reg-password').value.trim();
+            var confirm = document.getElementById('reg-confirm').value.trim();
+
+            if (pass !== confirm) {
+                alert('Las contraseñas no coinciden. Verifícalas.');
+                return;
+            }
+            if (pass.length < 8) {
+                alert('La contraseña debe tener al menos 8 caracteres.');
+                return;
+            }
+            if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(pass)) {
+                alert('La contraseña debe incluir mayúscula, minúscula y número.');
+                return;
+            }
+
+            var rol       = inputRol.value;
+            var nombres   = document.getElementById('reg-nombres').value.trim();
+            var apellidos = document.getElementById('reg-apellidos').value.trim();
+            var email     = document.getElementById('reg-email').value.trim();
+            var telefono  = document.getElementById('reg-telefono').value.trim();
+            var direccion = document.getElementById('reg-direccion').value.trim();
+            var foto      = document.getElementById('reg-foto-base64').value;
+            var adminKey  = document.getElementById('reg-admin-key').value;
+
+            if (!nombres || !apellidos || !email || !telefono || !direccion) {
+                alert('Por favor completa todos los campos obligatorios (*).');
+                return;
+            }
+
+            var finca    = document.getElementById('reg-finca').value.trim() || (rol === 'productor' ? nombres + ' ' + apellidos : '');
+            var zona     = document.getElementById('reg-zona').value;
+            var capac    = document.getElementById('reg-capacidad').value.trim();
+            var tipos    = document.getElementById('reg-tipos').value.trim();
+
+            var btn = document.getElementById('btn-submit-registro');
+            btn.disabled = true;
+            btnTexto.textContent = 'Registrando...';
+
+            try {
+                var res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        nombre: nombres + ' ' + apellidos,
+                        email: email,
+                        password: pass,
+                        rol: rol,
+                        admin_key: adminKey,
+                        telefono: telefono,
+                        direccion: direccion,
+                        foto: foto,
+                        nombre_finca: finca,
+                        zona_cultivo: zona,
+                        capacidad_produccion: capac,
+                        tipos_citricos: tipos
+                    })
                 });
+
+                var data;
+                try { data = await res.json(); }
+                catch(err) { data = { error: 'Error del servidor (' + res.status + ')' }; }
+
+                if (!res.ok) {
+                    alert(data.error || 'Error al registrar. Intenta de nuevo.');
+                    btn.disabled = false;
+                    btnTexto.textContent = rol === 'productor' ? 'Crear Cuenta de Productor' : 'Crear Cuenta de Comprador';
+                    return;
+                }
+
+                if (typeof CitriAuth !== 'undefined') CitriAuth.setUser(data.data);
+                alert('✅ ¡Bienvenido a Citri-Fresh, ' + data.data.nombre + '!\nTu cuenta de ' + data.data.rol.toUpperCase() + ' fue creada exitosamente.');
+
+                if (data.data.rol === 'admin' || data.data.rol === 'auditor') {
+                    window.location.href = 'admin.html';
+                } else if (data.data.rol === 'productor') {
+                    window.location.href = 'panel_productor.html';
+                } else {
+                    window.location.href = 'perfil.html';
+                }
+
+            } catch(err) {
+                console.error(err);
+                alert('No se pudo conectar con el servidor. Verifica tu conexión.');
+                btn.disabled = false;
+                btnTexto.textContent = rol === 'productor' ? 'Crear Cuenta de Productor' : 'Crear Cuenta de Comprador';
             }
         });
+
+    })();
     </script>
 </body>
 </html>
-
-
-
