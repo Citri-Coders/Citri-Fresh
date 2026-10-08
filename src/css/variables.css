@@ -141,3 +141,93 @@
     --transition:      0.25s ease;
     --transition-slow: 0.4s ease;
 }
+
+/* ============================================
+   MODO OSCURO (Dark Mode)
+   Se activa por preferencia del sistema o
+   manualmente con [data-theme="dark"] en <html>
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --color-primary:           #2da05a;
+        --color-secondary:         #3cb972;
+        --color-accent:            #f5a623;
+        --color-yellow:            #ffd34e;
+        --color-success:           #4caf7d;
+        --color-error:             #e55a4a;
+
+        --color-bg:                #0d1f14;
+        --color-surface:           #1a2d20;
+        --color-surface-gray:      #162620;
+        --color-surface-warm:      #1e3328;
+        --color-surface-container: #234035;
+        --color-surface-low:       #1e3328;
+        --color-surface-high:      #2a4a3a;
+
+        --color-text:              #e8f5e9;
+        --color-text-dark:         #c8e6c9;
+        --color-text-muted:        #a5c4af;
+        --color-text-light:        #7a9c8a;
+
+        --color-border:            #2a4a3a;
+        --color-border-light:      #234035;
+
+        --color-primary-container: #3cb972;
+        --color-secondary-container: #234035;
+        --color-on-primary:        #ffffff;
+
+        --color-tertiary:          #f5a623;
+        --color-tertiary-container: #b87800;
+        --color-on-tertiary:       #ffffff;
+
+        --color-inverse-surface:     #c8e6c9;
+        --color-inverse-on-surface:  #0d1f14;
+
+        --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.3);
+        --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.35);
+        --shadow-lg:  0 8px 30px rgba(0, 0, 0, 0.4);
+        --shadow-xl:  0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Override manual: [data-theme="dark"] en <html> */
+:root[data-theme="dark"] {
+    --color-primary:           #2da05a;
+    --color-secondary:         #3cb972;
+    --color-accent:            #f5a623;
+    --color-yellow:            #ffd34e;
+    --color-success:           #4caf7d;
+    --color-error:             #e55a4a;
+
+    --color-bg:                #0d1f14;
+    --color-surface:           #1a2d20;
+    --color-surface-gray:      #162620;
+    --color-surface-warm:      #1e3328;
+    --color-surface-container: #234035;
+    --color-surface-low:       #1e3328;
+    --color-surface-high:      #2a4a3a;
+
+    --color-text:              #e8f5e9;
+    --color-text-dark:         #c8e6c9;
+    --color-text-muted:        #a5c4af;
+    --color-text-light:        #7a9c8a;
+
+    --color-border:            #2a4a3a;
+    --color-border-light:      #234035;
+
+    --color-primary-container: #3cb972;
+    --color-secondary-container: #234035;
+    --color-on-primary:        #ffffff;
+
+    --color-tertiary:          #f5a623;
+    --color-tertiary-container: #b87800;
+    --color-on-tertiary:       #ffffff;
+
+    --color-inverse-surface:     #c8e6c9;
+    --color-inverse-on-surface:  #0d1f14;
+
+    --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.35);
+    --shadow-lg:  0 8px 30px rgba(0, 0, 0, 0.4);
+    --shadow-xl:  0 12px 32px rgba(0, 0, 0, 0.5);
+}
