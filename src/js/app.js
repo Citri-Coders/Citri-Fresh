@@ -1,7 +1,10 @@
 // ==================== INICIALIZACIÓN DE LA PÁGINA ====================
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. Inicializar barra de navegación según sesión
+    // 1. Inicializar barra de navegación según sesión y sincronizar con backend
     CitriAuth.updateNavUI();
+    if (CitriAuth.getUser()) {
+        CitriAuth.syncWithServer().catch(() => {});
+    }
 
     // 2. Control del Formulario de Inicio de Sesión (Login real contra Backend)
     const loginForm = document.querySelector('.auth-form');
@@ -70,78 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
         inicializarRecuperarPassword();
     }
 
-    // 3. Control del Formulario de Registro (Registro real en BD SQLite)
-    const registerForm = document.querySelector('.auth-form');
-    if (registerForm && window.location.pathname.includes('registro.html')) {
-        registerForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const roleSelected = registerForm.querySelector('input[name="role"]:checked')?.value || 'cliente';
-            const nameInputs = registerForm.querySelectorAll('input[placeholder="Carlos"], input[placeholder="Mendoza"]');
-            const emailInput = registerForm.querySelector('input[type="email"]');
-            const passwordInput = registerForm.querySelector('input[type="password"]');
-            const submitBtn = registerForm.querySelector('button[type="submit"]');
+    // 3. Control del Formulario de Registro
+    // La lógica de registro dinámico con soporte de perfiles (Cliente, Productor, Administrador)
+    // está implementada en procesarRegistroDinamico() dentro de registro.html.
 
-            const nombre = nameInputs.length >= 2 
-                ? `${nameInputs[0].value.trim()} ${nameInputs[1].value.trim()}`.trim()
-                : (nameInputs[0]?.value.trim() || 'Usuario');
-            const email = emailInput ? emailInput.value.trim() : '';
-            const password = passwordInput ? passwordInput.value : '';
-
-            if (!nombre || !email || !password) {
-                alert('Por favor completa todos los campos.');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('La contraseña debe tener al menos 6 caracteres.');
-                return;
-            }
-
-            const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span>Registrando...</span>';
-            }
-
-            try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ nombre, email, password, rol: roleSelected })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    alert(data.error || 'Error al registrar la cuenta.');
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnHtml;
-                    }
-                    return;
-                }
-
-                // Iniciar sesión automáticamente tras registro
-                CitriAuth.setUser(data.data);
-
-                if (data.data.rol === 'admin') {
-                    window.location.href = 'admin.html';
-                } else if (data.data.rol === 'productor') {
-                    window.location.href = 'panel_productor.html';
-                } else {
-                    window.location.href = 'perfil.html';
-                }
-            } catch (error) {
-                console.error('Error al registrarse:', error);
-                alert('No se pudo conectar con el servidor.');
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnHtml;
-                }
-            }
-        });
-    }
 
     // 4. Inicializar botones de "Continuar con Google" (Login y Registro)
     inicializarBotonGoogle();
