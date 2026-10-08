@@ -46,9 +46,17 @@ export const validateRegister = async (req, res, next) => {
       return next(new BadRequestError(verificacion.error));
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       return next(
-        new BadRequestError("La contraseña debe tener al menos 6 caracteres"),
+        new BadRequestError("La contraseña debe tener al menos 8 caracteres"),
+      );
+    }
+
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+      return next(
+        new BadRequestError(
+          "La contraseña debe incluir al menos una mayúscula, una minúscula y un número",
+        ),
       );
     }
 
@@ -120,10 +128,18 @@ export const validateActualizarPerfil = async (req, res, next) => {
         );
       }
 
-      if (typeof password_nuevo !== "string" || password_nuevo.length < 6) {
+      if (typeof password_nuevo !== "string" || password_nuevo.length < 8) {
         return next(
           new BadRequestError(
-            "La nueva contraseña debe tener al menos 6 caracteres",
+            "La nueva contraseña debe tener al menos 8 caracteres",
+          ),
+        );
+      }
+
+      if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password_nuevo)) {
+        return next(
+          new BadRequestError(
+            "La nueva contraseña debe incluir al menos una mayúscula, una minúscula y un número",
           ),
         );
       }

@@ -451,9 +451,15 @@ export const restablecerPassword = async (req, res, next) => {
       );
     }
 
-    if (password_nuevo.length < 6) {
+    if (password_nuevo.length < 8) {
       throw new BadRequestError(
-        "La nueva contraseña debe tener al menos 6 caracteres",
+        "La nueva contraseña debe tener al menos 8 caracteres",
+      );
+    }
+
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password_nuevo)) {
+      throw new BadRequestError(
+        "La nueva contraseña debe incluir al menos una mayúscula, una minúscula y un número",
       );
     }
 
