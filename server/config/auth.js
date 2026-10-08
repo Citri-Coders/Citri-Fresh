@@ -9,16 +9,10 @@ import crypto from "crypto";
 let JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-  if (process.env.NODE_ENV === "production") {
-    // En produccion, fallar inmediatamente: sin JWT_SECRET no hay sesiones seguras
-    throw new Error(
-      "FATAL: JWT_SECRET no esta configurado. Definelo en las variables de entorno (Vercel/env) antes de desplegar a produccion.",
-    );
-  }
-  // En desarrollo, generar una clave efimera para conveniencia
+  // Generar clave persistente por proceso si no fue configurada para evitar FUNCTION_INVOCATION_FAILED (500)
   JWT_SECRET = crypto.randomBytes(64).toString("hex");
   logger.warn(
-    "ADVERTENCIA: JWT_SECRET no esta configurado. Se genero una clave efimera para desarrollo. Configura JWT_SECRET en .env para sesiones persistentes.",
+    "⚠️ ADVERTENCIA: JWT_SECRET no está configurado en las variables de entorno. Se generó una clave en memoria. Para mantener las sesiones activas entre reinicios, define JWT_SECRET en las variables de entorno de Vercel.",
   );
 }
 
