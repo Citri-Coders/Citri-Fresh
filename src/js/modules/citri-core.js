@@ -256,9 +256,11 @@ const CitriAuth = {
     },
     requireAuth: function(allowedRoles = ['cliente', 'productor', 'admin']) {
         const user = this.getUser();
+        const isInsideAuth = window.location.pathname.includes('/auth/');
+        const prefix = isInsideAuth ? '../' : '';
         if (!user) {
             const isInsidePages = window.location.pathname.includes('/pages/');
-            const loginUrl = isInsidePages ? (window.location.pathname.includes('/auth/') ? 'login.html' : 'auth/login.html') : 'pages/auth/login.html';
+            const loginUrl = isInsidePages ? (isInsideAuth ? 'login.html' : 'auth/login.html') : 'pages/auth/login.html';
             window.location.href = loginUrl;
             return false;
         }
@@ -266,11 +268,11 @@ const CitriAuth = {
         if (!allowedRoles.includes(userRole)) {
             alert('Acceso restringido para este tipo de cuenta.');
             if (userRole === 'admin' || userRole === 'auditor') {
-                window.location.href = 'admin.html';
+                window.location.href = prefix + 'admin.html';
             } else if (userRole === 'productor') {
-                window.location.href = 'panel_productor.html';
+                window.location.href = prefix + 'panel_productor.html';
             } else {
-                window.location.href = 'perfil.html';
+                window.location.href = prefix + 'perfil.html';
             }
             return false;
         }

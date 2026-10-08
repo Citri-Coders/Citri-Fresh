@@ -11,7 +11,7 @@ const ASSETS_TO_CACHE = [
   '/pages/carrito.html',
   '/pages/panel_productor.html',
   '/pages/auth/login.html',
-  '/pages/auth/registro.html',
+  '/pages/registro.html',
   '/css/reset.css',
   '/css/variables.css',
   '/css/fonts.css',
