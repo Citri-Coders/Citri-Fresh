@@ -64,8 +64,8 @@ app.get("/favicon.svg", (req, res) => {
   res.sendFile(path.join(rootDir, "public", "images", "favicon.svg"));
 });
 
-// Redirección de la raíz al inicio de la aplicación
-app.get("/", (req, res) => {
+// Redirección de la raíz y del entrypoint serverless al inicio de la aplicación
+app.get(["/", "/server.js", "/index.html"], (req, res) => {
   res.redirect("/pages/inicio.html");
 });
 
