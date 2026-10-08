@@ -49,11 +49,6 @@ const corsOptions = {
       return callback(null, true);
     }
 
-    // En desarrollo, permitir cualquier origen para facilitar el trabajo
-    if (process.env.NODE_ENV !== "production") {
-      return callback(null, true);
-    }
-
     // En producción solo se permiten los orígenes explícitos de ALLOWED_ORIGINS/CLIENT_URL
     return callback(new Error(`Origen no permitido por CORS: ${origin}`), false);
   },

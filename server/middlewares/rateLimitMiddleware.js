@@ -72,4 +72,44 @@ const rateLimitErrorHandler = (err, req, res, next) => {
   next(err);
 };
 
-export { generalLimiter, authLimiter, rateLimitErrorHandler };
+// Middleware de rate limiting estricto para recuperación de contraseña (3 solicitudes por hora)
+const passwordResetLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hora
+  max: process.env.NODE_ENV === "development" ? 20 : 3,
+  message: {
+    error: "Demasiadas solicitudes de recuperación",
+    message: "Has excedido el límite de solicitudes de recuperación de contraseña. Por favor, espera una hora antes de intentar de nuevo.",
+    retryAfter: "1 hora"
+  },
+  skip: (req) => {
+    if (process.env.NODE_ENV === "development" && (req.ip === "127.0.0.1" || req.ip === "::1" || req.ip === "::ffff:127.0.0.1")) {
+      return true;
+    }
+    return false;
+  },
+  headers: true,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Middleware de rate limiting para autenticación con Google (10/minuto)
+const googleAuthLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minuto
+  max: process.env.NODE_ENV === "development" ? 50 : 10,
+  message: {
+    error: "Demasiados intentos de autenticación con Google",
+    message: "Has excedido el límite de intentos de autenticación con Google. Por favor, espera un momento.",
+    retryAfter: "1 minuto"
+  },
+  skip: (req) => {
+    if (process.env.NODE_ENV === "development" && (req.ip === "127.0.0.1" || req.ip === "::1" || req.ip === "::ffff:127.0.0.1")) {
+      return true;
+    }
+    return false;
+  },
+  headers: true,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+export { generalLimiter, authLimiter, passwordResetLimiter, googleAuthLimiter, rateLimitErrorHandler };
