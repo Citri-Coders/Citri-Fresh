@@ -44,7 +44,7 @@ export const LIMITES_CAMPOS = Object.freeze({
   zona_cultivo: 100,
   capacidad_produccion: 100,
   tipos_citricos: 255,
-  foto: 500,
+  foto: 2000000,
   descripcion: 1000,
 });
 

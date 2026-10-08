@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 2. Control del Formulario de Inicio de Sesión (Login real contra Backend)
-    const loginForm = document.querySelector('.auth-form');
-    if (loginForm && (window.location.pathname.includes('/auth/login.html') || loginForm.id === 'login-form')) {
+    const loginForm = document.getElementById('login-form') || document.querySelector('#login-form');
+    if (loginForm) {
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const emailInput = loginForm.querySelector('input[type="email"]');

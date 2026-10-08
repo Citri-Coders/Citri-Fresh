@@ -253,11 +253,14 @@ async function seedDefaultUsers(db) {
 }
 
 async function openAndInit() {
-  if (process.env.TURSO_DATABASE_URL) {
+  const tursoUrl = process.env.TURSO_DATABASE_URL || "libsql://citrifresh-db-kambidev.aws-us-east-1.turso.io";
+  const tursoToken = process.env.TURSO_AUTH_TOKEN || "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTEyMTYyNzEsImlkIjoiMDFhMTBjY2MtMmEwMS03NzY1LWIyZWQtY2VhNmIyZDU4NjllIiwia2lkIjoiM3pTd2tWRTRwc3pvOGNHNVY1YnpkVEdGNlFXLUd6ZnBpcUZIbVJ2dkxMTSIsInJpZCI6IjM0ODkzZGFlLTU0ZmUtNDZkYi04NGM1LWY1ZjY4MzczNmU1MSJ9.-_oRe91ufsPhy-xHyefwr4QsAAVcf6XBvn2EBMIOgbDwgN1EHrJvFXWZJVfXzFiKlwQ4-4Va_alXmN7gv3UkCQ";
+
+  if (tursoUrl) {
     logger.info("[CitriFresh DB] Conectando a Turso (SQLite Cloud)...");
     const client = createClient({
-      url: process.env.TURSO_DATABASE_URL,
-      authToken: process.env.TURSO_AUTH_TOKEN || "",
+      url: tursoUrl,
+      authToken: tursoToken,
     });
     const db = wrapLibsqlClient(client);
     await initSchema(db);

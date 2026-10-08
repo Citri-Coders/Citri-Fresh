@@ -1,5 +1,5 @@
 // Citri-Fresh Service Worker - Soporte Offline Resiliente y Caché Dinámico
-const CACHE_NAME = 'citrifresh-cache-v1';
+const CACHE_NAME = 'citrifresh-cache-v2';
 
 const ASSETS_TO_CACHE = [
   '/',
@@ -11,7 +11,7 @@ const ASSETS_TO_CACHE = [
   '/pages/carrito.html',
   '/pages/panel_productor.html',
   '/pages/auth/login.html',
-  '/pages/auth/registro.html',
+  '/pages/registro.html',
   '/css/reset.css',
   '/css/variables.css',
   '/css/fonts.css',
@@ -25,17 +25,14 @@ const ASSETS_TO_CACHE = [
   '/css/auth.css',
   '/css/cart.css',
   '/js/app.js',
-  '/manifest.json',
-  '/public/images/n-comer.jpg',
-  '/public/images/l-criollo.jpg',
-  '/public/images/mandarina.jpeg'
+  '/manifest.json'
 ];
 
 // Instalación: Guardar recursos estáticos principales
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[Citri-Fresh SW] Precargando activos críticos para funcionamiento offline...');
+      console.log('[Citri-Fresh SW v2] Precargando activos críticos...');
       return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
         console.warn('[Citri-Fresh SW] Algunos activos no se precargaron:', err);
       });
@@ -44,34 +41,33 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activación: Limpieza de cachés antiguas
+// Activación: Limpieza forzosa de cachés antiguas
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[Citri-Fresh SW] Eliminando caché antigua:', key);
+            console.log('[Citri-Fresh SW v2] Eliminando caché antigua:', key);
             return caches.delete(key);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Interceptar peticiones (Estrategia: Network-First con fallback a Caché para API y Cache-First con Network Fallback para Estáticos)
+// Interceptar peticiones
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Ignorar peticiones que no sean GET (POST/PUT/DELETE se manejan en la cola de sincronización de la app)
+  // Ignorar peticiones que no sean GET
   if (req.method !== 'GET') {
     return;
   }
 
-  // Peticiones a la API de datos (productos, zonas, etc.) -> Network First con respaldo en caché
+  // 1. Peticiones a la API de datos -> Network First con respaldo en caché
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(req)
@@ -97,7 +93,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Peticiones de Páginas y Activos Estáticos -> Stale-While-Revalidate
+  // 2. Navegación HTML -> NETWORK FIRST (para que el usuario siempre vea la última versión del formulario y vistas)
+  const isHtml = req.mode === 'navigate' || req.headers.get('accept')?.includes('text/html') || url.pathname.endsWith('.html');
+  if (isHtml) {
+    event.respondWith(
+      fetch(req)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(req, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          // Si no hay conexión, cargar desde caché
+          return caches.match(req).then((cached) => cached || caches.match('/pages/inicio.html'));
+        })
+    );
+    return;
+  }
+
+  // 3. Activos Estáticos (CSS, JS, Imágenes) -> Stale-While-Revalidate
   event.respondWith(
     caches.match(req).then((cachedResponse) => {
       const fetchPromise = fetch(req)
@@ -110,12 +128,7 @@ self.addEventListener('fetch', (event) => {
           }
           return networkResponse;
         })
-        .catch(() => {
-          // Si no hay red y se pedía una página HTML, devolver la página solicitada en caché o inicio
-          if (req.headers.get('accept')?.includes('text/html')) {
-            return cachedResponse || caches.match('/pages/inicio.html');
-          }
-        });
+        .catch(() => null);
 
       return cachedResponse || fetchPromise;
     })
