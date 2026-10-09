@@ -3,7 +3,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // 1. Inicializar barra de navegación según sesión y sincronizar con backend
     CitriAuth.updateNavUI();
     if (CitriAuth.getUser()) {
-        CitriAuth.syncWithServer().catch(() => {});
+        CitriAuth.syncWithServer()
+            .catch(() => {})
+            .finally(() => {
+                // Cargar el carrito persistido en el servidor (si hay sesión)
+                if (window.CitriCart && typeof CitriCart.sincronizarConServidor === 'function') {
+                    CitriCart.sincronizarConServidor().catch(() => {});
+                }
+            });
     }
 
     // 2. Control del Formulario de Inicio de Sesión (Login real contra Backend)

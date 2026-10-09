@@ -169,6 +169,17 @@ async function initSchema(db) {
         intentos INTEGER NOT NULL DEFAULT 0,
         verificado INTEGER NOT NULL DEFAULT 0
       );
+      CREATE TABLE IF NOT EXISTS carrito_items (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL,
+        producto_id INTEGER NOT NULL,
+        cantidad INTEGER NOT NULL DEFAULT 1 CHECK (cantidad > 0),
+        creado_en TEXT NOT NULL DEFAULT (DATETIME('now')),
+        actualizado_en TEXT NOT NULL DEFAULT (DATETIME('now')),
+        UNIQUE (usuario_id, producto_id),
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE ON UPDATE CASCADE
+      );
       CREATE INDEX IF NOT EXISTS idx_productos_productor ON productos(productor_id);
       CREATE INDEX IF NOT EXISTS idx_productos_zona ON productos(zona);
       CREATE INDEX IF NOT EXISTS idx_pedidos_usuario ON pedidos(usuario_id);
@@ -176,6 +187,7 @@ async function initSchema(db) {
       CREATE INDEX IF NOT EXISTS idx_pedidos_fecha ON pedidos(fecha);
       CREATE INDEX IF NOT EXISTS idx_pedidos_items_pedido ON pedidos_items(pedido_id);
       CREATE INDEX IF NOT EXISTS idx_pedidos_items_producto ON pedidos_items(producto_id);
+      CREATE INDEX IF NOT EXISTS idx_carrito_items_usuario ON carrito_items(usuario_id);
     `);
 
   // Asegurar que si la tabla usuarios ya existía con esquema viejo, tenga las columnas requeridas
