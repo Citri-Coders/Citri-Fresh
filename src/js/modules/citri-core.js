@@ -459,6 +459,11 @@ const CitriAuth = {
                 `;
             }
         }
+
+        // 3. Mantener sincronizado el contador del carrito en todas las páginas
+        if (window.CitriCart && typeof window.CitriCart.updateCartBadge === 'function') {
+            window.CitriCart.updateCartBadge();
+        }
     }
 };
 
