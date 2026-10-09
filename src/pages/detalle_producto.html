@@ -168,7 +168,7 @@
             <nav class="flex items-center gap-xs text-muted" style="font-size: var(--text-caption); margin-bottom: var(--space-xl);">
                 <a href="producto.html" class="hover:text-primary transition-fast">Productos</a>
                 <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
-                <span class="text-primary" style="font-weight: 700;">Naranjas Valencia</span>
+                <span id="detail-breadcrumb" class="text-primary" style="font-weight: 700;">Naranjas Valencia</span>
             </nav>
             
             <div class="product-detail-grid">
@@ -200,8 +200,8 @@
                 
                 <!-- Details Section -->
                 <div style="display: flex; flex-direction: column;">
-                    <h1 style="font-size: var(--text-h2); margin-bottom: var(--space-xs);">Naranjas Valencia</h1>
-                    <p class="text-muted" style="font-size: var(--text-body-lg); line-height: 1.6; margin-bottom: var(--space-lg);">
+                    <h1 id="detail-nombre" style="font-size: var(--text-h2); margin-bottom: var(--space-xs);">Naranjas Valencia</h1>
+                    <p id="detail-descripcion" class="text-muted" style="font-size: var(--text-body-lg); line-height: 1.6; margin-bottom: var(--space-lg);">
                         Cultivadas en el corazón fértil de Nicaragua, nuestras Naranjas Valencia destacan por su alto contenido de jugo, dulzor equilibrado y piel resistente, ideales para la industria y el mercado fresco.
                     </p>
                     
@@ -410,6 +410,60 @@
         // ── Format Selector ───────────────────────────────────────────────
         let currentPrice = 550;
         let currentUnit  = 'Caja (20 kg)';
+        let productoActual = null;
+        const productoId = new URLSearchParams(window.location.search).get('id');
+
+        // ── Cargar el producto real según ?id= ────────────────────────────
+        async function cargarDetalleProducto() {
+            if (!productoId) return;
+            try {
+                const res = await fetch(`/api/productos/${productoId}`, { credentials: 'include' });
+                if (!res.ok) return;
+                const data = (await res.json()).data;
+                if (!data) return;
+                productoActual = data;
+
+                const nombre = data.nombre || 'Producto Cítrico';
+                const imagen = data.imagen || '/public/images/n-comer.jpg';
+                const precio = Number(data.precio) || 0;
+                const unidad = data.unidad || 'caja';
+
+                const elNombre = document.getElementById('detail-nombre');
+                if (elNombre) elNombre.textContent = nombre;
+                const elBreadcrumb = document.getElementById('detail-breadcrumb');
+                if (elBreadcrumb) elBreadcrumb.textContent = nombre;
+                document.title = `${nombre} | Citri-Fresh`;
+
+                const elDesc = document.getElementById('detail-descripcion');
+                if (elDesc) {
+                    elDesc.textContent = data.descripcion || `Cosecha de ${nombre} cultivada en ${data.zona_nombre || 'Nicaragua'}.`;
+                }
+
+                const mainImg = document.getElementById('main-img');
+                if (mainImg) mainImg.src = imagen;
+                const thumbActivo = document.querySelector('.product-thumb.active');
+                if (thumbActivo) {
+                    const thumbImg = thumbActivo.querySelector('img');
+                    if (thumbImg) thumbImg.src = imagen;
+                    thumbActivo.setAttribute('onclick', `switchThumb(this, '${imagen}')`);
+                }
+
+                currentPrice = precio;
+                currentUnit = unidad;
+                const btnFormato = document.querySelector('.format-btn.active');
+                if (btnFormato) {
+                    const unidadLabel = unidad.charAt(0).toUpperCase() + unidad.slice(1);
+                    btnFormato.textContent = unidadLabel;
+                    btnFormato.setAttribute('onclick', `selectFormat(this, ${precio}, '${unidad}')`);
+                }
+
+                updateTotal();
+                const elUnit = document.getElementById('detail-unit');
+                if (elUnit) elUnit.textContent = `/ ${unidad}`;
+            } catch (err) {
+                console.warn('No se pudo cargar el producto:', err);
+            }
+        }
 
         function selectFormat(el, price, unit) {
             document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
@@ -456,12 +510,13 @@
                 return;
             }
             const qty = parseInt(qtyInput.value, 10) || 50;
+            const item = productoActual || {};
             CitriCart.addItem({
-                id: 1,
-                nombre: 'Naranjas Valencia',
+                id: item.id !== undefined && item.id !== null ? item.id : (productoId || 1),
+                nombre: item.nombre || 'Naranjas Valencia',
                 precio: currentPrice,
                 unidad: currentUnit,
-                imagen: '/public/images/n-comer.jpg',
+                imagen: item.imagen || '/public/images/n-comer.jpg',
                 cantidad: qty
             });
             CitriCart.updateCartBadge();
@@ -527,6 +582,8 @@
                 }, 2500);
             }, 800);
         }
+        // Inicializar el detalle con el producto real cuando viene ?id=
+        cargarDetalleProducto();
     </script>
 </body>
 </html>
