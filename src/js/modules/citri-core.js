@@ -539,6 +539,11 @@ const CitriCart = {
         return items.reduce((acc, item) => acc + (Number(item.cantidad) || 0), 0);
     },
 
+    // Cantidad de productos distintos (líneas) en el carrito, sin sumar sus unidades
+    getProductCount: function() {
+        return this.getItems().length;
+    },
+
     getTotals: function() {
         const items = this.getItems();
         const subtotal = items.reduce((acc, item) => acc + (Number(item.precio) * Number(item.cantidad)), 0);
@@ -550,12 +555,12 @@ const CitriCart = {
             subtotal,
             envio,
             total,
-            totalItems: this.getCount()
+            totalItems: this.getProductCount()
         };
     },
 
     updateCartBadge: function() {
-        const count = this.getCount();
+        const count = this.getProductCount();
         document.querySelectorAll('.cart-count-badge').forEach(badge => {
             badge.textContent = count;
             badge.style.display = count > 0 ? 'flex' : 'none';
