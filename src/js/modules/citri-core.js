@@ -477,9 +477,44 @@ const CitriCart = {
     },
 
     saveItems: function(items) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
+        } catch (err) {
+            // Cuota de localStorage superada (p. ej. imágenes base64 muy grandes).
+            // Se reintenta guardando el carrito sin las imágenes pesadas.
+            console.warn('Cuota de localStorage superada al guardar el carrito. Se guarda sin imágenes pesadas.', err);
+            const itemsSinImagen = items.map(item => ({ ...item, imagen: '/public/images/n-comer.jpg' }));
+            try {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(itemsSinImagen));
+            } catch (err2) {
+                console.error('No fue posible guardar el carrito en localStorage:', err2);
+            }
+        }
         this.updateCartBadge();
         window.dispatchEvent(new CustomEvent('citri:cart-updated', { detail: { items } }));
+    },
+
+    // Genera una miniatura JPEG a partir de un <img> ya cargado, para no almacenar
+    // imágenes base64 de gran tamaño en el carrito (localStorage).
+    crearMiniatura: function(imgEl, maxDim = 160) {
+        try {
+            if (!imgEl) return '';
+            let w = imgEl.naturalWidth || imgEl.width;
+            let h = imgEl.naturalHeight || imgEl.height;
+            if (!w || !h) return '';
+            if (w > h) {
+                if (w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; }
+            } else {
+                if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(imgEl, 0, 0, w, h);
+            return canvas.toDataURL('image/jpeg', 0.6);
+        } catch (e) {
+            return '';
+        }
     },
 
     addItem: function(producto) {

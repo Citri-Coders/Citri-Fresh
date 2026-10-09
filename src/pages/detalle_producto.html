@@ -511,12 +511,17 @@
             }
             const qty = parseInt(qtyInput.value, 10) || 50;
             const item = productoActual || {};
+            let imagenItem = item.imagen || '/public/images/n-comer.jpg';
+            // Evitar guardar imágenes base64 grandes en el carrito: se usa una miniatura
+            if (imagenItem.startsWith('data:')) {
+                imagenItem = CitriCart.crearMiniatura(document.getElementById('main-img')) || '/public/images/n-comer.jpg';
+            }
             CitriCart.addItem({
                 id: item.id !== undefined && item.id !== null ? item.id : (productoId || 1),
                 nombre: item.nombre || 'Naranjas Valencia',
                 precio: currentPrice,
                 unidad: currentUnit,
-                imagen: item.imagen || '/public/images/n-comer.jpg',
+                imagen: imagenItem,
                 cantidad: qty
             });
             CitriCart.updateCartBadge();

@@ -612,7 +612,12 @@ function gestionarClickAgregarCarrito(btn) {
     const name = btn.dataset.name || 'Producto Cítrico';
     const price = parseFloat(btn.dataset.price) || 0;
     const card = btn.closest('.product-card');
-    const img = card ? card.querySelector('.product-image')?.getAttribute('src') : '/public/images/n-comer.jpg';
+    const imgEl = card ? card.querySelector('.product-image') : null;
+    let img = imgEl ? imgEl.getAttribute('src') : '/public/images/n-comer.jpg';
+    // Evitar guardar imágenes base64 grandes en el carrito: se usa una miniatura
+    if (img && img.startsWith('data:')) {
+        img = CitriCart.crearMiniatura(imgEl) || '/public/images/n-comer.jpg';
+    }
     const unitText = card ? card.querySelector('.product-unit')?.textContent.replace('/', '').trim() : 'caja';
 
     CitriCart.addItem({
