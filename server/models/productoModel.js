@@ -63,6 +63,7 @@ export const ProductoModel = {
         z.nombre AS zona_nombre,
         p.imagen,
         p.productor_id,
+        p.activo,
         u.nombre AS productor_nombre,
         u.email AS productor_email,
         p.creado_en

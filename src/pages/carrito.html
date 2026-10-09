@@ -372,8 +372,12 @@
             // Inyectar ítems con controles de cantidad y eliminar
             container.innerHTML = items.map(item => {
                 const subtotalItem = Number(item.precio) * Number(item.cantidad);
+                const inactivo = item.activo === false;
+                const badgePresentacion = inactivo
+                    ? '<span class="badge badge-error" style="margin-bottom: var(--space-xs); display: inline-block;">No disponible</span>'
+                    : `<span class="badge badge-success" style="margin-bottom: var(--space-xs); display: inline-block;">Presentación: ${item.unidad}</span>`;
                 return `
-                    <div class="cart-item" data-id="${item.id}">
+                    <div class="cart-item" data-id="${item.id}" ${inactivo ? 'style="opacity: 0.6;"' : ''}>
                         <button onclick="eliminarItemCarrito(${item.id})" aria-label="Eliminar producto" class="cart-item-delete" title="Eliminar del carrito">
                             <span class="material-symbols-outlined">delete</span>
                         </button>
@@ -384,25 +388,25 @@
                         
                         <div class="cart-item-content">
                             <div>
-                                <span class="badge badge-success" style="margin-bottom: var(--space-xs); display: inline-block;">Presentación: ${item.unidad}</span>
+                                ${badgePresentacion}
                                 <h3 class="cart-item-title">${item.nombre}</h3>
                                 <p class="cart-item-desc">${item.productor || 'Productor Nicaragüense'}</p>
                             </div>
                             
                             <div class="cart-item-footer">
                                 <div class="quantity-control">
-                                    <button onclick="cambiarCantidadCarrito(${item.id}, ${item.cantidad - 1})" class="quantity-btn" ${item.cantidad <= 1 ? 'disabled' : ''}>
+                                    <button onclick="cambiarCantidadCarrito(${item.id}, ${item.cantidad - 1})" class="quantity-btn" ${inactivo || item.cantidad <= 1 ? 'disabled' : ''}>
                                         <span class="material-symbols-outlined">remove</span>
                                     </button>
-                                    <input class="quantity-input" type="number" min="1" value="${item.cantidad}" onchange="cambiarCantidadCarrito(${item.id}, this.value)">
-                                    <button onclick="cambiarCantidadCarrito(${item.id}, ${item.cantidad + 1})" class="quantity-btn">
+                                    <input class="quantity-input" type="number" min="1" value="${item.cantidad}" ${inactivo ? 'disabled' : ''} onchange="cambiarCantidadCarrito(${item.id}, this.value)">
+                                    <button onclick="cambiarCantidadCarrito(${item.id}, ${item.cantidad + 1})" class="quantity-btn" ${inactivo ? 'disabled' : ''}>
                                         <span class="material-symbols-outlined">add</span>
                                     </button>
                                 </div>
                                 
                                 <div class="cart-item-price">
                                     <span class="cart-item-price-old">C$ ${Number(item.precio).toFixed(2)} c/u</span>
-                                    <span class="cart-item-price-current">C$ ${subtotalItem.toLocaleString('es-NI', { minimumFractionDigits: 2 })}</span>
+                                    <span class="cart-item-price-current">${inactivo ? 'No disponible' : 'C$ ' + subtotalItem.toLocaleString('es-NI', { minimumFractionDigits: 2 })}</span>
                                 </div>
                             </div>
                         </div>
@@ -430,8 +434,8 @@
 
         function abrirModalCheckout() {
             const totals = CitriCart.getTotals();
-            if (totals.totalItems === 0) {
-                alert('Tu carrito está vacío. Agrega productos primero.');
+            if (totals.activeItems === 0) {
+                alert('Tu carrito no tiene productos disponibles para comprar. Agrega productos primero.');
                 return;
             }
             const user = CitriAuth.getUser();
@@ -466,10 +470,19 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="material-symbols-outlined">sync</span> Procesando...';
 
-            const items = CitriCart.getItems().map(item => ({
-                producto_id: Number(item.id),
-                cantidad: Number(item.cantidad)
-            }));
+            const items = CitriCart.getItems()
+                .filter(item => item.activo !== false)
+                .map(item => ({
+                    producto_id: Number(item.id),
+                    cantidad: Number(item.cantidad)
+                }));
+
+            if (items.length === 0) {
+                alert('Tu carrito no tiene productos disponibles para comprar.');
+                btn.disabled = false;
+                btn.innerHTML = '<span class="material-symbols-outlined">lock</span> Confirmar Pedido';
+                return;
+            }
 
             try {
                 const res = await fetch('/api/pedidos', {

@@ -590,7 +590,10 @@ const CitriCart = {
                         unidad: si.unidad,
                         imagen: si.imagen || (local && local.imagen) || '/public/images/n-comer.jpg',
                         productor: si.productor,
-                        cantidad: Number(si.cantidad) || 1
+                        cantidad: Number(si.cantidad) || 1,
+                        // activo=false => el productor retiró el producto: se muestra
+                        // en el carrito como "No disponible" en lugar de desaparecer.
+                        activo: si.activo === 0 ? false : true
                     };
                 });
                 this.saveItems(normalizados);
@@ -618,7 +621,8 @@ const CitriCart = {
                 unidad: producto.unidad || 'caja',
                 imagen: producto.imagen || '/public/images/n-comer.jpg',
                 productor: producto.productor || 'Finca Cítrica',
-                cantidad: cantidadAgregada
+                cantidad: cantidadAgregada,
+                activo: producto.activo === false ? false : true
             });
         }
 
@@ -690,16 +694,20 @@ const CitriCart = {
 
     getTotals: function() {
         const items = this.getItems();
-        const subtotal = items.reduce((acc, item) => acc + (Number(item.precio) * Number(item.cantidad)), 0);
+        // Los productos retirados por el productor (activo=false) se muestran en el
+        // carrito pero no suman al total ni se pueden comprar.
+        const activos = items.filter(item => item.activo !== false);
+        const subtotal = activos.reduce((acc, item) => acc + (Number(item.precio) * Number(item.cantidad)), 0);
         // Exención agropecuaria según Ley de Concertación Tributaria (productos primarios en estado natural) o tarifa preferencial
-        const envio = items.length > 0 ? 150 : 0; // C$ 150 tarifa plana nacional
+        const envio = activos.length > 0 ? 150 : 0; // C$ 150 tarifa plana nacional
         const total = subtotal + envio;
 
         return {
             subtotal,
             envio,
             total,
-            totalItems: this.getProductCount()
+            totalItems: this.getProductCount(),
+            activeItems: activos.length
         };
     },
 

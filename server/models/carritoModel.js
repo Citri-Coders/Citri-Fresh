@@ -14,11 +14,12 @@ const SELECT_ITEMS = `
     p.unidad,
     ${IMAGEN_SEGURA},
     p.stock,
+    p.activo,
     u.nombre AS productor
   FROM carrito_items ci
   JOIN productos p ON ci.producto_id = p.id
   JOIN usuarios u ON p.productor_id = u.id
-  WHERE ci.usuario_id = ? AND p.activo = 1
+  WHERE ci.usuario_id = ?
   ORDER BY ci.creado_en ASC
 `;
 
