@@ -38,6 +38,9 @@ app.use(helmet({
     },
   },
   crossOriginEmbedderPolicy: false,
+  // OSM y otros servidores de tiles bloquean peticiones sin Referer (devuelven
+  // "Access blocked"). Enviar el origen como Referer permite cargar los mosaicos.
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
 }));
 
 
