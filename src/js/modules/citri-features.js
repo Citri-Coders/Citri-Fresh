@@ -251,21 +251,16 @@ function inicializarRecuperarPassword() {
                     return;
                 }
 
-                emailValidado = data.data.email;
-                const safeEmail = escapeHtml(data.data.email);
-                const safePreviewUrl = escapeAttr(data.data.previewUrl || '');
-                const previewLinkHtml = data.data.previewUrl 
-                    ? `<div style="margin-top: 8px;"><a href="${safePreviewUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; border-radius: 8px; color: #006837; border-color: #006837; text-decoration: none;"><span class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span> Abrir Correo en Servidor de Pruebas (Ethereal)</a></div>`
-                    : `<div style="margin-top: 8px;"><button type="button" onclick="verBuzonSimulado('${safeEmail}')" style="background: none; border: none; padding: 0; color: #006837; font-size: 0.75rem; font-weight: 700; text-decoration: underline; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px;">mail</span> ¿No tienes acceso a este correo? Ver bandeja local de prueba</button></div>`;
+                emailValidado = email;
+                const safeEmail = escapeHtml(email);
 
                 codigoInfo.innerHTML = `
                     <div style="display: flex; align-items: flex-start; gap: 8px;">
                         <span class="material-symbols-outlined" style="font-size: 20px; color: #006837; margin-top: 2px;">mark_email_read</span>
                         <div>
-                            <strong>¡Correo electrónico enviado con éxito!</strong><br>
-                            Hemos despachado la clave de seguridad de 6 dígitos a <u>${safeEmail}</u>.<br>
+                            <strong>Solicitud recibida</strong><br>
+                            Si <u>${safeEmail}</u> corresponde a una cuenta, recibirás un código de seguridad.<br>
                             <span style="font-size: 0.8rem; color: #475569; display: block; margin-top: 4px;">Revisa tu bandeja de entrada o carpeta de no deseados (spam) y escribe el código abajo.</span>
-                            ${previewLinkHtml}
                         </div>
                     </div>
                 `;

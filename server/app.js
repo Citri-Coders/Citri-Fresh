@@ -90,10 +90,15 @@ app.use((err, req, res, next) => {
   const esOperacional = err instanceof AppError;
   const status = esOperacional ? err.statusCode : 500;
 
-  if (esOperacional) {
-    logger.warn({ err, path: req.originalUrl }, err.message);
+  if (esOperacional && status < 500) {
+    // Respuestas 4xx esperadas (sesión ausente, credenciales inválidas, etc.)
+    // se registran sin stacktrace para evitar ruido en los logs.
+    logger.info({ status, path: req.originalUrl }, err.message);
   } else {
-    logger.error({ err, path: req.originalUrl }, "Error no controlado");
+    logger.error(
+      { err, path: req.originalUrl },
+      esOperacional ? err.message : "Error no controlado",
+    );
   }
 
   const body = {

@@ -191,6 +191,13 @@ await db.get(query);
 - Validar longitud máxima de strings
 - Usar biblioteca como `validator.js` o `joi`
 
+#### Validación de correo y dominio
+
+- Los correos de registro y los cambios de correo en el perfil deben tener formato válido.
+- Se rechazan proveedores desechables y dominios reservados para ejemplos o pruebas.
+- Fuera del entorno de pruebas, el dominio debe resolver registros MX o, como fallback, registros A/AAAA. Si la consulta DNS falla temporalmente, no se acepta solo por la sintaxis.
+- Esta verificación confirma que el dominio tiene una ruta de correo; no confirma que el buzón concreto exista ni que quien se registra lo controle. Para verificar propiedad del buzón se requiere un paso adicional de confirmación por correo.
+
 ---
 
 ### ✅ 8. Rate Limiting

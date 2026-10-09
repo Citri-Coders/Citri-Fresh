@@ -24,7 +24,13 @@ async function getTransporter() {
       },
     });
     logger.info(`[Citri-Fresh Email] Conectado a servidor SMTP: ${process.env.SMTP_HOST}`);
+  } else if (process.env.NODE_ENV === "test") {
+    transporterInstance = nodemailer.createTransport({ jsonTransport: true });
   } else {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("SMTP_HOST, SMTP_USER y SMTP_PASS deben configurarse en producción");
+    }
+
     // Modo de desarrollo: Crear cuenta Ethereal en tiempo real para generar previsualizaciones oficiales
     try {
       const testAccount = await nodemailer.createTestAccount();
@@ -54,8 +60,6 @@ async function getTransporter() {
  * Enviar correo con código de seguridad OTP para recuperación de contraseña
  */
 export async function enviarCorreoRecuperacion({ email, nombre, codigo }) {
-  const transporter = await getTransporter();
-
   const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -109,6 +113,7 @@ export async function enviarCorreoRecuperacion({ email, nombre, codigo }) {
   `;
 
   try {
+    const transporter = await getTransporter();
     const info = await transporter.sendMail({
       from: '"Seguridad Citri-Fresh" <seguridad@citrifresh.ni>',
       to: email,
@@ -122,15 +127,17 @@ export async function enviarCorreoRecuperacion({ email, nombre, codigo }) {
       previewUrl = nodemailer.getTestMessageUrl(info);
     } catch (e) {}
 
-    ultimoCorreoEnviado = {
-      destinatario: email,
-      nombre,
-      codigo,
-      asunto: `Código de Recuperación: ${codigo} - Citri-Fresh`,
-      fecha: new Date().toISOString(),
-      previewUrl,
-      htmlContent,
-    };
+    if (process.env.NODE_ENV !== "production") {
+      ultimoCorreoEnviado = {
+        destinatario: email,
+        nombre,
+        codigo,
+        asunto: `Código de Recuperación: ${codigo} - Citri-Fresh`,
+        fecha: new Date().toISOString(),
+        previewUrl,
+        htmlContent,
+      };
+    }
 
     logger.info(`[Citri-Fresh Email] Despachado correo a ${email}. ID: ${info.messageId}`);
     if (previewUrl) {
@@ -141,14 +148,16 @@ export async function enviarCorreoRecuperacion({ email, nombre, codigo }) {
   } catch (error) {
     logger.error({ err: error }, "[Citri-Fresh Email Error]:");
     // Guardar para fallback
-    ultimoCorreoEnviado = {
-      destinatario: email,
-      nombre,
-      codigo,
-      asunto: `Código de Recuperación: ${codigo} - Citri-Fresh`,
-      fecha: new Date().toISOString(),
-      htmlContent,
-    };
+    if (process.env.NODE_ENV !== "production") {
+      ultimoCorreoEnviado = {
+        destinatario: email,
+        nombre,
+        codigo,
+        asunto: `Código de Recuperación: ${codigo} - Citri-Fresh`,
+        fecha: new Date().toISOString(),
+        htmlContent,
+      };
+    }
     return { exito: false, error: error.message };
   }
 }
@@ -157,5 +166,6 @@ export async function enviarCorreoRecuperacion({ email, nombre, codigo }) {
  * Obtener el último correo despachado (útil para pruebas en vivo y demostración visual en frontend)
  */
 export function getUltimoCorreoEnviado() {
+  if (process.env.NODE_ENV === "production") return null;
   return ultimoCorreoEnviado;
 }

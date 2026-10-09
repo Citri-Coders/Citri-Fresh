@@ -36,6 +36,55 @@ export const CodigoRecuperacionModel = {
     );
   },
 
+  // Consume el OTP y cambia la contraseña en una única transacción.
+  async restablecerPassword({ email, codigo, passwordHash, ahora, intentosMax }) {
+    const db = await getDB();
+    return db.transaction(async (tx) => {
+      const registro = await tx.get(
+        "SELECT codigo, expira_en, intentos, verificado FROM codigos_recuperacion WHERE email = ?",
+        [email],
+      );
+
+      if (!registro) return "invalid";
+
+      if (ahora > Number(registro.expira_en)) {
+        await tx.run("DELETE FROM codigos_recuperacion WHERE email = ?", [email]);
+        return "invalid";
+      }
+
+      if (Number(registro.intentos) >= intentosMax) {
+        await tx.run("DELETE FROM codigos_recuperacion WHERE email = ?", [email]);
+        return "attempts-exceeded";
+      }
+
+      if (Number(registro.verificado) !== 1 || registro.codigo !== codigo) {
+        const intentos = Number(registro.intentos) + 1;
+        if (intentos >= intentosMax) {
+          await tx.run("DELETE FROM codigos_recuperacion WHERE email = ?", [email]);
+          return "attempts-exceeded";
+        }
+        await tx.run(
+          "UPDATE codigos_recuperacion SET intentos = ? WHERE email = ?",
+          [intentos, email],
+        );
+        return "invalid";
+      }
+
+      const usuario = await tx.get("SELECT id FROM usuarios WHERE email = ?", [email]);
+      if (!usuario) {
+        await tx.run("DELETE FROM codigos_recuperacion WHERE email = ?", [email]);
+        return "invalid";
+      }
+
+      await tx.run("UPDATE usuarios SET password_hash = ? WHERE id = ?", [
+        passwordHash,
+        usuario.id,
+      ]);
+      await tx.run("DELETE FROM codigos_recuperacion WHERE email = ?", [email]);
+      return "success";
+    });
+  },
+
   async eliminar(email) {
     const db = await getDB();
     await db.run("DELETE FROM codigos_recuperacion WHERE email = ?", [email]);

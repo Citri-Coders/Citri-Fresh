@@ -87,7 +87,14 @@ router.put("/perfil", verifyToken, validateActualizarPerfil, actualizarPerfil);
 
 // Rutas administrativas (solo rol admin, auditor para lectura)
 router.get("/usuarios", verifyToken, requireRole(ROLES.ADMIN, ROLES.AUDITOR), listarUsuarios);
-router.get("/ultimo-correo-enviado", verifyToken, requireRole(ROLES.ADMIN, ROLES.AUDITOR), obtenerUltimoCorreo);
+if (process.env.NODE_ENV === "development") {
+  router.get(
+    "/ultimo-correo-enviado",
+    verifyToken,
+    requireRole(ROLES.ADMIN, ROLES.AUDITOR),
+    obtenerUltimoCorreo,
+  );
+}
 router.delete("/usuarios/:id", verifyToken, requireRole(ROLES.ADMIN), validateIdParam, eliminarUsuario);
 
 export default router;

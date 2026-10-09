@@ -16,9 +16,6 @@ export const ROLES_AUTO_REGISTRO = Object.freeze([
   ROLES.PRODUCTOR,
 ]);
 
-// Roles que requieren clave maestra de autorización para crearse.
-export const ROLES_PRIVILEGIADOS = Object.freeze([ROLES.ADMIN, ROLES.AUDITOR]);
-
 export const ESTADOS_PEDIDO = Object.freeze({
   PENDIENTE: "pendiente",
   PAGADO: "pagado",

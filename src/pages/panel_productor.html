@@ -61,10 +61,12 @@
                     <span class="material-symbols-outlined">eco</span>
                     <span>Productor</span>
                 </div>
-                <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-error flex items-center gap-xs" style="cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid #e2e8f0;" title="Cerrar Sesión">
-                    <span class="material-symbols-outlined" style="color: #dc2626; font-size: 19px;">logout</span>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626;" class="hidden sm-inline">Salir</span>
-                </button>
+                <form action="/api/auth/logout" method="POST" style="display: inline-flex; margin: 0;">
+                    <button type="submit" class="btn btn-icon text-muted hover:text-error flex items-center gap-xs" style="cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid #e2e8f0;" title="Cerrar Sesión">
+                        <span class="material-symbols-outlined" style="color: #dc2626; font-size: 19px;">logout</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626;" class="hidden sm-inline">Salir</span>
+                    </button>
+                </form>
                 <button class="mobile-menu-btn">
                     <span class="material-symbols-outlined">menu</span>
                 </button>

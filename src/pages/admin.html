@@ -364,10 +364,12 @@
                         <span class="material-symbols-outlined">open_in_new</span>
                         <span>Ver Catálogo</span>
                     </a>
-                    <button type="button" onclick="CitriAuth.logout()" class="btn btn-outline flex items-center gap-xs" style="color: #dc2626; border-color: #fca5a5; background: #fff5f5;" title="Cerrar sesión del panel">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
-                        <span>Cerrar Sesión</span>
-                    </button>
+                    <form action="/api/auth/logout" method="POST" style="display: inline-flex; margin: 0;">
+                        <button type="submit" class="btn btn-outline flex items-center gap-xs" style="color: #dc2626; border-color: #fca5a5; background: #fff5f5;" title="Cerrar sesión del panel">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+                            <span>Cerrar Sesión</span>
+                        </button>
+                    </form>
                 </div>
             </div>
 

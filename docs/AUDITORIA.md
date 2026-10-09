@@ -2,6 +2,8 @@
 
 Revisión completa del backend, base de datos, seguridad, arquitectura y buenas prácticas.
 
+> **Vigencia:** Este documento conserva hallazgos de una revisión anterior y no se sincroniza automáticamente con el código. Verifica el estado actual de cada punto antes de tratarlo como pendiente o aplicar una recomendación.
+
 ---
 
 ## 📊 Resumen Ejecutivo

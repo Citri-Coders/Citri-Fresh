@@ -111,10 +111,12 @@
                             <span class="material-symbols-outlined">shopping_cart</span>
                             Mi Carrito
                         </a>
-                        <a href="javascript:void(0)" onclick="CitriAuth.logout()" class="profile-nav-link" style="border-top: 1px solid var(--color-border);">
-                            <span class="material-symbols-outlined">logout</span>
-                            Cerrar Sesión
-                        </a>
+                        <form action="/api/auth/logout" method="POST" style="margin: 0;">
+                            <button type="submit" class="profile-nav-link" style="width: 100%; border: 0; border-top: 1px solid var(--color-border); background: transparent; text-align: left; cursor: pointer; font: inherit;">
+                                <span class="material-symbols-outlined">logout</span>
+                                Cerrar Sesión
+                            </button>
+                        </form>
                     </nav>
                 </aside>
                 

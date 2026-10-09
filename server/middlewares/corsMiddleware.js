@@ -50,12 +50,40 @@ const corsOptions = {
     }
 
     // En producción solo se permiten los orígenes explícitos de ALLOWED_ORIGINS/CLIENT_URL
-    return callback(new Error(`Origen no permitido por CORS: ${origin}`), false);
+    const error = new Error("Origen no permitido por CORS");
+    error.code = "CORS_ORIGIN_DENIED";
+    return callback(error, false);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
 };
 
-export const corsMiddleware = cors(corsOptions);
+const corsHandler = cors(corsOptions);
+
+export const corsMiddleware = (req, res, next) => {
+  const isOpaqueOriginLogoutForm =
+    req.method === "POST" &&
+    req.path === "/api/auth/logout" &&
+    req.get("origin") === "null" &&
+    req.get("content-type")?.startsWith("application/x-www-form-urlencoded");
+
+  // Las navegaciones por formulario no necesitan permisos CORS para leer la
+  // respuesta. Permitir este caso evita convertir el logout en un 500 cuando
+  // la app se abre desde un origen opaco (por ejemplo, file://), sin autorizar
+  // ese origen para llamadas fetch/XHR con credenciales.
+  if (isOpaqueOriginLogoutForm) {
+    return next();
+  }
+
+  return corsHandler(req, res, (error) => {
+    if (error?.code === "CORS_ORIGIN_DENIED") {
+      return res.status(403).json({
+        success: false,
+        error: "Origen no permitido por CORS",
+      });
+    }
+    return next(error);
+  });
+};
 

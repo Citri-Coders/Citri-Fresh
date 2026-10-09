@@ -1,6 +1,6 @@
 import { validarCorreoReal } from "../utils/emailValidator.js";
 import { BadRequestError } from "../utils/appError.js";
-import { ROLES_VALIDOS, LIMITES_CAMPOS } from "../config/constants.js";
+import { ROLES_AUTO_REGISTRO, LIMITES_CAMPOS } from "../config/constants.js";
 
 // Devuelve un mensaje de error si algún campo excede su longitud máxima, o null.
 const validarLongitudes = (body, campos) => {
@@ -60,8 +60,10 @@ export const validateRegister = async (req, res, next) => {
       );
     }
 
-    if (rol && !ROLES_VALIDOS.includes(rol)) {
-      return next(new BadRequestError("Rol no válido"));
+    if (rol && !ROLES_AUTO_REGISTRO.includes(rol)) {
+      return next(
+        new BadRequestError("El rol solicitado no está disponible para autorregistro"),
+      );
     }
 
     // Guardar correo normalizado

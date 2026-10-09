@@ -92,13 +92,13 @@ function wrapLibsqlClient(client) {
 }
 
 
-// En Vercel (producción serverless) el FS es solo-lectura excepto /tmp
+// En Vercel (producción serverless) el FS es solo-lectura excepto /tmp.
+// En una VM, la base local debe quedar en una ruta persistente del servidor.
 function resolveDbPath() {
   if (process.env.DB_PATH) {
     return path.resolve(process.cwd(), process.env.DB_PATH);
   }
-  // En producción Vercel usamos /tmp (único directorio escribible) como fallback
-  if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+  if (process.env.VERCEL) {
     return "/tmp/citrifresh.db";
   }
   return path.resolve(__dirname, "../../db/citrifresh.db");
@@ -253,10 +253,16 @@ async function seedDefaultUsers(db) {
 }
 
 async function openAndInit() {
-  const tursoUrl = process.env.TURSO_DATABASE_URL || "libsql://citrifresh-db-kambidev.aws-us-east-1.turso.io";
-  const tursoToken = process.env.TURSO_AUTH_TOKEN || "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTEyMTYyNzEsImlkIjoiMDFhMTBjY2MtMmEwMS03NzY1LWIyZWQtY2VhNmIyZDU4NjllIiwia2lkIjoiM3pTd2tWRTRwc3pvOGNHNVY1YnpkVEdGNlFXLUd6ZnBpcUZIbVJ2dkxMTSIsInJpZCI6IjM0ODkzZGFlLTU0ZmUtNDZkYi04NGM1LWY1ZjY4MzczNmU1MSJ9.-_oRe91ufsPhy-xHyefwr4QsAAVcf6XBvn2EBMIOgbDwgN1EHrJvFXWZJVfXzFiKlwQ4-4Va_alXmN7gv3UkCQ";
+  const tursoUrl = process.env.TURSO_DATABASE_URL?.trim();
+  const tursoToken = process.env.TURSO_AUTH_TOKEN?.trim();
 
   if (tursoUrl) {
+    if (!tursoToken) {
+      throw new Error(
+        "TURSO_AUTH_TOKEN es obligatorio cuando TURSO_DATABASE_URL está configurada",
+      );
+    }
+
     logger.info("[CitriFresh DB] Conectando a Turso (SQLite Cloud)...");
     const client = createClient({
       url: tursoUrl,

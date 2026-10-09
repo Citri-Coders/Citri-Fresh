@@ -98,17 +98,18 @@ Content-Type: application/json
 ---
 
 #### POST /api/auth/logout
-Cerrar sesión (invalida token en el cliente).
+Cierra la sesión del navegador expirando la cookie `token` y redirige al inicio.
 
 **Request:**
 ```http
 POST /api/auth/logout
-Authorization: Bearer <token>
+Cookie: token=<jwt>
 ```
 
-**Response (200 OK):**
-```json
-{"message": "Sesión cerrada correctamente"}
+**Response (303 See Other):**
+```http
+Location: /pages/inicio.html
+Set-Cookie: token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly
 ```
 
 ---

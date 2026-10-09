@@ -8,23 +8,19 @@ import crypto from "crypto";
 
 let JWT_SECRET = process.env.JWT_SECRET;
 
+if (process.env.NODE_ENV === "production" && (!JWT_SECRET || JWT_SECRET.length < 32)) {
+  throw new Error("JWT_SECRET debe configurarse en producción con al menos 32 caracteres");
+}
+
 if (!JWT_SECRET) {
-  // Generar clave persistente por proceso si no fue configurada para evitar FUNCTION_INVOCATION_FAILED (500)
+  // En desarrollo y pruebas se genera una clave efímera si no se configuró.
   JWT_SECRET = crypto.randomBytes(64).toString("hex");
   logger.warn(
-    "⚠️ ADVERTENCIA: JWT_SECRET no está configurado en las variables de entorno. Se generó una clave en memoria. Para mantener las sesiones activas entre reinicios, define JWT_SECRET en las variables de entorno de Vercel.",
+    "JWT_SECRET no está configurado; se generó una clave temporal para este proceso.",
   );
 }
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1d";
-
-const ADMIN_ACCESS_KEY = process.env.ADMIN_ACCESS_KEY || null;
-
-if (!ADMIN_ACCESS_KEY) {
-  logger.warn(
-    "⚠️ ADVERTENCIA: ADMIN_ACCESS_KEY no está configurada. El registro de administradores/auditores queda deshabilitado.",
-  );
-}
 
 const SALT_ROUNDS = 10;
 
@@ -43,18 +39,19 @@ const COOKIE_OPTIONS = {
   secure: COOKIE_SECURE,
   sameSite: COOKIE_SAME_SITE,
   maxAge: 24 * 60 * 60 * 1000, // 1 día
+  path: "/",
 };
 
 const CLEAR_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: COOKIE_SECURE,
   sameSite: COOKIE_SAME_SITE,
+  path: "/",
 };
 
 export {
   JWT_SECRET,
   JWT_EXPIRES_IN,
-  ADMIN_ACCESS_KEY,
   SALT_ROUNDS,
   COOKIE_OPTIONS,
   CLEAR_COOKIE_OPTIONS,
