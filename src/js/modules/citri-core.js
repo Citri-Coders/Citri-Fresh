@@ -261,10 +261,21 @@ const CitriAuth = {
         } catch (err) {
             console.warn('Error al llamar /api/auth/logout:', err);
         }
-        localStorage.removeItem('citrifresh_user');
-        localStorage.removeItem('citrifresh_cart');
+        try {
+            localStorage.removeItem('citrifresh_user');
+            localStorage.removeItem('citrifresh_cart');
+            sessionStorage.clear();
+        } catch(e) {}
+
         const isInsideAuth = window.location.pathname.includes('/auth/');
-        window.location.href = isInsideAuth ? '../inicio.html' : 'inicio.html';
+        const isInsidePages = window.location.pathname.includes('/pages/');
+        if (isInsideAuth) {
+            window.location.href = '../inicio.html';
+        } else if (isInsidePages) {
+            window.location.href = 'inicio.html';
+        } else {
+            window.location.href = '/pages/inicio.html';
+        }
     },
     isLoggedIn: function() {
         return !!this.getUser();
@@ -357,8 +368,9 @@ const CitriAuth = {
                         <span class="material-symbols-outlined">person</span>
                         <span style="font-weight: 700; font-size: var(--text-label);">${userName}</span>
                     </a>
-                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-primary" title="Cerrar Sesión">
-                        <span class="material-symbols-outlined">logout</span>
+                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-error flex items-center gap-xs" style="cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid #e2e8f0;" title="Cerrar Sesión">
+                        <span class="material-symbols-outlined" style="color: #dc2626; font-size: 19px;">logout</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626;" class="hidden sm-inline">Salir</span>
                     </button>
                     <button class="mobile-menu-btn" aria-label="Abrir Menú">
                         <span class="material-symbols-outlined">menu</span>
@@ -377,8 +389,9 @@ const CitriAuth = {
                         <span class="material-symbols-outlined" style="font-size: 18px;">agriculture</span>
                         <span style="font-weight: 700; font-size: var(--text-label);">${userName}</span>
                     </a>
-                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-primary" title="Cerrar Sesión">
-                        <span class="material-symbols-outlined">logout</span>
+                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-error flex items-center gap-xs" style="cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid #e2e8f0;" title="Cerrar Sesión">
+                        <span class="material-symbols-outlined" style="color: #dc2626; font-size: 19px;">logout</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626;" class="hidden sm-inline">Salir</span>
                     </button>
                     <button class="mobile-menu-btn" aria-label="Abrir Menú">
                         <span class="material-symbols-outlined">menu</span>
@@ -393,8 +406,9 @@ const CitriAuth = {
                         <span class="material-symbols-outlined" style="font-size: 18px;">admin_panel_settings</span>
                         <span>${userName}</span>
                     </a>
-                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-primary" title="Cerrar Sesión">
-                        <span class="material-symbols-outlined">logout</span>
+                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-error flex items-center gap-xs" style="cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid #e2e8f0;" title="Cerrar Sesión">
+                        <span class="material-symbols-outlined" style="color: #dc2626; font-size: 19px;">logout</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626;" class="hidden sm-inline">Salir</span>
                     </button>
                     <button class="mobile-menu-btn" aria-label="Abrir Menú">
                         <span class="material-symbols-outlined">menu</span>
@@ -409,8 +423,9 @@ const CitriAuth = {
                         <span class="material-symbols-outlined" style="font-size: 18px;">policy</span>
                         <span>Auditoría: ${userName}</span>
                     </a>
-                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-primary" title="Cerrar Sesión">
-                        <span class="material-symbols-outlined">logout</span>
+                    <button onclick="CitriAuth.logout()" class="btn btn-icon text-muted hover:text-error flex items-center gap-xs" style="cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid #e2e8f0;" title="Cerrar Sesión">
+                        <span class="material-symbols-outlined" style="color: #dc2626; font-size: 19px;">logout</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: #dc2626;" class="hidden sm-inline">Salir</span>
                     </button>
                     <button class="mobile-menu-btn" aria-label="Abrir Menú">
                         <span class="material-symbols-outlined">menu</span>
@@ -521,3 +536,10 @@ const CitriCart = {
         });
     }
 };
+
+// Exposición global explícita en window
+if (typeof window !== 'undefined') {
+    window.CitriAuth = CitriAuth;
+    window.CitriCart = CitriCart;
+    window.CitriSync = CitriSync;
+}

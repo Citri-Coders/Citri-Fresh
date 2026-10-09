@@ -47,6 +47,8 @@ app.use(cookieParser());
 // Servir archivos estáticos del frontend (HTML, CSS, JS, imágenes) primero
 app.use(express.static(path.join(rootDir, "src")));
 app.use("/public", express.static(path.join(rootDir, "public")));
+app.use("/assets", express.static(path.join(rootDir, "public")));
+app.use("/images", express.static(path.join(rootDir, "public", "images")));
 
 // Aplicar rate limiting general exclusivamente a la API
 app.use("/api", generalLimiter);

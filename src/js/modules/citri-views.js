@@ -261,7 +261,7 @@ async function cargarPanelProductor() {
                     invContainer.innerHTML = productos.map(p => `
                         <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-lg); background-color: white;">
                             <div class="flex items-center gap-md" style="flex: 1; min-width: 0;">
-                                <img alt="${escapeAttr(p.nombre)}" src="${escapeAttr(p.imagen || '/public/images/l-criollo.jpg')}" style="width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover; flex-shrink: 0;">
+                                <img alt="${escapeAttr(p.nombre)}" src="${escapeAttr(p.imagen || '/public/images/n-comer.jpg')}" onerror="this.onerror=null; this.src='/public/images/n-comer.jpg';" style="width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover; flex-shrink: 0;">
                                 <div style="min-width: 0;">
                                     <h3 style="margin: 0; font-size: var(--text-label); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(p.nombre)}</h3>
                                     <p class="text-muted" style="margin: 0; font-size: var(--text-caption);">C$ ${Number(p.precio).toFixed(2)} / ${escapeHtml(p.unidad)} • Zona: ${escapeHtml(p.zona_nombre || 'Nicaragua')}</p>

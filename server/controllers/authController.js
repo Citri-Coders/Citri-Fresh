@@ -138,7 +138,8 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie(NOMBRE_COOKIE_TOKEN, CLEAR_COOKIE_OPTIONS);
+  res.clearCookie(NOMBRE_COOKIE_TOKEN, { ...CLEAR_COOKIE_OPTIONS, path: "/" });
+  res.clearCookie(NOMBRE_COOKIE_TOKEN);
   return sendSuccess(res, null, { message: "Sesión cerrada exitosamente" });
 };
 

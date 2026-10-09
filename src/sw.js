@@ -1,5 +1,5 @@
 // Citri-Fresh Service Worker - Soporte Offline Resiliente y Caché Dinámico
-const CACHE_NAME = 'citrifresh-cache-v3';
+const CACHE_NAME = 'citrifresh-cache-v4';
 
 const ASSETS_TO_CACHE = [
   '/',

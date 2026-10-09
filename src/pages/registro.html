@@ -365,26 +365,38 @@
             btn.disabled = true;
             btnTexto.textContent = 'Registrando...';
 
+            var fetchOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    nombre: nombres + ' ' + apellidos,
+                    email: email,
+                    password: pass,
+                    rol: rol,
+                    admin_key: adminKey,
+                    telefono: telefono,
+                    direccion: direccion,
+                    foto: foto,
+                    nombre_finca: finca,
+                    zona_cultivo: zona,
+                    capacidad_produccion: capac,
+                    tipos_citricos: tipos
+                })
+            };
+
             try {
-                var res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        nombre: nombres + ' ' + apellidos,
-                        email: email,
-                        password: pass,
-                        rol: rol,
-                        admin_key: adminKey,
-                        telefono: telefono,
-                        direccion: direccion,
-                        foto: foto,
-                        nombre_finca: finca,
-                        zona_cultivo: zona,
-                        capacidad_produccion: capac,
-                        tipos_citricos: tipos
-                    })
-                });
+                var res;
+                try {
+                    res = await fetch('/api/auth/register', fetchOptions);
+                } catch(primaryErr) {
+                    // Si se está ejecutando desde Live Server (ej: puerto 5500) o file:///, reintentar directo a :3050
+                    if (window.location.port !== '3050' || window.location.protocol === 'file:') {
+                        res = await fetch('http://localhost:3050/api/auth/register', fetchOptions);
+                    } else {
+                        throw primaryErr;
+                    }
+                }
 
                 var data;
                 try { data = await res.json(); }
@@ -409,8 +421,8 @@
                 }
 
             } catch(err) {
-                console.error(err);
-                alert('No se pudo conectar con el servidor. Verifica tu conexión.');
+                console.error('Error al registrar:', err);
+                alert('No se pudo conectar con el servidor Citri-Fresh.\nAsegúrate de que el servidor esté activo ejecutando "npm start" o levantado en http://localhost:3050.');
                 btn.disabled = false;
                 btnTexto.textContent = rol === 'productor' ? 'Crear Cuenta de Productor' : 'Crear Cuenta de Comprador';
             }

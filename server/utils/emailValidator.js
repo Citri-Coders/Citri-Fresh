@@ -90,6 +90,11 @@ export async function validarCorreoReal(email) {
     return { valido: true, email: emailTrim };
   }
 
+  // En modo desarrollo o pruebas locales, permitir correos con dominios comunes de prueba
+  if (process.env.NODE_ENV === "development" || dominio.endsWith(".local") || dominio.endsWith(".test") || dominio === "test.com" || dominio === "ejemplo.com" || dominio === "example.com") {
+    return { valido: true, email: emailTrim };
+  }
+
   // 5. Verificación DNS en tiempo real de servidores de correo (Registros MX o A)
   try {
     const mxRecords = await Promise.race([
