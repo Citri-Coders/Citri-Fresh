@@ -9,7 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="alternate icon" href="/favicon.ico">
     <!-- Iconos y Fuentes -->    <!-- Leaflet CSS para Mapa Interactivo -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="/public/vendor/leaflet/leaflet.css" />
     <!-- CSS Independiente Local -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
@@ -436,6 +436,7 @@
                     <div class="flex items-center gap-xs" style="font-size: 0.75rem; background: var(--color-surface-container); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); color: var(--color-primary); font-weight: 700;">
                         <span class="material-symbols-outlined" style="font-size: 14px;">location_pin</span>
                         Zonas Activas: <span id="map-active-zones">Cargando...</span>
+                        <span id="map-last-update" class="text-muted" style="font-weight: 600; margin-left: 4px;"></span>
                     </div>
                 </div>
                 <div id="admin-map"></div>
@@ -693,8 +694,8 @@
         </div>
     </footer>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet JS (servido localmente) -->
+    <script src="/public/vendor/leaflet/leaflet.js"></script>
     <script src="../js/modules/citri-core.js"></script>
     <script src="../js/modules/citri-views.js"></script>
     <script src="../js/modules/citri-features.js"></script>
@@ -726,6 +727,7 @@
             ajustarVistaSegunRol();
             initLeafletMap();
             await cargarDatosAdmin();
+            iniciarAutoRefresco();
         });
 
         function ajustarVistaSegunRol() {
@@ -751,6 +753,10 @@
 
         function initLeafletMap() {
             try {
+                if (typeof L === 'undefined') {
+                    console.error("Leaflet no está disponible (no se pudo cargar leaflet.js).");
+                    return;
+                }
                 // Centrado en la región del Pacífico de Nicaragua (producción de cítricos)
                 adminMap = L.map('admin-map').setView([12.15, -86.5], 8);
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -758,9 +764,36 @@
                     attribution: '© OpenStreetMap colaboradores'
                 }).addTo(adminMap);
                 markersGroup = L.layerGroup().addTo(adminMap);
+
+                // Reajustar el tamaño del mapa cuando el contenedor ya tiene dimensiones
+                setTimeout(() => { if (adminMap) adminMap.invalidateSize(); }, 200);
+                window.addEventListener('resize', () => { if (adminMap) adminMap.invalidateSize(); });
             } catch (err) {
                 console.error("Error al inicializar Leaflet:", err);
             }
+        }
+
+        // ── Auto-refresco (tiempo real) ─────────────────────────────────────
+        const INTERVALO_REFRESCO_MS = 30000;
+
+        function iniciarAutoRefresco() {
+            // Refresca los datos y el mapa periódicamente, solo si la pestaña está visible
+            // y no hay un modal abierto (para no interrumpir ediciones).
+            setInterval(() => {
+                if (document.hidden) return;
+                const modalAbierto = Array.from(document.querySelectorAll('.modal-backdrop'))
+                    .some(m => getComputedStyle(m).display !== 'none');
+                if (modalAbierto) return;
+                cargarDatosAdmin();
+            }, INTERVALO_REFRESCO_MS);
+
+            // Al volver a la pestaña, refrescar de inmediato y reajustar el mapa
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    if (adminMap) adminMap.invalidateSize();
+                    cargarDatosAdmin();
+                }
+            });
         }
 
         async function cargarDatosAdmin() {
@@ -865,6 +898,13 @@
             });
 
             document.getElementById('map-active-zones').textContent = Array.from(zonasActivas).join(', ') || 'Ninguna';
+
+            const elUltima = document.getElementById('map-last-update');
+            if (elUltima) {
+                elUltima.textContent = '· ' + new Date().toLocaleTimeString('es-NI', {
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                });
+            }
         }
 
         function renderTablaProductos() {
