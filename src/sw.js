@@ -1,5 +1,5 @@
 // Citri-Fresh Service Worker - Soporte Offline Resiliente y Caché Dinámico
-const CACHE_NAME = 'citrifresh-cache-v7';
+const CACHE_NAME = 'citrifresh-cache-v8';
 
 const ASSETS_TO_CACHE = [
   '/',
@@ -66,6 +66,15 @@ self.addEventListener('fetch', (event) => {
 
   // Ignorar peticiones que no sean GET
   if (req.method !== 'GET') {
+    return;
+  }
+
+  // Dejar pasar las peticiones a otros orígenes (p. ej. los mosaicos/tiles del mapa).
+  // El CSP con el que se sirve este service worker solo permite connect-src 'self',
+  // por lo que si el SW intenta hacer fetch() a un origen externo el navegador lo
+  // bloquea y los tiles quedan en blanco. Al no interceptarlas, el navegador las
+  // carga directamente (img-src ya permite https:).
+  if (url.origin !== self.location.origin) {
     return;
   }
 
