@@ -667,7 +667,10 @@ function inicializarFormularioCosecha() {
         const fileInput = document.getElementById('cosecha_img');
         let imagenBase64 = '';
 
-        if (fileInput && fileInput.files && fileInput.files[0]) {
+        if (window.currentImageBase64) {
+            // La imagen ya fue validada y comprimida al seleccionarla en el formulario
+            imagenBase64 = window.currentImageBase64;
+        } else if (fileInput && fileInput.files && fileInput.files[0]) {
             const file = fileInput.files[0];
             imagenBase64 = await new Promise((resolve) => {
                 const reader = new FileReader();
@@ -675,11 +678,10 @@ function inicializarFormularioCosecha() {
                 reader.onerror = () => resolve('');
                 reader.readAsDataURL(file);
             });
-        } else if (typeof currentImageBase64 !== 'undefined' && currentImageBase64) {
-            imagenBase64 = currentImageBase64;
         }
 
         const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="material-symbols-outlined">hourglass_top</span> Publicando...';
@@ -695,30 +697,17 @@ function inicializarFormularioCosecha() {
             imagen: imagenBase64
         };
 
+        let res;
         try {
-            const res = await fetch('/api/productos', {
+            res = await fetch('/api/productos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 body: JSON.stringify(productoPayload)
             });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                alert(data.error || 'Error al publicar la cosecha');
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<span class="material-symbols-outlined">save</span> Publicar Producto';
-                }
-                return;
-            }
-
-            localStorage.removeItem('citrifresh_borrador_cosecha');
-            alert(`🍊 ¡Cosecha "${nombre}" guardada en la base de datos y publicada exitosamente!`);
-            window.location.href = 'panel_productor.html';
-        } catch (err) {
-            console.warn('Conexión no disponible. Encolando cosecha para sincronización posterior:', err);
+        } catch (networkErr) {
+            // Fallo de red real (fetch rechazado): encolar para sincronización offline
+            console.warn('Conexión no disponible. Encolando cosecha para sincronización posterior:', networkErr);
             CitriSync.addToQueue({
                 tipo: 'producto',
                 url: '/api/productos',
@@ -728,6 +717,29 @@ function inicializarFormularioCosecha() {
             localStorage.removeItem('citrifresh_borrador_cosecha');
             alert(`💾 ¡Cosecha "${nombre}" guardada sin conexión!\nSe sincronizará automáticamente con el servidor en cuanto regrese el internet.`);
             window.location.href = 'panel_productor.html';
+            return;
         }
+
+        // La respuesta llegó: parsear de forma segura (puede no ser JSON si el servidor falla)
+        const rawBody = await res.text().catch(() => '');
+        let data = {};
+        try {
+            data = rawBody ? JSON.parse(rawBody) : {};
+        } catch (parseErr) {
+            data = {};
+        }
+
+        if (!res.ok) {
+            alert(data.error || `Error al publicar la cosecha (código ${res.status}).`);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+            }
+            return;
+        }
+
+        localStorage.removeItem('citrifresh_borrador_cosecha');
+        alert(`🍊 ¡Cosecha "${nombre}" guardada en la base de datos y publicada exitosamente!`);
+        window.location.href = 'panel_productor.html';
     });
 }
