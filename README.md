@@ -9,6 +9,8 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-10B981.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express.js-4.18-000000.svg?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![SQLite](https://img.shields.io/badge/SQLite-3-003B57.svg?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Turso](https://img.shields.io/badge/Turso-libSQL-4FF8D2.svg?style=for-the-badge&logo=turso&logoColor=white)](https://turso.tech/)
+[![Azure](https://img.shields.io/badge/Deploy-Azure-0078D4.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 [![Hackathon](https://img.shields.io/badge/Hackathon-2026-EA580C.svg?style=for-the-badge&logo=target&logoColor=white)](#-hackathon-2026)
 
@@ -32,7 +34,7 @@
 6. [📂 Estructura Detallada de Carpetas](#-estructura-detallada-de-carpetas)
 7. [🚀 Instalación y Puesta en Marcha](#-instalación-y-puesta-en-marcha)
 8. [📡 API REST Endpoints](#-api-endpoints)
-9. [☁️ Despliegue en Producción (Vercel & Servidor Dedicado)](#-despliegue-en-producción)
+9. [☁️ Despliegue en Producción (Azure, Vercel & Servidor Dedicado)](#-despliegue-en-producción)
 10. [🔒 Seguridad, Resiliencia y PWA](#-seguridad-resiliencia-y-pwa)
 11. [🎨 Recursos de Diseño y Branding](#-recursos-de-diseño-y-branding)
 12. [👥 Equipo y Contacto](#-equipo-y-contacto)
@@ -45,7 +47,7 @@
 
 ```mermaid
 graph LR
-    Finca[👨‍🌾 Finca Citrícola] -->|Publicación directa| Plataforma[🍊 Plataforma Citri-Fresh]
+    Finca[👨🌾 Finca Citrícola] -->|Publicación directa| Plataforma[🍊 Plataforma Citri-Fresh]
     Auditor[🔍 Auditor de Calidad] -->|Inspección y Trazabilidad| Plataforma
     Plataforma -->|Precios transparentes y sin intermediarios| Comprador[🛒 Cliente / Restaurante]
     Admin[⚙️ Administrador] -->|Monitoreo y Métricas| Plataforma
@@ -75,7 +77,7 @@ El sistema implementa **RBAC (Role-Based Access Control)** integral con protecci
 │ 🛒 Cliente      │ Catálogo completo, carrito dinámico (IVA 15% + flete), historial y     │
 │                 │ seguimiento de órdenes de compra en tiempo real.                       │
 ├─────────────────┼────────────────────────────────────────────────────────────────────────┤
-│ 👨‍🌾 Productor    │ Dashboard agrícola con ingresos semanales, inventario por calibres,    │
+│ 👨🌾 Productor    │ Dashboard agrícola con ingresos semanales, inventario por calibres,    │
 │                 │ registro de nuevas cosechas con fotos y actualización de pedidos.      │
 ├─────────────────┼────────────────────────────────────────────────────────────────────────┤
 │ 🔍 Auditor      │ Vista fiscalizadora en modo sólo lectura de todas las operaciones,     │
@@ -97,9 +99,12 @@ El sistema implementa **RBAC (Role-Based Access Control)** integral con protecci
 - **PWA Ready:** Service Worker registrado para cacheo de assets estáticos y funcionamiento offline en el campo.
 
 ### Backend & API REST
-- **Node.js (v18+) & Express.js (v4):** Servidor HTTP estructurado bajo patrón **Controlador - Servicio - Modelo**.
+- **Node.js (v18+, en producción v20 LTS) & Express.js (v4):** Servidor HTTP estructurado bajo patrón **Controlador - Servicio - Modelo**.
 - **SQLite3 & sqlite (async/await):** Base de datos relacional embebida, con soporte para inicialización en memoria/disco efímero (`/tmp`) en arquitecturas Serverless.
-- **Seguridad HTTP:** `bcrypt` (10 rounds) para hashing de contraseñas, tokens JWT en cookies `HttpOnly`, `cors` adaptativo y `express-rate-limit` para defensa contra fuerza bruta.
+- **Turso (libSQL) — SQLite en la nube:** Base de datos relacional distribuida basada en SQLite, accedida de forma remota mediante la librería `@libsql/client`. Ofrece replicación global, baja latencia y alta disponibilidad sin necesidad de administrar un motor de base de datos en el servidor. Se utiliza como base de datos principal en el despliegue de producción sobre Azure.
+- **SQLite3 (runtime local en servidor):** Se mantiene un cliente `sqlite3` instalado en la VM para labores administrativas, inspección del esquema y respaldo.
+- **Seguridad HTTP:** `bcrypt` (10 rounds) para hashing de contraseñas, tokens JWT en cookies `HttpOnly`, `cors` adaptativo con whitelist de orígenes, `helmet` para cabeceras HTTP y `express-rate-limit` para defensa contra fuerza bruta.
+- **Proceso en Producción:** **PM2** mantiene el backend activo 24/7 con auto-reinicio y arranque automático tras reinicio de la VM.
 
 ---
 
@@ -349,6 +354,145 @@ Todos los endpoints responden en formato JSON estándar.
 
 ## ☁️ Despliegue en Producción
 
+### 🌐 Despliegue en Microsoft Azure (Producción activa)
+
+El proyecto se encuentra desplegado sobre una **Máquina Virtual de Microsoft Azure** accesible públicamente.
+
+#### 🔗 URLs de acceso
+| Recurso | URL |
+|---|---|
+| Aplicación PWA | `http://68.211.178.227:3050/pages/inicio.html` |
+| Instalación PWA | Abrir en Chrome → Menú → "Instalar Citri-Fresh" |
+| Repositorio | https://github.com/Citri-Coders/Citri-Fresh |
+
+#### 🖥️ Infraestructura Azure
+
+| Componente | Detalle |
+|---|---|
+| **Proveedor** | Microsoft Azure |
+| **VM** | `vm-citri-fresh` |
+| **IP pública** | `68.211.178.227` |
+| **Sistema Operativo** | Ubuntu Server 24.04.4 LTS (kernel 6.17.0-1022-azure) |
+| **Usuario SSH** | `azureuser` (autenticación mediante clave `.pem`) |
+| **Región** | Azure Public Cloud |
+| **Recursos** | 28 GB disco, 1 vCPU, red `eth0: 172.16.0.4` |
+
+#### 🚀 Proceso de despliegue paso a paso
+
+**1. Acceso a la VM por SSH**
+```bash
+ssh -i "ruta/a/tu-clave.pem" azureuser@68.211.178.227
+```
+
+**2. Instalación del entorno**
+```bash
+# Actualizar sistema
+sudo apt update && sudo apt upgrade -y
+
+# Node.js 20 LTS
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Cliente SQLite (administración)
+sudo apt install -y sqlite3 libsqlite3-dev
+
+# PM2 (proceso persistente)
+sudo npm install -g pm2
+```
+
+**3. Clonar el proyecto y dependencias**
+```bash
+cd ~
+git clone https://github.com/Citri-Coders/Citri-Fresh.git citri-fresh
+cd citri-fresh
+npm install
+```
+
+**4. Configurar variables de entorno (`.env`)**
+```env
+# Base de datos Turso
+TURSO_DATABASE_URL=libsql://citri-fresh-<usuario>.turso.io
+TURSO_AUTH_TOKEN=<token_generado_con_turso_cli>
+
+# Servidor
+PORT=3050
+NODE_ENV=production
+
+# CORS (orígenes permitidos)
+ALLOWED_ORIGINS=http://68.211.178.227:3050,http://68.211.178.227
+```
+> Las credenciales de Turso se obtienen con la CLI: `turso db show <bd> --url` y `turso db tokens create <bd>`.
+
+**5. Levantar el backend con PM2**
+```bash
+pm2 start server.js --name citri-fresh
+pm2 save
+pm2 startup   # ejecutar el comando que imprime para habilitar auto-arranque
+```
+
+**6. Verificación**
+```bash
+pm2 status                             # Backend online
+curl http://localhost:3050             # Respuesta 200 + redirect
+```
+
+#### 🌐 Configuración de red y puertos (Azure NSG)
+
+Solo se exponen los puertos estrictamente necesarios:
+
+| Puerto | Servicio | Origen permitido |
+|---|---|---|
+| **22** | SSH (administración) | Restringido a IPs autorizadas |
+| **80** | HTTP (PWA) | Cualquier origen |
+| **443** | HTTPS (reservado) | Cualquier origen |
+| **3050** | Backend Node.js | Cualquier origen |
+
+> ⚠️ **La base de datos no expone puertos** porque Turso es un servicio cloud gestionado. La VM solo mantiene conexiones salientes hacia Turso por HTTPS.
+
+#### 🗄️ Gestión de la base de datos Turso
+
+```bash
+# Autenticación (en la VM, una sola vez)
+turso auth login --headless
+
+# Listar bases de datos
+turso db list
+
+# Abrir shell SQL remoto
+turso db shell citri-fresh
+
+# Consultas de verificación
+SELECT name FROM sqlite_master WHERE type='table';
+SELECT COUNT(*) FROM usuarios;
+```
+
+#### 🔄 Actualización del despliegue
+
+Cuando se realicen cambios en el repositorio:
+
+```bash
+cd ~/citri-fresh
+git pull origin main
+npm install --omit=dev
+pm2 restart citri-fresh
+```
+
+#### 📊 Diagrama de arquitectura en Azure
+
+```mermaid
+graph TB
+    User[👤 Usuario / Navegador] -->|HTTPS :80/:443| Azure[🌐 Azure NSG]
+    Azure -->|:3050| VM[💻 VM vm-citri-fresh - Ubuntu 24.04]
+    VM --> Express[🟢 Node.js 20 + Express]
+    Express -->|libSQL over HTTPS| Turso[(☁️ Turso - SQLite Cloud)]
+    VM -.->|Administración| PM2[⚙️ PM2 Process Manager]
+    Dev[👨💻 Desarrollador] -->|SSH :22| VM
+    Dev -->|git push| GitHub[📦 GitHub Repository]
+    GitHub -->|git pull| VM
+```
+
+---
+
 ### Despliegue Automatizado en Vercel
 El repositorio incluye configuración nativa para Vercel mediante [`vercel.json`](vercel.json):
 1. Conecta el repositorio de GitHub en tu panel de **[Vercel](https://vercel.com/)**.
@@ -376,6 +520,10 @@ pm2 startup
 - **Cookies Seguras:** Tokens JWT protegidos contra ataques XSS mediante banderas `HttpOnly`, `SameSite: 'lax'` y `secure` en producción.
 - **Saneamiento y Validación:** Sanitización de strings, validación de contraseñas robustas y parametrización completa de consultas SQL (prevención de SQL Injections).
 - **Offline Sync:** La cola local `CitriSync` almacena solicitudes cuando no hay cobertura y las sincroniza en cuanto el dispositivo recupera señal de red.
+- **Superficie de ataque mínima en Azure:** Solo los puertos 22 (SSH), 80 (HTTP), 443 (HTTPS) y 3050 (backend) están expuestos. La base de datos Turso vive fuera de la VM, por lo que no existe un motor SQL escuchando en puertos internos.
+- **Whitelist de orígenes CORS:** Solo los dominios explícitamente permitidos (Vercel, localhost y la IP pública de Azure) pueden consumir la API con credenciales, evitando peticiones cross-site no autorizadas.
+- **Aislamiento de credenciales:** Los tokens de Turso y JWT se almacenan únicamente en el archivo `.env` del servidor, excluido del control de versiones mediante `.gitignore`.
+- **HSTS y upgrade-insecure-requests desactivados temporalmente** durante el desarrollo (HTTP sin SSL). Se reactivarán al migrar a HTTPS con un dominio real y certificado de Let's Encrypt.
 
 ---
 
