@@ -227,6 +227,7 @@ function limpiarEstadoLocalSesion() {
     try {
         localStorage.removeItem('citrifresh_user');
         localStorage.removeItem('citrifresh_cart');
+        localStorage.removeItem('citrifresh_cart_owner');
         sessionStorage.clear();
     } catch (err) {
         console.warn('No se pudo limpiar el estado local de sesión:', err);
@@ -470,6 +471,7 @@ const CitriAuth = {
 // ==================== GESTOR DEL CARRITO DE COMPRAS (CitriCart) ====================
 const CitriCart = {
     STORAGE_KEY: 'citrifresh_cart',
+    OWNER_KEY: 'citrifresh_cart_owner',
 
     getItems: function() {
         try {
@@ -522,13 +524,92 @@ const CitriCart = {
         }
     },
 
+    // ¿Hay una sesión de usuario válida almacenada localmente?
+    _usuarioAutenticado: function() {
+        try {
+            return typeof CitriAuth !== 'undefined' ? CitriAuth.getUser() : null;
+        } catch (e) {
+            return null;
+        }
+    },
+
+    // Petición JSON al backend del carrito (con credenciales de sesión)
+    _peticion: async function(metodo, ruta, body) {
+        const opciones = {
+            method: metodo,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        };
+        if (body !== undefined) opciones.body = JSON.stringify(body);
+        const res = await fetch(ruta, opciones);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        try {
+            return (await res.json()).data;
+        } catch (e) {
+            return null;
+        }
+    },
+
+    // Sincroniza el carrito local con el del servidor (fuente de verdad para
+    // usuarios autenticados). Si es el primer inicio de sesión con un carrito de
+    // invitado, lo fusiona antes de traer el carrito del servidor.
+    sincronizarConServidor: async function() {
+        const user = this._usuarioAutenticado();
+        if (!user) return this.getItems();
+
+        const owner = localStorage.getItem(this.OWNER_KEY);
+        const localItems = this.getItems();
+
+        if (String(owner) !== String(user.id) && localItems.length > 0) {
+            try {
+                await this._peticion('POST', '/api/carrito/sincronizar', {
+                    items: localItems.map(i => ({
+                        producto_id: Number(i.id),
+                        cantidad: Number(i.cantidad) || 1
+                    }))
+                });
+                localStorage.setItem(this.OWNER_KEY, String(user.id));
+            } catch (e) {
+                // Sin conexión: no se marca el carrito como sincronizado para reintentar luego
+                return this.getItems();
+            }
+        } else {
+            localStorage.setItem(this.OWNER_KEY, String(user.id));
+        }
+
+        try {
+            const serverItems = await this._peticion('GET', '/api/carrito');
+            if (Array.isArray(serverItems)) {
+                const localMap = new Map(localItems.map(i => [Number(i.id), i]));
+                const normalizados = serverItems.map(si => {
+                    const local = localMap.get(Number(si.id));
+                    return {
+                        id: Number(si.id),
+                        nombre: si.nombre,
+                        precio: Number(si.precio) || 0,
+                        unidad: si.unidad,
+                        imagen: si.imagen || (local && local.imagen) || '/public/images/n-comer.jpg',
+                        productor: si.productor,
+                        cantidad: Number(si.cantidad) || 1
+                    };
+                });
+                this.saveItems(normalizados);
+                return normalizados;
+            }
+        } catch (e) {
+            // Sin conexión: se conserva el carrito local
+        }
+        return this.getItems();
+    },
+
     addItem: function(producto) {
         const items = this.getItems();
         const prodId = Number(producto.id);
         const existing = items.find(item => Number(item.id) === prodId);
+        const cantidadAgregada = Number(producto.cantidad) || 1;
 
         if (existing) {
-            existing.cantidad = (Number(existing.cantidad) || 1) + (Number(producto.cantidad) || 1);
+            existing.cantidad = (Number(existing.cantidad) || 1) + cantidadAgregada;
         } else {
             items.push({
                 id: prodId,
@@ -537,11 +618,19 @@ const CitriCart = {
                 unidad: producto.unidad || 'caja',
                 imagen: producto.imagen || '/public/images/n-comer.jpg',
                 productor: producto.productor || 'Finca Cítrica',
-                cantidad: Number(producto.cantidad) || 1
+                cantidad: cantidadAgregada
             });
         }
 
         this.saveItems(items);
+
+        // Persistir en el servidor si hay sesión activa
+        if (this._usuarioAutenticado()) {
+            this._peticion('POST', '/api/carrito', {
+                producto_id: prodId,
+                cantidad: cantidadAgregada
+            }).catch(() => {});
+        }
         return this.getItems();
     },
 
@@ -549,6 +638,8 @@ const CitriCart = {
         let items = this.getItems();
         const qty = parseInt(cantidad, 10);
         const prodId = Number(id);
+
+        if (!Number.isFinite(qty)) return items;
 
         if (qty <= 0) {
             items = items.filter(item => Number(item.id) !== prodId);
@@ -558,6 +649,11 @@ const CitriCart = {
         }
 
         this.saveItems(items);
+
+        if (this._usuarioAutenticado()) {
+            this._peticion('PUT', '/api/carrito/' + prodId, { cantidad: Math.max(0, qty) })
+                .catch(() => {});
+        }
         return items;
     },
 
@@ -565,6 +661,10 @@ const CitriCart = {
         const prodId = Number(id);
         const items = this.getItems().filter(item => Number(item.id) !== prodId);
         this.saveItems(items);
+
+        if (this._usuarioAutenticado()) {
+            this._peticion('DELETE', '/api/carrito/' + prodId).catch(() => {});
+        }
         return items;
     },
 
@@ -572,6 +672,10 @@ const CitriCart = {
         localStorage.removeItem(this.STORAGE_KEY);
         this.updateCartBadge();
         window.dispatchEvent(new CustomEvent('citri:cart-updated', { detail: { items: [] } }));
+
+        if (this._usuarioAutenticado()) {
+            this._peticion('DELETE', '/api/carrito').catch(() => {});
+        }
     },
 
     getCount: function() {

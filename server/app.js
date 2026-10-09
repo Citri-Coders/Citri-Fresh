@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import productoRoutes from "./routes/productoRoutes.js";
 import pedidoRoutes from "./routes/pedidoRoutes.js";
 import zonaRoutes from "./routes/zonaRoutes.js";
+import carritoRoutes from "./routes/carritoRoutes.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -78,6 +79,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/productos", productoRoutes);
 app.use("/api/pedidos", pedidoRoutes);
 app.use("/api/zonas", zonaRoutes);
+app.use("/api/carrito", carritoRoutes);
 
 // Middleware para manejo de errores de rate limiting
 app.use(rateLimitErrorHandler);
