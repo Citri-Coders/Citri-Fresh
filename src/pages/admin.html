@@ -759,10 +759,29 @@
                 }
                 // Centrado en la región del Pacífico de Nicaragua (producción de cítricos)
                 adminMap = L.map('admin-map').setView([12.15, -86.5], 8);
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+                const capaOSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 18,
                     attribution: '© OpenStreetMap colaboradores'
-                }).addTo(adminMap);
+                });
+                capaOSM.addTo(adminMap);
+
+                // Si los mosaicos de OSM no cargan (red/bloqueador), cambiar a un proveedor alterno
+                let erroresTiles = 0;
+                let respaldoActivo = false;
+                capaOSM.on('tileerror', () => {
+                    erroresTiles++;
+                    if (!respaldoActivo && erroresTiles >= 3) {
+                        respaldoActivo = true;
+                        adminMap.removeLayer(capaOSM);
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                            subdomains: 'abcd',
+                            maxZoom: 19,
+                            attribution: '© OpenStreetMap, © CARTO'
+                        }).addTo(adminMap);
+                    }
+                });
+
                 markersGroup = L.layerGroup().addTo(adminMap);
 
                 // Reajustar el tamaño del mapa cuando el contenedor ya tiene dimensiones
