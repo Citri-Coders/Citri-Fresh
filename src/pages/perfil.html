@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/icons.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
@@ -66,7 +67,7 @@
                     <div class="dashboard-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px;">
                         <div style="position: relative; width: 6.5rem; height: 6.5rem; margin: 0 auto var(--space-md) auto;">
                             <div id="profile-avatar-container" style="width: 100%; height: 100%; border-radius: 50%; background-color: var(--color-primary-container); color: white; display: flex; align-items: center; justify-content: center; border: 3px solid var(--color-primary); overflow: hidden;">
-                                <span id="profile-avatar-icon" class="material-symbols-outlined icon-fill" style="font-size: 3.5rem;">person</span>
+                                <span id="profile-avatar-icon" class="cf-icon cf-16" style="font-size: 3.5rem;"></span>
                                 <img id="profile-avatar-img" src="" alt="Foto de Perfil" style="display: none; width: 100%; height: 100%; object-fit: cover;">
                             </div>
                             <button type="button" onclick="abrirModalPerfil()" title="Cambiar foto de perfil" style="position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--color-primary); color: white; border: 2px solid white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
@@ -78,15 +79,15 @@
                         
                         <div class="profile-details" style="width: 100%; text-align: left; border-top: 1px solid var(--color-border); padding: var(--space-lg) 0; margin-bottom: 0;">
                             <div class="profile-detail-item">
-                                <span class="material-symbols-outlined" style="font-size: 1.25rem;">mail</span>
+                                <span class="cf-icon cf-19" style="font-size: 1.25rem;"></span>
                                 <span id="profile-email" style="font-size: var(--text-caption); word-break: break-all;">cliente@citrifresh.com</span>
                             </div>
                             <div class="profile-detail-item">
-                                <span class="material-symbols-outlined" style="font-size: 1.25rem;">phone</span>
+                                <span class="cf-icon cf-30" style="font-size: 1.25rem;"></span>
                                 <span id="profile-phone" style="font-size: var(--text-caption);">+505 8888 8888</span>
                             </div>
                             <div class="profile-detail-item" style="margin-bottom: 0;">
-                                <span class="material-symbols-outlined" style="font-size: 1.25rem;">location_on</span>
+                                <span class="cf-icon cf-37" style="font-size: 1.25rem;"></span>
                                 <span id="profile-address" style="font-size: var(--text-caption); line-height: 1.4;">Managua, Nicaragua</span>
                             </div>
                         </div>
@@ -100,15 +101,15 @@
                     <!-- Quick Navigation -->
                     <nav class="dashboard-card hidden md-block" style="padding: 0; overflow: hidden;">
                         <a href="#pedidos-section" class="profile-nav-link active">
-                            <span class="material-symbols-outlined icon-fill">inventory_2</span>
+                            <span class="cf-icon cf-38"></span>
                             Mis Pedidos
                         </a>
                         <a href="producto.html" class="profile-nav-link">
-                            <span class="material-symbols-outlined">storefront</span>
+                            <span class="cf-icon cf-04"></span>
                             Explorar Cosechas
                         </a>
                         <a href="carrito.html" class="profile-nav-link">
-                            <span class="material-symbols-outlined">shopping_cart</span>
+                            <span class="cf-icon cf-33"></span>
                             Mi Carrito
                         </a>
                         <form action="/api/auth/logout" method="POST" style="margin: 0;">
@@ -125,7 +126,7 @@
                     <!-- Order Status Overview -->
                     <section style="margin-bottom: var(--space-xl);">
                         <h2 class="flex items-center gap-sm" style="font-size: var(--text-h3); margin-bottom: var(--space-md);">
-                            <span class="material-symbols-outlined text-primary">local_shipping</span>
+                            <span class="cf-icon cf-36"></span>
                             Estado de Pedidos
                         </h2>
                         
@@ -133,7 +134,7 @@
                             <!-- Pending -->
                             <div class="stat-card">
                                 <div class="flex justify-between items-start" style="margin-bottom: var(--space-sm);">
-                                    <span class="material-symbols-outlined" style="background-color: rgba(255,199,59,0.2); color: var(--color-yellow); padding: 0.5rem; border-radius: var(--radius-lg);">pending_actions</span>
+                                    <span class="cf-icon cf-38" style="background-color: rgba(255,199,59,0.2); color: var(--color-yellow); padding: 0.5rem; border-radius: var(--radius-lg);"></span>
                                     <span id="stat-pedidos-pendientes" class="stat-value">0</span>
                                 </div>
                                 <h3 class="stat-title">Pendientes</h3>
@@ -142,7 +143,7 @@
                             <!-- Shipped -->
                             <div class="stat-card">
                                 <div class="flex justify-between items-start" style="margin-bottom: var(--space-sm);">
-                                    <span class="material-symbols-outlined" style="background-color: var(--color-surface-container); color: var(--color-primary); padding: 0.5rem; border-radius: var(--radius-lg);">directions_boat</span>
+                                    <span class="cf-icon cf-36" style="background-color: var(--color-surface-container); color: var(--color-primary); padding: 0.5rem; border-radius: var(--radius-lg);"></span>
                                     <span id="stat-pedidos-enviados" class="stat-value">0</span>
                                 </div>
                                 <h3 class="stat-title">Enviados</h3>
@@ -151,7 +152,7 @@
                             <!-- Delivered -->
                             <div class="stat-card">
                                 <div class="flex justify-between items-start" style="margin-bottom: var(--space-sm);">
-                                    <span class="material-symbols-outlined" style="background-color: var(--color-secondary-container); color: var(--color-secondary); padding: 0.5rem; border-radius: var(--radius-lg);">task_alt</span>
+                                    <span class="cf-icon cf-46" style="background-color: var(--color-secondary-container); color: var(--color-secondary); padding: 0.5rem; border-radius: var(--radius-lg);"></span>
                                     <span id="stat-pedidos-entregados" class="stat-value">0</span>
                                 </div>
                                 <h3 class="stat-title">Entregados</h3>
@@ -164,7 +165,7 @@
                         <div class="flex justify-between items-center flex-wrap gap-sm" style="padding: var(--space-lg); border-bottom: 1px solid var(--color-border);">
                             <h2 style="font-size: var(--text-h3); margin: 0;">Historial de Pedidos</h2>
                             <a href="producto.html" class="btn btn-primary flex items-center gap-xs" style="font-size: 0.825rem; padding: 0.4rem 0.85rem;">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">add_shopping_cart</span>
+                                <span class="cf-icon cf-33" style="font-size: 16px;"></span>
                                 Realizar Pedido
                             </a>
                         </div>
@@ -184,7 +185,7 @@
                                 <tbody id="pedidos-tbody">
                                     <tr>
                                         <td colspan="6" style="text-align: center; padding: 2.5rem; color: #888;">
-                                            <span class="material-symbols-outlined" style="font-size: 36px; display: block; margin-bottom: 8px; color: var(--color-primary);">shopping_bag</span>
+                                            <span class="cf-icon cf-28" style="font-size: 36px; display: block; margin-bottom: 8px; color: var(--color-primary);"></span>
                                             Cargando historial de pedidos...
                                         </td>
                                     </tr>
@@ -202,7 +203,7 @@
         <div style="background: white; border-radius: 16px; max-width: 480px; width: 100%; padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto;">
             <div class="flex justify-between items-center" style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.75rem;">
                 <h3 class="text-primary flex items-center gap-xs" style="margin: 0; font-size: 1.15rem;">
-                    <span class="material-symbols-outlined">manage_accounts</span>
+                    <span class="cf-icon cf-16"></span>
                     Editar Perfil
                 </h3>
                 <button onclick="cerrarModalPerfil()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</button>
@@ -212,7 +213,7 @@
                 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 1.25rem;">
                     <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid var(--color-primary); margin-bottom: 0.5rem; background: var(--color-surface-container); display: flex; align-items: center; justify-content: center;">
                         <img id="edit-foto-preview" src="" alt="Vista previa" style="display: none; width: 100%; height: 100%; object-fit: cover;">
-                        <span id="edit-foto-icon" class="material-symbols-outlined" style="font-size: 40px; color: var(--color-primary);">person</span>
+                        <span id="edit-foto-icon" class="cf-icon cf-16" style="font-size: 40px; color: var(--color-primary);"></span>
                     </div>
                     <label class="btn btn-outline" style="font-size: 0.8rem; padding: 0.35rem 0.85rem; cursor: pointer;">
                         <span>Subir Foto</span>
@@ -253,7 +254,7 @@
         <div style="background: white; border-radius: 16px; max-width: 480px; width: 100%; padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.25);">
             <div class="flex justify-between items-center" style="margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.75rem;">
                 <h3 id="modal-pedido-title" class="text-primary flex items-center gap-xs" style="margin: 0; font-size: 1.15rem;">
-                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span class="cf-icon cf-11"></span>
                     Detalle del Pedido
                 </h3>
                 <button onclick="document.getElementById('modal-detalle-pedido').style.display = 'none'" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</button>
@@ -399,7 +400,7 @@
             if (!pedido) return;
 
             document.getElementById('modal-pedido-title').innerHTML = `
-                <span class="material-symbols-outlined">receipt_long</span>
+                <span class="cf-icon cf-11"></span>
                 Pedido #CF-${pedido.id}
             `;
             const itemsHtml = (pedido.items && pedido.items.length > 0)

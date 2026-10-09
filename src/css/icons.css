@@ -1,0 +1,195 @@
+/* Iconografía Citri-Fresh (SVG propio, hereda color con mask) */
+.cf-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+.cf-04 {
+  -webkit-mask-image: url('/public/images/icons/cf-04.svg');
+  mask-image: url('/public/images/icons/cf-04.svg');
+}
+.cf-05 {
+  -webkit-mask-image: url('/public/images/icons/cf-05.svg');
+  mask-image: url('/public/images/icons/cf-05.svg');
+}
+.cf-06 {
+  -webkit-mask-image: url('/public/images/icons/cf-06.svg');
+  mask-image: url('/public/images/icons/cf-06.svg');
+}
+.cf-07 {
+  -webkit-mask-image: url('/public/images/icons/cf-07.svg');
+  mask-image: url('/public/images/icons/cf-07.svg');
+}
+.cf-08 {
+  -webkit-mask-image: url('/public/images/icons/cf-08.svg');
+  mask-image: url('/public/images/icons/cf-08.svg');
+}
+.cf-09 {
+  -webkit-mask-image: url('/public/images/icons/cf-09.svg');
+  mask-image: url('/public/images/icons/cf-09.svg');
+}
+.cf-10 {
+  -webkit-mask-image: url('/public/images/icons/cf-10.svg');
+  mask-image: url('/public/images/icons/cf-10.svg');
+}
+.cf-11 {
+  -webkit-mask-image: url('/public/images/icons/cf-11.svg');
+  mask-image: url('/public/images/icons/cf-11.svg');
+}
+.cf-12 {
+  -webkit-mask-image: url('/public/images/icons/cf-12.svg');
+  mask-image: url('/public/images/icons/cf-12.svg');
+}
+.cf-13 {
+  -webkit-mask-image: url('/public/images/icons/cf-13.svg');
+  mask-image: url('/public/images/icons/cf-13.svg');
+}
+.cf-14 {
+  -webkit-mask-image: url('/public/images/icons/cf-14.svg');
+  mask-image: url('/public/images/icons/cf-14.svg');
+}
+.cf-15 {
+  -webkit-mask-image: url('/public/images/icons/cf-15.svg');
+  mask-image: url('/public/images/icons/cf-15.svg');
+}
+.cf-16 {
+  -webkit-mask-image: url('/public/images/icons/cf-16.svg');
+  mask-image: url('/public/images/icons/cf-16.svg');
+}
+.cf-17 {
+  -webkit-mask-image: url('/public/images/icons/cf-17.svg');
+  mask-image: url('/public/images/icons/cf-17.svg');
+}
+.cf-18 {
+  -webkit-mask-image: url('/public/images/icons/cf-18.svg');
+  mask-image: url('/public/images/icons/cf-18.svg');
+}
+.cf-19 {
+  -webkit-mask-image: url('/public/images/icons/cf-19.svg');
+  mask-image: url('/public/images/icons/cf-19.svg');
+}
+.cf-20 {
+  -webkit-mask-image: url('/public/images/icons/cf-20.svg');
+  mask-image: url('/public/images/icons/cf-20.svg');
+}
+.cf-21 {
+  -webkit-mask-image: url('/public/images/icons/cf-21.svg');
+  mask-image: url('/public/images/icons/cf-21.svg');
+}
+.cf-22 {
+  -webkit-mask-image: url('/public/images/icons/cf-22.svg');
+  mask-image: url('/public/images/icons/cf-22.svg');
+}
+.cf-23 {
+  -webkit-mask-image: url('/public/images/icons/cf-23.svg');
+  mask-image: url('/public/images/icons/cf-23.svg');
+}
+.cf-24 {
+  -webkit-mask-image: url('/public/images/icons/cf-24.svg');
+  mask-image: url('/public/images/icons/cf-24.svg');
+}
+.cf-25 {
+  -webkit-mask-image: url('/public/images/icons/cf-25.svg');
+  mask-image: url('/public/images/icons/cf-25.svg');
+}
+.cf-26 {
+  -webkit-mask-image: url('/public/images/icons/cf-26.svg');
+  mask-image: url('/public/images/icons/cf-26.svg');
+}
+.cf-27 {
+  -webkit-mask-image: url('/public/images/icons/cf-27.svg');
+  mask-image: url('/public/images/icons/cf-27.svg');
+}
+.cf-28 {
+  -webkit-mask-image: url('/public/images/icons/cf-28.svg');
+  mask-image: url('/public/images/icons/cf-28.svg');
+}
+.cf-29 {
+  -webkit-mask-image: url('/public/images/icons/cf-29.svg');
+  mask-image: url('/public/images/icons/cf-29.svg');
+}
+.cf-30 {
+  -webkit-mask-image: url('/public/images/icons/cf-30.svg');
+  mask-image: url('/public/images/icons/cf-30.svg');
+}
+.cf-31 {
+  -webkit-mask-image: url('/public/images/icons/cf-31.svg');
+  mask-image: url('/public/images/icons/cf-31.svg');
+}
+.cf-32 {
+  -webkit-mask-image: url('/public/images/icons/cf-32.svg');
+  mask-image: url('/public/images/icons/cf-32.svg');
+}
+.cf-33 {
+  -webkit-mask-image: url('/public/images/icons/cf-33.svg');
+  mask-image: url('/public/images/icons/cf-33.svg');
+}
+.cf-34 {
+  -webkit-mask-image: url('/public/images/icons/cf-34.svg');
+  mask-image: url('/public/images/icons/cf-34.svg');
+}
+.cf-35 {
+  -webkit-mask-image: url('/public/images/icons/cf-35.svg');
+  mask-image: url('/public/images/icons/cf-35.svg');
+}
+.cf-36 {
+  -webkit-mask-image: url('/public/images/icons/cf-36.svg');
+  mask-image: url('/public/images/icons/cf-36.svg');
+}
+.cf-37 {
+  -webkit-mask-image: url('/public/images/icons/cf-37.svg');
+  mask-image: url('/public/images/icons/cf-37.svg');
+}
+.cf-38 {
+  -webkit-mask-image: url('/public/images/icons/cf-38.svg');
+  mask-image: url('/public/images/icons/cf-38.svg');
+}
+.cf-39 {
+  -webkit-mask-image: url('/public/images/icons/cf-39.svg');
+  mask-image: url('/public/images/icons/cf-39.svg');
+}
+.cf-40 {
+  -webkit-mask-image: url('/public/images/icons/cf-40.svg');
+  mask-image: url('/public/images/icons/cf-40.svg');
+}
+.cf-41 {
+  -webkit-mask-image: url('/public/images/icons/cf-41.svg');
+  mask-image: url('/public/images/icons/cf-41.svg');
+}
+.cf-42 {
+  -webkit-mask-image: url('/public/images/icons/cf-42.svg');
+  mask-image: url('/public/images/icons/cf-42.svg');
+}
+.cf-43 {
+  -webkit-mask-image: url('/public/images/icons/cf-43.svg');
+  mask-image: url('/public/images/icons/cf-43.svg');
+}
+.cf-44 {
+  -webkit-mask-image: url('/public/images/icons/cf-44.svg');
+  mask-image: url('/public/images/icons/cf-44.svg');
+}
+.cf-45 {
+  -webkit-mask-image: url('/public/images/icons/cf-45.svg');
+  mask-image: url('/public/images/icons/cf-45.svg');
+}
+.cf-46 {
+  -webkit-mask-image: url('/public/images/icons/cf-46.svg');
+  mask-image: url('/public/images/icons/cf-46.svg');
+}
+.cf-47 {
+  -webkit-mask-image: url('/public/images/icons/cf-47.svg');
+  mask-image: url('/public/images/icons/cf-47.svg');
+}
+.cf-48 {
+  -webkit-mask-image: url('/public/images/icons/cf-48.svg');
+  mask-image: url('/public/images/icons/cf-48.svg');
+}

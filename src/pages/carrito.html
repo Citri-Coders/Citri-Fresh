@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/icons.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
@@ -169,14 +170,14 @@
                         <div class="payment-methods">
                             <p class="payment-methods-title">Métodos de pago habilitados</p>
                             <div class="payment-icons">
-                                <div class="payment-icon" title="BAC / Banpro / LaFise"><span class="material-symbols-outlined text-muted">account_balance</span></div>
-                                <div class="payment-icon" title="Tarjeta Visa / Mastercard"><span class="material-symbols-outlined text-muted">credit_card</span></div>
-                                <div class="payment-icon" title="Pago Contra Entrega"><span class="material-symbols-outlined text-muted">payments</span></div>
+                                <div class="payment-icon" title="BAC / Banpro / LaFise"><span class="cf-icon cf-39"></span></div>
+                                <div class="payment-icon" title="Tarjeta Visa / Mastercard"><span class="cf-icon cf-39"></span></div>
+                                <div class="payment-icon" title="Pago Contra Entrega"><span class="cf-icon cf-40"></span></div>
                             </div>
                         </div>
                         
                         <div class="trust-badge">
-                            <span class="material-symbols-outlined">verified_user</span>
+                            <span class="cf-icon cf-42"></span>
                             <div>
                                 <p class="trust-badge-title">Comercio Citrícola Seguro</p>
                                 <p class="trust-badge-text">Garantía directa de calidad entre productor nicaragüense y comprador.</p>
@@ -189,14 +190,14 @@
             <!-- Empty Cart State -->
             <div id="cart-empty-view" class="empty-cart-state" style="display: none;">
                 <div style="width: 80px; height: 80px; border-radius: 50%; background: #ecfdf5; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                    <span class="material-symbols-outlined" style="font-size: 44px; color: #006837;">remove_shopping_cart</span>
+                    <span class="cf-icon cf-28" style="font-size: 44px; color: #006837;"></span>
                 </div>
                 <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #1e293b;">Tu carrito de compras está vacío</h2>
                 <p style="color: #64748b; max-width: 460px; margin: 0 auto 1.75rem auto; line-height: 1.5;">
                     Aún no has agregado ninguna cosecha cítrica. Explora nuestro catálogo de cosechas de León, Carazo, Chinandega y Masaya.
                 </p>
                 <a href="producto.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 0.85rem 1.75rem; border-radius: 14px; text-decoration: none;">
-                    <span class="material-symbols-outlined">storefront</span>
+                    <span class="cf-icon cf-04"></span>
                     <span>Explorar Catálogo Cítrico</span>
                 </a>
             </div>
@@ -210,7 +211,7 @@
             <div style="background: linear-gradient(135deg, #006837 0%, #15803d 100%); padding: 1.75rem 2rem; border-radius: 28px 28px 0 0; color: white; display: flex; justify-content: space-between; align-items: center;">
                 <div class="flex items-center gap-sm">
                     <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
-                        <span class="material-symbols-outlined" style="font-size: 26px;">check_circle</span>
+                        <span class="cf-icon cf-38" style="font-size: 26px;"></span>
                     </div>
                     <div>
                         <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: white;">Finalizar Pedido</h3>
@@ -246,7 +247,7 @@
 
                         <!-- Opción 1: Transferencia Bancaria -->
                         <div class="payment-choice-card active" onclick="seleccionarMetodoPago('transferencia', this)">
-                            <span class="material-symbols-outlined" style="color: #006837; font-size: 28px;">account_balance</span>
+                            <span class="cf-icon cf-39" style="color: #006837; font-size: 28px;"></span>
                             <div style="flex-grow: 1;">
                                 <strong style="color: #1e293b; font-size: 0.95rem; display: block;">Transferencia Bancaria Nacional</strong>
                                 <span style="font-size: 0.775rem; color: #64748b;">BAC Credomatic / Banpro / Banco LaFise</span>
@@ -256,7 +257,7 @@
 
                         <!-- Opción 2: Tarjeta Crédito / Débito -->
                         <div class="payment-choice-card" onclick="seleccionarMetodoPago('tarjeta', this)">
-                            <span class="material-symbols-outlined" style="color: #2563eb; font-size: 28px;">credit_card</span>
+                            <span class="cf-icon cf-39" style="color: #2563eb; font-size: 28px;"></span>
                             <div style="flex-grow: 1;">
                                 <strong style="color: #1e293b; font-size: 0.95rem; display: block;">Tarjeta de Crédito o Débito</strong>
                                 <span style="font-size: 0.775rem; color: #64748b;">Visa o MasterCard (Pasarela Segura)</span>
@@ -266,7 +267,7 @@
 
                         <!-- Opción 3: Pago Contra Entrega -->
                         <div class="payment-choice-card" onclick="seleccionarMetodoPago('efectivo', this)">
-                            <span class="material-symbols-outlined" style="color: #16a34a; font-size: 28px;">payments</span>
+                            <span class="cf-icon cf-40" style="color: #16a34a; font-size: 28px;"></span>
                             <div style="flex-grow: 1;">
                                 <strong style="color: #1e293b; font-size: 0.95rem; display: block;">Pago en Efectivo Contra Entrega</strong>
                                 <span style="font-size: 0.775rem; color: #64748b;">Paga al recibir el camión de cosecha</span>
